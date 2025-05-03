@@ -7,7 +7,7 @@ import Filters from './components/Filters';
 import PerfumeCard from './components/PerfumeCard';
 import PerfumeDetails from './components/PerfumeDetails';
 import Cart from './components/Cart';
-import { Facebook, Instagram, Apple as WhatsApp, CreditCard, Wallet } from 'lucide-react';
+import {  Instagram, Apple as WhatsApp, CreditCard, Wallet } from 'lucide-react';
 
 function App() {
   const [filteredPerfumes, setFilteredPerfumes] = useState<Perfume[]>(perfumes);
@@ -119,7 +119,7 @@ function App() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center md:text-left">
                 <h3 className="text-xl font-serif mb-4">
-                  <span className="text-[#D4AF37]">Luxe</span>Scent
+                  <span className="text-[#D4AF37]">DT</span>Fragancias
                 </h3>
                 <p className="text-sm text-gray-300">Tu tienda de perfumes de confianza</p>
               </div>
@@ -127,13 +127,10 @@ function App() {
               <div className="text-center">
                 <h4 className="font-medium mb-4">Síguenos en</h4>
                 <div className="flex justify-center space-x-4">
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors">
-                    <Facebook size={24} />
-                  </a>
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors">
+                  <a href="https://www.instagram.com/dt_fragancias/" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors">
                     <Instagram size={24} />
                   </a>
-                  <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors">
+                  <a href="https://wa.me/1145630304" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors">
                     <WhatsApp size={24} />
                   </a>
                 </div>
@@ -155,7 +152,7 @@ function App() {
             </div>
             
             <div className="text-center mt-8 pt-4 border-t border-gray-700">
-              <p className="text-sm text-gray-300">© 2025 LuxeScent. Todos los derechos reservados.</p>
+              <p className="text-sm text-gray-300">© 2025 DTFragancias. Todos los derechos reservados.</p>
             </div>
           </div>
         </footer>
