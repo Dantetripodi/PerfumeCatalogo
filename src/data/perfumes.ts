@@ -710,9 +710,77 @@ export const perfumes: Perfume[] = [
     description:
       "Amber Oud de Al Haramain Perfumes es una fragancia de la familia olfativa Oriental Amaderada para Hombres y Mujeres",
     notes: {
-      top: ["Romero ", "Cedro", "Bergamota","Limon"],
+      top: ["Romero ", "Cedro", "Bergamota", "Limon"],
       middle: ["especies", "madera degaiac"],
       base: ["Resinas", "Ambar", "Almizcle"],
+    },
+  },
+  {
+    id: 43,
+    name: "Yara Moi Lattafa",
+    brand: "arabe",
+    price: 55000,
+    gender: "femenino",
+    category: "cítrico",
+    size: "100ml",
+    image: "/imagenes/arabes/Yara-Moi-Lattafa.jpg",
+    description:
+      "Una fragancia fresca y floral con notas de jazmín, durazno, caramelo y ámbar.",
+    notes: {
+      top: ["Jazmín", "Durazno (melocotón)"],
+      middle: ["Caramelo", "Ámbar"],
+      base: ["Pachulí", "Sándalo"],
+    },
+  },
+  {
+    id: 44,
+    name: "Yara Pink Lattafa",
+    brand: "Arabes",
+    price: 55000,
+    gender: "femenino",
+    category: "ambar",
+    size: "100ml",
+    image: "/imagenes/arabes/Yara-Lattafa.jpg",
+    description:
+      "Yara de Lattafa es una fragancia de la familia olfativa Ámbar Vainilla para Mujeres.",
+    notes: {
+      top: ["Orquídea", "Heliotropo", "Naranja tangerina"],
+      middle: ["Acuerdo goloso", "Frutas tropicales"],
+      base: ["Vainilla", "Almizcle", "Sándalo"],
+    },
+  },
+  {
+    id: 45,
+    name: "Yara Tous Lattafa ",
+    brand: "Arabes",
+    price: 55000,
+    gender: "femenino",
+    category: "oriental",
+    size: "100ml",
+    image: "/imagenes/arabes/Yara-Amarrillo-Lattafa.jpg",
+    description:
+      "Yara Tous de Lattafa es una fragancia cautivadora y exótica gracias a una armoniosa combinación de notas olfativas",
+    notes: {
+      top: ["Mango", "Coco", "Maracuyá (fruta de la pasión)"],
+      middle: ["Jazmín", "Flor de azahar del naranjo", "Heliotropo"],
+      base: ["Vainilla", "Almizcle", "Cachemira"],
+    },
+  },
+  {
+    id: 46,
+    name: "Haya de Lattafa",
+    brand: "Lattafa",
+    price: 60000,
+    gender: "femenino",
+    category: "floral",
+    size: "100ml",
+    image: "/imagenes/arabes/Haya-Lattafa.jpg", // Asegúrate de que la ruta de la imagen sea correcta
+    description:
+      "Haya de Lattafa es una fragancia floral y afrutada que evoca la frescura y la elegancia.",
+    notes: {
+      top: ["Champaña", "Fresa","naranja tangerina","naranja sanguina y rosa"],
+      middle: ["Gardenia", "Gardenia","orquídea de vainilla"],
+      base: ["Ambar", "castaña", "Sándalo"],
     },
   },
 ];

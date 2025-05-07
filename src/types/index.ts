@@ -27,7 +27,15 @@ export interface Perfume {
     | "acuático floral"
     | "aromático especiado"
     | "perfumeria"
-    | "aromatica";
+    | "aromatica"
+    | "ambar"
+    | "ambar floral"
+    | "ambar oriental"
+    | "ambar especiado"
+    | "ambar frutal"
+    | "ambar cítrico"
+    | "ambar acuático"
+    | "ambar oriental";
   size: string;
   image: string;
   description: string;
