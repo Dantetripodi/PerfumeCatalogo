@@ -9,8 +9,25 @@ export interface Perfume {
   name: string;
   brand: string;
   price: number;
-  gender: 'masculino' | 'femenino' | 'unisex';
-  category: 'floral' | 'amaderado' | 'oriental' | 'cítrico' | 'acuático' | 'frutal' |'amaderado especiado'|'cítrico acuático'|'acuático oriental'|'floral frutal'|'oriental especiaido'|'amaderado frutal'|'cítrico floral'|'acuático floral'|'aromático especiado'|'perfumeria'|"aromatica";
+  gender: "masculino" | "femenino" | "unisex";
+  category:
+    | "floral"
+    | "amaderado"
+    | "oriental"
+    | "cítrico"
+    | "acuático"
+    | "frutal"
+    | "amaderado especiado"
+    | "cítrico acuático"
+    | "acuático oriental"
+    | "floral frutal"
+    | "oriental especiaido"
+    | "amaderado frutal"
+    | "cítrico floral"
+    | "acuático floral"
+    | "aromático especiado"
+    | "perfumeria"
+    | "aromatica";
   size: string;
   image: string;
   description: string;
@@ -20,4 +37,14 @@ export interface Perfume {
 export interface CartItem {
   perfume: Perfume;
   quantity: number;
+}
+
+export interface CartContextType {
+  cart: CartItem[];
+  addToCart: (perfume: Perfume) => void;
+  removeFromCart: (id: number) => void;
+  updateQuantity: (id: number, quantity: number) => void;
+  clearCart: () => void;
+  getCartTotal: () => number;
+  getCartCount: () => number;
 }

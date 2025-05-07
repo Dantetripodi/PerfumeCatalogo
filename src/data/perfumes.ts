@@ -698,4 +698,21 @@ export const perfumes: Perfume[] = [
       base: ["Vainilla", "Almizcleblanco", "Ambar"],
     },
   },
+  {
+    id: 42,
+    name: "Al Haramain Amber Oud",
+    brand: "Arabes",
+    price: 110000,
+    gender: "masculino",
+    category: "amaderado",
+    size: "100ML",
+    image: "/imagenes/arabes/Haramain-AmberOud.jpg",
+    description:
+      "Amber Oud de Al Haramain Perfumes es una fragancia de la familia olfativa Oriental Amaderada para Hombres y Mujeres",
+    notes: {
+      top: ["Romero ", "Cedro", "Bergamota","Limon"],
+      middle: ["especies", "madera degaiac"],
+      base: ["Resinas", "Ambar", "Almizcle"],
+    },
+  },
 ];
