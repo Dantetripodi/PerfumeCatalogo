@@ -783,4 +783,38 @@ export const perfumes: Perfume[] = [
       base: ["Ambar", "castaña", "Sándalo"],
     },
   },
+  {
+    id: 47,
+    name: "Odyssey Mandarin Sky",
+    brand: "Arabe",
+    price: 81000,
+    gender: "masculino",
+    category: "floral",
+    size: "100ml",
+    image: "/imagenes/arabes/odysseyMandarinSky.jpg", // Asegúrate de que la ruta de la imagen sea correcta
+    description:
+      "Odyssey Mandarin Sky de Armaf es una fragancia cautivadora de la familia olfativa para hombres, lanzada en 2023",
+    notes: {
+      top: ["mandarina", "naranja","azafrán","salvia"],
+      middle: ["caramelo", "haba tonka","cempasúchil"],
+      base: ["vetiver", "ambroxan", "cedro brindan"],
+    },
+  },
+  {
+    id: 48,
+    name: "Armaf Club de Nuit Intense",
+    brand: "Arabes",
+    price: 61000,
+    gender: "masculino",
+    category: "amaderado especiado",
+    size: "105ml",
+    image: "/imagenes/arabes/ClubdeNuit.jpg", // Asegúrate de que la ruta de la imagen sea correcta
+    description:
+      "Club de Nuit Intense Man de Armaf es mucho más que una fragancia: es una declaración de estilo, misterio y presencia. Diseñada para el hombre que no pasa desapercibido, combina elegancia clásica con un giro audaz gracias a sus notas frutales, florales y Club de Nuit Intense Man de Armaf es mucho más que una fragancia: es una declaración de estilo, misterio y presencia. Diseñada para el hombre que no pasa desapercibido, combina elegancia clásica con un giro audaz gracias a sus notas frutales, florales y amaderadas",
+    notes: {
+      top: ["Limón chispeante.", "piña jugosa","bergamota vibrante","grosella negra"],
+      middle: ["Abedul ahumado", "jazmín refinado"," rosa elegante"],
+      base: ["Almizcle sensual", "ámbar cálido", "pachulí terroso","vainilla cremosa"],
+    },
+  },
 ];
