@@ -817,4 +817,38 @@ export const perfumes: Perfume[] = [
       base: ["Almizcle sensual", "ámbar cálido", "pachulí terroso","vainilla cremosa"],
     },
   },
+  {
+    id: 49,
+    name: "Honor & Glory",
+    brand: "Arabes",
+    price: 61000,
+    gender: "masculino",
+    category: "amaderada dulce",
+    size: "100ml",
+    image: "/imagenes/arabes/HonorAndGlory.jpg", // Asegúrate de que la ruta de la imagen sea correcta
+    description:
+      "Bade'e Al Oud Honor & Glory de Lattafa Perfumes es una fragancia de la familia olfativa para Hombres y Mujeres. Esta fragrancia es nueva. Bade'e Al Oud Honor & Glory se lanzó en 2023",
+    notes: {
+      top: ["Piña", "Créme bruléea"],
+      middle: ["canela", "cúrcuma ","pimienta negra","Benjuí"],
+      base: ["vainilla", "sándalo", "cachemira ","musgo"],
+    },
+  },
+  {
+    id: 50,
+    name: "Khamrah Qahwa Lattafa",
+    brand: "Arabes",
+    price: 61000,
+    gender: "masculino",
+    category: "amaderada dulce",
+    size: "100ml",
+    image: "/imagenes/arabes/Khamrah-Qahwa.jpg", // Asegúrate de que la ruta de la imagen sea correcta
+    description:
+      "Khamrah Qahwa de Lattafa Perfumes es una fragancia de la familia olfativa Oriental Vainilla para Hombres y Mujeres. Esta fragrancia es nueva. Khamrah Qahwa se lanzó en 2022",
+    notes: {
+      top: ["canela", "Cardamomo","jengibre"],
+      middle: ["praliné", "Frutas confitadas","flores blancas"],
+      base: ["vainilla", "Cafe", "Haba tonka","benjuí","almizcle"],
+    },
+  },
 ];
