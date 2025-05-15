@@ -718,7 +718,7 @@ export const perfumes: Perfume[] = [
   {
     id: 43,
     name: "Yara Moi Lattafa",
-    brand: "arabe",
+    brand: "Arabes",
     price: 55000,
     gender: "femenino",
     category: "cítrico",
@@ -769,7 +769,7 @@ export const perfumes: Perfume[] = [
   {
     id: 46,
     name: "Haya de Lattafa",
-    brand: "Lattafa",
+    brand: "Arabes",
     price: 60000,
     gender: "femenino",
     category: "floral",
@@ -786,7 +786,7 @@ export const perfumes: Perfume[] = [
   {
     id: 47,
     name: "Odyssey Mandarin Sky",
-    brand: "Arabe",
+    brand: "Arabes",
     price: 81000,
     gender: "masculino",
     category: "floral",
