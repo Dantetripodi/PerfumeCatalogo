@@ -8,7 +8,7 @@ export interface Perfume {
   id: number;
   name: string;
   brand: string;
-  price: number;
+  price: number | "Consultar";
   gender: "masculino" | "femenino" | "unisex";
   category:
     | "floral"
