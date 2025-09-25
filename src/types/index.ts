@@ -23,6 +23,7 @@ export interface Perfume {
     | "acuático oriental"
     | "floral frutal"
     | "oriental especiaido"
+    | "oriental floral"
     | "amaderado frutal"
     | "cítrico floral"
     | "acuático floral"

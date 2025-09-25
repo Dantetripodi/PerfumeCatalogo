@@ -866,4 +866,38 @@ export const perfumes: Perfume[] = [
       base: ["vainilla", "Cafe", "Haba tonka", "benjuí", "almizcle"],
     },
   },
+  {
+    id: 51,
+    name: "Pure Herbal",
+    brand: "Arabic",
+    price: 45000,
+    gender: "unisex",
+    category: "oriental",
+    size: "100ml",
+    image: "/imagenes/perfumes/Pure-Herbal-X.jpg", // Asegúrate de que la ruta de la imagen sea correcta
+    description:
+      "Pure Herbal X de Lattafa Perfumes es una fragancia de la familia olfativa para Hombres y Mujeres. Esta fragrancia es nueva. Pure Herbal X se lanzó en 2019",
+    notes: {
+      top: ["naranja siciliana", "bergamota de Calabria", "limón siciliano"],
+      middle: ["frutas"],
+      base: ["almizcle blanco", "vainilla de Madagascar ", "ámbar"],
+    },
+  },
+  {
+    id: 52,
+    name: "Clayton",
+    brand: "Arabic",
+    price: 45000,
+    gender: "masculino",
+    category: "oriental floral",
+    size: "120ml",
+    image: "/imagenes/perfumes/Clayton-X.jpg", // Asegúrate de que la ruta de la imagen sea correcta
+    description:
+      "Layton de Parfums de Marly es una fragancia de la familia olfativa Oriental Floral para Hombres y Mujeres",
+    notes: {
+      top: ["manzana", "lavanda", "bergamota", "mandarina"],
+      middle: ["geranio", "violeta", "jazmín"],
+      base: ["vainilla", "cardamomo", "sándalo", "pimienta", "madera de gaiac", "pachulí"],
+    },
+  },
 ];
