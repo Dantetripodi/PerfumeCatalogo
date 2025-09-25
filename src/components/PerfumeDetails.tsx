@@ -8,11 +8,7 @@ interface PerfumeDetailsProps {
   onClose: () => void;
 }
 
-const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({
-  perfume,
-  onClose,
-}) => {
-  const { addToCart } = useCart();
+const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({perfume,onClose,}) => {const { addToCart } = useCart();
 
   if (!perfume) return null;
 
