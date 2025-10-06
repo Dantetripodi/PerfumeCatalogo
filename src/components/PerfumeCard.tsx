@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Plus, Info } from 'lucide-react';
 import { Perfume } from '../types';
 import { useCart } from '../context/CartContext';
@@ -11,6 +11,27 @@ interface PerfumeCardProps {
 
 const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails }) => {
   const { addToCart } = useCart();
+  const [isVisible, setIsVisible] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -19,16 +40,36 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails }) => 
 
   return (
     <div 
+      ref={cardRef}
       className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer transform hover:-translate-y-1 transition-transform duration-300"
       onClick={() => onShowDetails(perfume)}
     >
       <div className="relative h-64 overflow-hidden">
-        <img 
-          src={perfume.image} 
-          alt={perfume.name} 
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-          loading="lazy"
-        />
+        {isVisible && (
+          <picture>
+            <source
+              type="image/webp"
+              srcSet={`
+                ${perfume.image.replace(/\.(jpg|jpeg|png)$/i, '-320.webp')} 320w,
+                ${perfume.image.replace(/\.(jpg|jpeg|png)$/i, '-640.webp')} 640w,
+                ${perfume.image.replace(/\.(jpg|jpeg|png)$/i, '-960.webp')} 960w
+              `}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+            <img 
+              src={perfume.image} 
+              alt={perfume.name} 
+              className={`w-full h-full object-cover transition-transform duration-500 hover:scale-105 transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+              loading="lazy"
+              onLoad={() => setImageLoaded(true)}
+            />
+          </picture>
+        )}
+        {!imageLoaded && isVisible && (
+          <div className="w-full h-full bg-gray-200 animate-pulse flex items-center justify-center">
+            <div className="text-gray-400">Cargando...</div>
+          </div>
+        )}
         <div className="absolute top-2 right-2 bg-[#D4AF37] text-white px-2 py-1 rounded-full text-xs font-semibold">
           {perfume.gender}
         </div>

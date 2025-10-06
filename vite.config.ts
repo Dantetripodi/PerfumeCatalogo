@@ -17,4 +17,6 @@ export default defineConfig({
   server: {
     port: 5173,
   },
+  // Optimización de assets
+  assetsInclude: ['**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.webp'],
 });
