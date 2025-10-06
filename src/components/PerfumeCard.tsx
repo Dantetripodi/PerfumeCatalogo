@@ -2,6 +2,7 @@ import React from 'react';
 import { Plus, Info } from 'lucide-react';
 import { Perfume } from '../types';
 import { useCart } from '../context/CartContext';
+import { formatPrice } from '../utils/price';
 
 interface PerfumeCardProps {
   perfume: Perfume;
@@ -26,6 +27,7 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails }) => 
           src={perfume.image} 
           alt={perfume.name} 
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          loading="lazy"
         />
         <div className="absolute top-2 right-2 bg-[#D4AF37] text-white px-2 py-1 rounded-full text-xs font-semibold">
           {perfume.gender}
@@ -35,7 +37,7 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails }) => 
       <div className="p-4">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-serif font-semibold text-[#1A2238] line-clamp-1">{perfume.name}</h3>
-          <span className="font-bold text-[#D4AF37]">${perfume.price}</span>
+          <span className="font-bold text-[#D4AF37]">{formatPrice(perfume.price)}</span>
         </div>
         
         <p className="text-sm text-gray-600 mb-2">{perfume.brand}</p>
