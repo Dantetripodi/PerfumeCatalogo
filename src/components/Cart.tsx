@@ -60,6 +60,8 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                       <img
                         src={item.perfume.image}
                         alt={item.perfume.name}
+                        loading="lazy"
+                        decoding="async"
                         className="h-full w-full object-cover"
                       />
                     </div>

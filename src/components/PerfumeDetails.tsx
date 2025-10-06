@@ -37,7 +37,7 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose }) => 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div
-        className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-xl animate-fadeIn"
+        className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative p-6">
@@ -53,6 +53,7 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose }) => 
                   src={perfume.image}
                   alt={perfume.name}
                   className="w-full h-auto object-cover"
+                  loading="lazy"
                 />
               </div>
             </div>

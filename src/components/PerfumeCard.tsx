@@ -27,6 +27,7 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails }) => 
           src={perfume.image} 
           alt={perfume.name} 
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          loading="lazy"
         />
         <div className="absolute top-2 right-2 bg-[#D4AF37] text-white px-2 py-1 rounded-full text-xs font-semibold">
           {perfume.gender}
