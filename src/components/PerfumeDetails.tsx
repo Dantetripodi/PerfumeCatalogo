@@ -2,13 +2,15 @@ import React from "react";
 import { X, Plus } from "lucide-react";
 import { Perfume } from "../types";
 import { useCart } from "../context/CartContext";
+import { formatPrice } from "../utils/price";
 
 interface PerfumeDetailsProps {
   perfume: Perfume | null;
   onClose: () => void;
 }
 
-const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({perfume,onClose,}) => {const { addToCart } = useCart();
+const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose }) => {
+  const { addToCart } = useCart();
 
   if (!perfume) return null;
 
@@ -33,17 +35,14 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({perfume,onClose,}) => {c
   );
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div
         className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-xl animate-fadeIn"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative p-6">
           <div className="sticky top-0 z-10 bg-white p-2 border-b flex justify-end">
-            <button
-              onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
-            >
+            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
               <X size={24} />
             </button>
           </div>
@@ -77,7 +76,7 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({perfume,onClose,}) => {c
               </div>
 
               <div className="text-2xl font-bold text-[#D4AF37] mb-4">
-                ${perfume.price}
+                {formatPrice(perfume.price)}
               </div>
 
               <p className="text-gray-700 mb-6">{perfume.description}</p>

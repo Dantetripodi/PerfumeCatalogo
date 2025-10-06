@@ -1,6 +1,8 @@
 import React from "react";
 import { X, Minus, Plus, ShoppingBag, Send } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { formatPrice, lineItemTotal } from "../utils/price";
+import { buildWhatsappMessage } from "../utils/whatsapp";
 
 interface CartProps {
   isOpen: boolean;
@@ -11,30 +13,14 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
   const { cart, removeFromCart, updateQuantity, getCartTotal, clearCart } =
     useCart();
 
-  const formatMessage = () => {
-    const items = cart
-      .map(
-        (item) =>
-          `${item.perfume.name} (${item.perfume.brand}) - ${item.quantity} x $${
-            item.perfume.price
-          } = $${item.perfume.price * item.quantity}`
-      )
-      .join("\n");
-
-    const total = getCartTotal();
-
-    return encodeURIComponent(
-      `*Mi Pedido de Perfumes:*\n\n${items}\n\n*Total: $${total}*\n\nPor favor, confirma mi pedido. ¡Gracias!`
-    );
-  };
-
   const handleWhatsAppCheckout = () => {
     if (cart.length === 0) return;
-
-    const phoneNumber = "1145630304"; // Replace with actual number
-    const message = formatMessage();
+    const phoneNumber = "1145630304";
+    const message = buildWhatsappMessage(cart);
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
   };
+
+  const total = getCartTotal();
 
   return (
     <div
@@ -87,7 +73,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                             {item.perfume.brand}
                           </p>
                           <p className="mt-1 text-sm font-medium text-[#D4AF37]">
-                            ${item.perfume.price}
+                            {formatPrice(item.perfume.price)}
                           </p>
                         </div>
                         <button
@@ -118,7 +104,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                           <Plus size={16} />
                         </button>
                         <div className="ml-auto text-sm font-medium">
-                          ${item.perfume.price * item.quantity}
+                          {lineItemTotal(item.perfume.price, item.quantity)}
                         </div>
                       </div>
                     </div>
@@ -133,14 +119,16 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
           <div className="border-t border-gray-200 p-4 bg-gray-50">
             <div className="flex justify-between mb-2">
               <span className="text-sm text-gray-600">Subtotal</span>
-              <span className="text-sm font-medium">${getCartTotal()}</span>
+              <span className="text-sm font-medium">
+                {total === "Consultar" ? "Consultar" : `$${total}`}
+              </span>
             </div>
             <div className="flex justify-between mb-4">
               <span className="text-base font-medium text-[#1A2238]">
                 Total
               </span>
               <span className="text-base font-medium text-[#1A2238]">
-                ${getCartTotal()}
+                {total === "Consultar" ? "Consultar" : `$${total}`}
               </span>
             </div>
 
