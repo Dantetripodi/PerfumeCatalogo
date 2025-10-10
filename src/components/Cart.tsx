@@ -15,7 +15,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
 
   const handleWhatsAppCheckout = () => {
     if (cart.length === 0) return;
-    const phoneNumber = "1145630304";
+    const phoneNumber = "541145630304";
     const message = buildWhatsappMessage(cart);
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
   };
