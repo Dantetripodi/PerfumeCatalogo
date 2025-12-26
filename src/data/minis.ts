@@ -65,6 +65,21 @@ export const perfumesMinis: PerfumeInput[] = [
       base: ["Almizcle"],
     },
   },
-  
+  {
+    name: "Stronger with you",
+    brand: "Jaques Ryon",
+    price: 15000,
+    gender: "masculino",
+    category: "vainilla dulce",
+    size: "50ml",
+    description:
+      "Versión mini de Stronger with you. Especiada Castaña, Azúcar, Salvia, Lavanda, Vainilla Y Humo..",
+    notes: {
+      top: ["Castaña", "Azucar"],
+      middle: ["Salvia", "Lavanda"],
+      base: ["Vainilla", "Humo"],
+    },
+    image: "/imagenes/minis/Stronger-with-you.png",
+  },
 ];
 
