@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { perfumes as all } from "../data/perfumes";
+import { perfumes as all } from "../data";
 import { Perfume } from "../types";
 
 interface FiltersState {

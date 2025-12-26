@@ -1,0 +1,258 @@
+import { Perfume } from "../types";
+
+export const perfumesArabes: Perfume[] = [
+  {
+    id: 39,
+    name: "9pm",
+    brand: "Arabes",
+    price: "Consultar",
+    gender: "masculino",
+    category: "oriental",
+    size: "100ML",
+    image: "/imagenes/arabes/9PM.jpg",
+    description:
+      "Es una fragancia masculina muy popular, conocida por su aroma dulce, especiado y ambarado, ideal para la noche o climas fríos",
+    notes: {
+      top: ["manzana", "canela", "lavanda silvestre", "bergamota"],
+      middle: ["flor de azahar", " lirio"],
+      base: ["vainilla", "haba tonka", "ambar", "pachuli"],
+    },
+  },
+  {
+    id: 40,
+    name: "Asad Lattafa",
+    brand: "Arabes",
+    price: "Consultar",
+    gender: "masculino",
+    category: "oriental",
+    size: "100ML",
+    image: "/imagenes/arabes/Asad-Lattafa.jpg",
+    description:
+      "Asad de Lattafa Perfumes es una fragancia de la familia olfativa Oriental para Hombre",
+    notes: {
+      top: ["Pimienta ngera", "Tabaco", "piña"],
+      middle: ["Pachuli", "Cafe", "Iris"],
+      base: ["Vainilla", "Madera seca", "Ambar"],
+    },
+  },
+  {
+    id: 41,
+    name: "Bharara King",
+    brand: "Arabes",
+    price: "Consultar",
+    gender: "masculino",
+    category: "aromatica",
+    size: "100ML",
+    image: "/imagenes/arabes/bhararaKing.jpg",
+    description:
+      "King de Bharara es una fragancia de la familia olfativa Aromática para Hombres",
+    notes: {
+      top: ["Naranja ", "Limón ", "Bergamota"],
+      middle: ["Notas afrutadas"],
+      base: ["Vainilla", "Almizcleblanco", "Ambar"],
+    },
+  },
+  {
+    id: 42,
+    name: "Al Haramain Amber Oud",
+    brand: "Arabes",
+    price: "Consultar",
+    gender: "masculino",
+    category: "amaderado",
+    size: "100ML",
+    image: "/imagenes/arabes/Haramain-AmberOud.jpg",
+    description:
+      "Amber Oud de Al Haramain Perfumes es una fragancia de la familia olfativa Oriental Amaderada para Hombres y Mujeres",
+    notes: {
+      top: ["Romero ", "Cedro", "Bergamota", "Limon"],
+      middle: ["especies", "madera degaiac"],
+      base: ["Resinas", "Ambar", "Almizcle"],
+    },
+  },
+  {
+    id: 43,
+    name: "Yara Moi Lattafa",
+    brand: "Arabes",
+    price: "Consultar",
+    gender: "femenino",
+    category: "cítrico",
+    size: "100ml",
+    image: "/imagenes/arabes/Yara-Moi-Lattafa.jpg",
+    description:
+      "Una fragancia fresca y floral con notas de jazmín, durazno, caramelo y ámbar.",
+    notes: {
+      top: ["Jazmín", "Durazno (melocotón)"],
+      middle: ["Caramelo", "Ámbar"],
+      base: ["Pachulí", "Sándalo"],
+    },
+  },
+  {
+    id: 44,
+    name: "Yara Pink Lattafa",
+    brand: "Arabes",
+    price: "Consultar",
+    gender: "femenino",
+    category: "ambar",
+    size: "100ml",
+    image: "/imagenes/arabes/Yara-Lattafa.jpg",
+    description:
+      "Yara de Lattafa es una fragancia de la familia olfativa Ámbar Vainilla para Mujeres.",
+    notes: {
+      top: ["Orquídea", "Heliotropo", "Naranja tangerina"],
+      middle: ["Acuerdo goloso", "Frutas tropicales"],
+      base: ["Vainilla", "Almizcle", "Sándalo"],
+    },
+  },
+  {
+    id: 45,
+    name: "Yara Tous Lattafa ",
+    brand: "Arabes",
+    price: "Consultar",
+    gender: "femenino",
+    category: "oriental",
+    size: "100ml",
+    image: "/imagenes/arabes/Yara-Amarrillo-Lattafa.jpg",
+    description:
+      "Yara Tous de Lattafa es una fragancia cautivadora y exótica gracias a una armoniosa combinación de notas olfativas",
+    notes: {
+      top: ["Mango", "Coco", "Maracuyá (fruta de la pasión)"],
+      middle: ["Jazmín", "Flor de azahar del naranjo", "Heliotropo"],
+      base: ["Vainilla", "Almizcle", "Cachemira"],
+    },
+  },
+  {
+    id: 46,
+    name: "Haya de Lattafa",
+    brand: "Arabes",
+    price: "Consultar",
+    gender: "femenino",
+    category: "floral",
+    size: "100ml",
+    image: "/imagenes/arabes/Haya-Lattafa.jpg",
+    description:
+      "Haya de Lattafa es una fragancia floral y afrutada que evoca la frescura y la elegancia.",
+    notes: {
+      top: [
+        "Champaña",
+        "Fresa",
+        "naranja tangerina",
+        "naranja sanguina y rosa",
+      ],
+      middle: ["Gardenia", "Gardenia", "orquídea de vainilla"],
+      base: ["Ambar", "castaña", "Sándalo"],
+    },
+  },
+  {
+    id: 47,
+    name: "Odyssey Mandarin Sky",
+    brand: "Arabes",
+    price: "Consultar",
+    gender: "masculino",
+    category: "floral",
+    size: "100ml",
+    image: "/imagenes/arabes/odysseyMandarinSky.jpg",
+    description:
+      "Odyssey Mandarin Sky de Armaf es una fragancia cautivadora de la familia olfativa para hombres, lanzada en 2023",
+    notes: {
+      top: ["mandarina", "naranja", "azafrán", "salvia"],
+      middle: ["caramelo", "haba tonka", "cempasúchil"],
+      base: ["vetiver", "ambroxan", "cedro brindan"],
+    },
+  },
+  {
+    id: 48,
+    name: "Armaf Club de Nuit Intense",
+    brand: "Arabes",
+    price: "Consultar",
+    gender: "masculino",
+    category: "amaderado especiado",
+    size: "105ml",
+    image: "/imagenes/arabes/ClubdeNuit.jpg",
+    description:
+      "Club de Nuit Intense Man de Armaf es mucho más que una fragancia: es una declaración de estilo, misterio y presencia. Diseñada para el hombre que no pasa desapercibido, combina elegancia clásica con un giro audaz gracias a sus notas frutales, florales y Club de Nuit Intense Man de Armaf es mucho más que una fragancia: es una declaración de estilo, misterio y presencia. Diseñada para el hombre que no pasa desapercibido, combina elegancia clásica con un giro audaz gracias a sus notas frutales, florales y amaderadas",
+    notes: {
+      top: [
+        "Limón chispeante.",
+        "piña jugosa",
+        "bergamota vibrante",
+        "grosella negra",
+      ],
+      middle: ["Abedul ahumado", "jazmín refinado", " rosa elegante"],
+      base: [
+        "Almizcle sensual",
+        "ámbar cálido",
+        "pachulí terroso",
+        "vainilla cremosa",
+      ],
+    },
+  },
+  {
+    id: 49,
+    name: "Honor & Glory",
+    brand: "Arabes",
+    price: "Consultar",
+    gender: "masculino",
+    category: "amaderada dulce",
+    size: "100ml",
+    image: "/imagenes/arabes/HonorAndGlory.jpg",
+    description:
+      "Bade'e Al Oud Honor & Glory de Lattafa Perfumes es una fragancia de la familia olfativa para Hombres y Mujeres. Esta fragrancia es nueva. Bade'e Al Oud Honor & Glory se lanzó en 2023",
+    notes: {
+      top: ["Piña", "Créme bruléea"],
+      middle: ["canela", "cúrcuma ", "pimienta negra", "Benjuí"],
+      base: ["vainilla", "sándalo", "cachemira ", "musgo"],
+    },
+  },
+  {
+    id: 50,
+    name: "Khamrah Qahwa Lattafa",
+    brand: "Arabes",
+    price: "Consultar",
+    gender: "masculino",
+    category: "amaderada dulce",
+    size: "100ml",
+    image: "/imagenes/arabes/Khamrah-Qahwa.jpg",
+    description:
+      "Khamrah Qahwa de Lattafa Perfumes es una fragancia de la familia olfativa Oriental Vainilla para Hombres y Mujeres. Esta fragrancia es nueva. Khamrah Qahwa se lanzó en 2022",
+    notes: {
+      top: ["canela", "Cardamomo", "jengibre"],
+      middle: ["praliné", "Frutas confitadas", "flores blancas"],
+      base: ["vainilla", "Cafe", "Haba tonka", "benjuí", "almizcle"],
+    },
+  },
+  {
+    id: 51,
+    name: "Pure Herbal",
+    brand: "Arabic",
+    price: 45000,
+    gender: "unisex",
+    category: "oriental",
+    size: "100ml",
+    image: "/imagenes/perfumes/Pure-Herbal-X.jpg",
+    description:
+      "Pure Herbal X de Lattafa Perfumes es una fragancia de la familia olfativa para Hombres y Mujeres. Esta fragrancia es nueva. Pure Herbal X se lanzó en 2019",
+    notes: {
+      top: ["naranja siciliana", "bergamota de Calabria", "limón siciliano"],
+      middle: ["frutas"],
+      base: ["almizcle blanco", "vainilla de Madagascar ", "ámbar"],
+    },
+  },
+  {
+    id: 52,
+    name: "Clayton",
+    brand: "Arabic",
+    price: 45000,
+    gender: "masculino",
+    category: "oriental floral",
+    size: "120ml",
+    image: "/imagenes/perfumes/Clayton-X.jpg",
+    description:
+      "Layton de Parfums de Marly es una fragancia de la familia olfativa Oriental Floral para Hombres y Mujeres",
+    notes: {
+      top: ["manzana", "lavanda", "bergamota", "mandarina"],
+      middle: ["geranio", "violeta", "jazmín"],
+      base: ["vainilla", "cardamomo", "sándalo", "pimienta", "madera de gaiac", "pachulí"],
+    },
+  },
+];
+

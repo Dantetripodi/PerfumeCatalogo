@@ -12,7 +12,7 @@ const Notice: React.FC = () => {
               clipRule="evenodd"
             />
           </svg>
-        </div>
+        </div>    
         <div className="ml-3">
           <p className="text-sm text-amber-700">
             <strong>Aviso importante:</strong> Los perfumes árabes tienen precios a consultar. Los precios mostrados son aproximados y pueden

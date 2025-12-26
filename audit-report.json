@@ -1,0 +1,137 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@eslint/plugin-kit": {
+      "name": "@eslint/plugin-kit",
+      "severity": "low",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1106734,
+          "name": "@eslint/plugin-kit",
+          "dependency": "@eslint/plugin-kit",
+          "title": "@eslint/plugin-kit is vulnerable to Regular Expression Denial of Service attacks through ConfigCommentParser",
+          "url": "https://github.com/advisories/GHSA-xffm-g5w8-qvg7",
+          "severity": "low",
+          "cwe": [
+            "CWE-1333"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<0.3.4"
+        }
+      ],
+      "effects": [
+        "eslint"
+      ],
+      "range": "<0.3.4",
+      "nodes": [
+        "node_modules/@eslint/plugin-kit"
+      ],
+      "fixAvailable": true
+    },
+    "@vitejs/plugin-react": {
+      "name": "@vitejs/plugin-react",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "vite"
+      ],
+      "effects": [],
+      "range": "2.0.0-alpha.0 - 4.3.3",
+      "nodes": [
+        "node_modules/@vitejs/plugin-react"
+      ],
+      "fixAvailable": true
+    },
+    "esbuild": {
+      "name": "esbuild",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1102341,
+          "name": "esbuild",
+          "dependency": "esbuild",
+          "title": "esbuild enables any website to send any requests to the development server and read the response",
+          "url": "https://github.com/advisories/GHSA-67mh-4wv8-2f99",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-346"
+          ],
+          "cvss": {
+            "score": 5.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+          },
+          "range": "<=0.24.2"
+        }
+      ],
+      "effects": [
+        "vite"
+      ],
+      "range": "<=0.24.2",
+      "nodes": [
+        "node_modules/esbuild"
+      ],
+      "fixAvailable": {
+        "name": "vite",
+        "version": "7.3.0",
+        "isSemVerMajor": true
+      }
+    },
+    "eslint": {
+      "name": "eslint",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@eslint/plugin-kit"
+      ],
+      "effects": [],
+      "range": "9.10.0 - 9.26.0",
+      "nodes": [
+        "node_modules/eslint"
+      ],
+      "fixAvailable": true
+    },
+    "vite": {
+      "name": "vite",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "esbuild"
+      ],
+      "effects": [
+        "@vitejs/plugin-react"
+      ],
+      "range": "0.11.0 - 6.1.6",
+      "nodes": [
+        "node_modules/vite"
+      ],
+      "fixAvailable": {
+        "name": "vite",
+        "version": "7.3.0",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 2,
+      "moderate": 3,
+      "high": 0,
+      "critical": 0,
+      "total": 5
+    },
+    "dependencies": {
+      "prod": 6,
+      "dev": 298,
+      "optional": 41,
+      "peer": 9,
+      "peerOptional": 0,
+      "total": 304
+    }
+  }
+}
