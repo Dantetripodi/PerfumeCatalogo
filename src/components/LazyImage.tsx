@@ -18,12 +18,20 @@ const LazyImage: React.FC<LazyImageProps> = ({
 }) => {
   const [ref, isIntersecting] = useIntersectionObserver({ threshold: 0.1 });
   const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+
+  if (error) {
+    return (
+      <div className={`${className} flex items-center justify-center bg-gray-200`}>
+        <span className="text-gray-400 text-sm">Imagen no disponible</span>
+      </div>
+    );
+  }
 
   return (
     <div ref={ref} className={className}>
       {isIntersecting && (
         <picture>
-          {/* Solo mostrar WebP si existen los archivos */}
           {base && webpDefault && (
             <source
               type="image/webp"
@@ -42,9 +50,13 @@ const LazyImage: React.FC<LazyImageProps> = ({
             loading="lazy"
             decoding="async"
             onLoad={() => setLoaded(true)}
+            onError={() => setError(true)}
             className={`transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
           />
         </picture>
+      )}
+      {!loaded && isIntersecting && (
+        <div className="absolute inset-0 bg-gray-200 animate-pulse" />
       )}
     </div>
   );

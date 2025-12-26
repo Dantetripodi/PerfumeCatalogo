@@ -1,8 +1,7 @@
-import { Perfume } from "../types";
+import { PerfumeInput } from "../types";
 
-export const perfumesRegulares: Perfume[] = [
+export const perfumesRegulares: PerfumeInput[] = [
   {
-    id: 1,
     name: "Victorious ONYX",
     brand: "Paco Rabanne",
     price: 40000,
@@ -19,7 +18,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 2,
     name: "YD12 Men",
     brand: "Yves d'Orgeval",
     price: 40000,
@@ -36,7 +34,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 3,
     name: "212-Vip Black",
     brand: "Carolina Herrera",
     price: 40000,
@@ -53,7 +50,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 4,
     name: "212-Vip Night Club Men",
     brand: "Carolina Herrera",
     price: 40000,
@@ -70,7 +66,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 5,
     name: "Acqua Di Gio",
     brand: "Giorgio Armani",
     price: 40000,
@@ -87,7 +82,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 6,
     name: "Amor Amor Cacharel",
     brand: "Jean Bousquet",
     price: 40000,
@@ -104,7 +98,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 7,
     name: "Armani Code",
     brand: "Giorgio Armani",
     price: 40000,
@@ -121,7 +114,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 8,
     name: "Bad Boy Cobalt",
     brand: "Carolina Herrera",
     price: 40000,
@@ -138,7 +130,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 9,
     name: "Bad Boy",
     brand: "Carolina Herrera",
     price: 40000,
@@ -155,7 +146,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 10,
     name: "Black XS L'Aphrodisiaque",
     brand: "Paco Rabanne",
     price: 40000,
@@ -172,7 +162,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 11,
     name: "CH Women",
     brand: "Carolina Herrera",
     price: 40000,
@@ -189,7 +178,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 12,
     name: "Eve EDP",
     brand: "Paco Rabanne",
     price: 40000,
@@ -206,7 +194,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 13,
     name: "Givenchy Very Irresistible Sensual",
     brand: "Givenchy",
     price: 40000,
@@ -223,7 +210,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 14,
     name: "Good Girl",
     brand: "Carolina Herrera",
     price: 40000,
@@ -240,7 +226,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 15,
     name: "Halloween Women",
     brand: "Jesús del Pozo",
     price: 40000,
@@ -257,7 +242,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 16,
     name: "Hugo Boss Just Different",
     brand: "Hugo Boss",
     price: 40000,
@@ -274,7 +258,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 17,
     name: "L'Interdit",
     brand: "Givenchy",
     price: 40000,
@@ -291,7 +274,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 18,
     name: "La Vida Es Bella",
     brand: "Lancôme",
     price: 40000,
@@ -308,7 +290,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 19,
     name: "My Way",
     brand: "Giorgio Armani",
     price: 40000,
@@ -325,7 +306,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 20,
     name: "Nina Ricci",
     brand: "Nina Ricci",
     price: 40000,
@@ -342,7 +322,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 21,
     name: "Phantom Black Parfum",
     brand: "Paco Rabanne",
     price: 40000,
@@ -359,7 +338,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 22,
     name: "Phantom",
     brand: "Paco Rabanne",
     price: 40000,
@@ -376,7 +354,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 23,
     name: "Polo Blue EDT",
     brand: "Ralph Lauren",
     price: 40000,
@@ -393,7 +370,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 24,
     name: "Sauvage Dior",
     brand: "Dior",
     price: 40000,
@@ -410,7 +386,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 25,
     name: "Scandal Pour Homme",
     brand: "Jean Paul Gaultier",
     price: 40000,
@@ -427,7 +402,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 26,
     name: "Tom Ford - Oud Wood",
     brand: "Tom Ford",
     price: 40000,
@@ -444,7 +418,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 27,
     name: "212 Vip Rose",
     brand: "Carolina Herrera",
     price: 40000,
@@ -461,7 +434,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 28,
     name: "Scandal Le Parfum Intense",
     brand: "Jean Paul Gaultier",
     price: 40000,
@@ -478,7 +450,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 29,
     name: "Olimpea Intense",
     brand: "Paco Rabanne",
     price: 40000,
@@ -495,7 +466,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 30,
     name: "212-Sexy Fem",
     brand: "Carolina Herrera",
     price: 40000,
@@ -512,7 +482,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 31,
     name: "Miss Millionaire Fabulous",
     brand: "Paco Rabanne",
     price: 40000,
@@ -529,7 +498,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 32,
     name: "Bella Leclat ",
     brand: "Paco Rabanne",
     price: 40000,
@@ -546,7 +514,6 @@ export const perfumesRegulares: Perfume[] = [
     },
   },
   {
-    id: 33,
     name: "One Million",
     brand: "Paco Rabanne",
     price: 40000,

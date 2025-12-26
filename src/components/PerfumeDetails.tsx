@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { X, Plus } from "lucide-react";
 import { Perfume } from "../types";
 import { useCart } from "../context/CartContext";
@@ -7,15 +7,29 @@ import { formatPrice } from "../utils/price";
 interface PerfumeDetailsProps {
   perfume: Perfume | null;
   onClose: () => void;
+  onAddToCart?: (perfume: Perfume) => void;
 }
 
-const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose }) => {
+const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAddToCart }) => {
   const { addToCart } = useCart();
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && perfume) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [perfume, onClose]);
 
   if (!perfume) return null;
 
   const handleAddToCart = () => {
     addToCart(perfume);
+    if (onAddToCart) {
+      onAddToCart(perfume);
+    }
   };
 
   const renderNotes = (title: string, notes: string[]) => (

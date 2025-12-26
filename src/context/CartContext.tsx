@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Perfume, CartItem } from '../types';
 
 interface CartContextType {
@@ -13,8 +13,22 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+const CART_STORAGE_KEY = 'dtfragancias_cart';
+
+const loadCartFromStorage = (): CartItem[] => {
+  try {
+    const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+    if (savedCart) {
+      return JSON.parse(savedCart);
+    }
+  } catch (error) {
+    console.error('Error loading cart from storage:', error);
+  }
+  return [];
+};
+
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>(() => loadCartFromStorage());
 
   const addToCart = (perfume: Perfume) => {
     setCart((prevCart) => {
@@ -55,6 +69,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const getCartCount = () => {
     return cart.reduce((count, item) => count + item.quantity, 0);
   };
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch (error) {
+      console.error('Error saving cart to storage:', error);
+    }
+  }, [cart]);
 
   return (
     <CartContext.Provider

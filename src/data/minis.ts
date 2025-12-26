@@ -1,8 +1,7 @@
-import { Perfume } from "../types";
+import { PerfumeInput } from "../types";
 
-export const perfumesMinis: Perfume[] = [
+export const perfumesMinis: PerfumeInput[] = [
   {
-    id: 34,
     name: "Badboy Mini",
     brand: "Jaques Ryon",
     price: 15000,
@@ -19,7 +18,6 @@ export const perfumesMinis: Perfume[] = [
     },
   },
   {
-    id: 35,
     name: "Sauvage Mini",
     brand: "Jaques Ryon",
     price: 15000,
@@ -36,7 +34,6 @@ export const perfumesMinis: Perfume[] = [
     },
   },
   {
-    id: 36,
     name: "Invictus Mini",
     brand: "Jaques Ryon",
     price: 15000,
@@ -53,7 +50,6 @@ export const perfumesMinis: Perfume[] = [
     },
   },
   {
-    id: 37,
     name: "12Heroes  Mini",
     brand: "Jaques Ryon",
     price: 15000,
@@ -69,5 +65,6 @@ export const perfumesMinis: Perfume[] = [
       base: ["Almizcle"],
     },
   },
+  
 ];
 

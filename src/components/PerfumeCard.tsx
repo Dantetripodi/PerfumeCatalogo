@@ -3,18 +3,23 @@ import { Plus, Info } from 'lucide-react';
 import { Perfume } from '../types';
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/price';
+import LazyImage from './LazyImage';
 
 interface PerfumeCardProps {
   perfume: Perfume;
   onShowDetails: (perfume: Perfume) => void;
+  onAddToCart?: (perfume: Perfume) => void;
 }
 
-const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails }) => {
+const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAddToCart }) => {
   const { addToCart } = useCart();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     addToCart(perfume);
+    if (onAddToCart) {
+      onAddToCart(perfume);
+    }
   };
 
   return (
@@ -22,14 +27,13 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails }) => 
       className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer transform hover:-translate-y-1 transition-transform duration-300"
       onClick={() => onShowDetails(perfume)}
     >
-      <div className="relative h-64 overflow-hidden">
-        <img 
-          src={perfume.image} 
-          alt={perfume.name} 
+      <div className="relative h-64 overflow-hidden bg-gray-100">
+        <LazyImage
+          src={perfume.image}
+          alt={perfume.name}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-          loading="lazy"
         />
-        <div className="absolute top-2 right-2 bg-[#D4AF37] text-white px-2 py-1 rounded-full text-xs font-semibold">
+        <div className="absolute top-2 right-2 bg-[#D4AF37] text-white px-2 py-1 rounded-full text-xs font-semibold z-10">
           {perfume.gender}
         </div>
       </div>

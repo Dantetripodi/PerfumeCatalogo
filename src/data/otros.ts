@@ -1,8 +1,7 @@
-import { Perfume } from "../types";
+import { PerfumeInput } from "../types";
 
-export const otrosProductos: Perfume[] = [
+export const otrosProductos: PerfumeInput[] = [
   {
-    id: 38,
     name: "Perfumero recargable",
     brand: "Otros",
     price: 6000,

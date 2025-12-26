@@ -122,7 +122,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
             <div className="flex justify-between mb-2">
               <span className="text-sm text-gray-600">Subtotal</span>
               <span className="text-sm font-medium">
-                {total === "Consultar" ? "Consultar" : `$${total}`}
+                {formatPrice(total)}
               </span>
             </div>
             <div className="flex justify-between mb-4">
@@ -130,7 +130,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                 Total
               </span>
               <span className="text-base font-medium text-[#1A2238]">
-                {total === "Consultar" ? "Consultar" : `$${total}`}
+                {formatPrice(total)}
               </span>
             </div>
 

@@ -1,8 +1,7 @@
-import { Perfume } from "../types";
+import { PerfumeInput } from "../types";
 
-export const perfumesArabes: Perfume[] = [
+export const perfumesArabes: PerfumeInput[] = [
   {
-    id: 39,
     name: "9pm",
     brand: "Arabes",
     price: "Consultar",
@@ -19,7 +18,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 40,
     name: "Asad Lattafa",
     brand: "Arabes",
     price: "Consultar",
@@ -36,7 +34,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 41,
     name: "Bharara King",
     brand: "Arabes",
     price: "Consultar",
@@ -53,7 +50,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 42,
     name: "Al Haramain Amber Oud",
     brand: "Arabes",
     price: "Consultar",
@@ -70,7 +66,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 43,
     name: "Yara Moi Lattafa",
     brand: "Arabes",
     price: "Consultar",
@@ -87,7 +82,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 44,
     name: "Yara Pink Lattafa",
     brand: "Arabes",
     price: "Consultar",
@@ -104,7 +98,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 45,
     name: "Yara Tous Lattafa ",
     brand: "Arabes",
     price: "Consultar",
@@ -121,7 +114,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 46,
     name: "Haya de Lattafa",
     brand: "Arabes",
     price: "Consultar",
@@ -143,7 +135,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 47,
     name: "Odyssey Mandarin Sky",
     brand: "Arabes",
     price: "Consultar",
@@ -160,7 +151,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 48,
     name: "Armaf Club de Nuit Intense",
     brand: "Arabes",
     price: "Consultar",
@@ -187,7 +177,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 49,
     name: "Honor & Glory",
     brand: "Arabes",
     price: "Consultar",
@@ -204,7 +193,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 50,
     name: "Khamrah Qahwa Lattafa",
     brand: "Arabes",
     price: "Consultar",
@@ -221,7 +209,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 51,
     name: "Pure Herbal",
     brand: "Arabic",
     price: 45000,
@@ -238,7 +225,6 @@ export const perfumesArabes: Perfume[] = [
     },
   },
   {
-    id: 52,
     name: "Clayton",
     brand: "Arabic",
     price: 45000,

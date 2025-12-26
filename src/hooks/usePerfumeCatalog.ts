@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { perfumes as all } from "../data";
 import { Perfume } from "../types";
+import { useDebounce } from "./useDebounce";
 
 interface FiltersState {
   brand: string;
@@ -11,13 +12,14 @@ interface FiltersState {
 export function usePerfumeCatalog() {
   const [filters, setFilters] = useState<FiltersState>({ brand: "", gender: "", category: "" });
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [selectedPerfume, setSelectedPerfume] = useState<Perfume | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const filteredPerfumes = useMemo(() => {
     let result = all;
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
+    if (debouncedSearchQuery) {
+      const q = debouncedSearchQuery.toLowerCase();
       result = result.filter(p =>
         p.name.toLowerCase().includes(q) ||
         p.brand.toLowerCase().includes(q) ||
@@ -28,7 +30,7 @@ export function usePerfumeCatalog() {
     if (filters.gender) result = result.filter(p => p.gender === filters.gender);
     if (filters.category) result = result.filter(p => p.category === filters.category);
     return result;
-  }, [searchQuery, filters]);
+  }, [debouncedSearchQuery, filters]);
 
   const handleFilterChange = (name: keyof FiltersState, value: string) => {
     setFilters(prev => ({ ...prev, [name]: value }));
