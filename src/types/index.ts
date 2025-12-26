@@ -30,7 +30,9 @@ export type PerfumeCategory =
   | "ambar especiado"
   | "ambar frutal"
   | "ambar cítrico"
-  | "ambar acuático";
+  | "ambar acuático"
+  | "vainilla dulce"
+  | "vainilla especiada";
 
 export interface Perfume {
   id: number;

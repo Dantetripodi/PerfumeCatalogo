@@ -402,6 +402,22 @@ export const perfumesRegulares: PerfumeInput[] = [
     },
   },
   {
+    name: "Scandal Absolut",
+    brand: "Jean Paul Gaultier",
+    price: 40000,
+    gender: "masculino",
+    category: "amaderado",
+    size: "100ml",
+    image: "/imagenes/perfumes/Scandal-absolut-men.png",
+    description:
+      "Inspirado en Scandal Absolut de Jean Paul Gaultier. Atrevido y sensual con ciruela maribel, castaña y sandalo.",
+    notes: {
+      top: ["Ciruela Maribel"],
+      middle: ["Castaña"],
+      base: ["Sandalo"],
+    },
+  },
+  {
     name: "Tom Ford - Oud Wood",
     brand: "Tom Ford",
     price: 40000,
