@@ -545,5 +545,21 @@ export const perfumesRegulares: PerfumeInput[] = [
       base: ["Ámbar", "Cuero"],
     },
   },
+  {
+    name: "CH men prive",
+    brand: "Carolina Herrera",
+    price: 40000,
+    gender: "masculino",
+    category: "amaderado",
+    description:
+      "Inspirado en CH Men Prive de Carolina Herrera..",
+    notes: {
+      top: ["Whisky", "Toronja"],
+      middle: ["Cardamomo", "Lavanda","Salvia","Tomillo rojo"],
+      base: ['Cuero','Haba tonka','Almizcle']
+    },
+    size: "100ml",
+    image: "/imagenes/perfumes/ch-prive.png",
+  },
 ];
 
