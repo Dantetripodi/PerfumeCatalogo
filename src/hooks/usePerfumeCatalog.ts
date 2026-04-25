@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { perfumes as all } from "../data";
+import { useEffect, useMemo, useState } from "react";
+import { getStoredPerfumes, perfumes as basePerfumes } from "../data";
 import { Perfume } from "../types";
 import { useDebounce } from "./useDebounce";
 
@@ -27,6 +27,22 @@ export function usePerfumeCatalog() {
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [selectedPerfume, setSelectedPerfume] = useState<Perfume | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [customPerfumes, setCustomPerfumes] = useState<Perfume[]>(() => getStoredPerfumes());
+
+  const all = useMemo(() => [...basePerfumes, ...customPerfumes], [customPerfumes]);
+
+  const refreshCustomPerfumes = () => {
+    setCustomPerfumes(getStoredPerfumes());
+  };
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    const match = hash.match(/^#\/perfume\/(.+)$/);
+    if (!match) return;
+
+    const perfume = all.find(item => item.slug === match[1]);
+    if (perfume) setSelectedPerfume(perfume);
+  }, [all]);
 
   const filteredPerfumes = useMemo(() => {
     let result = all;
@@ -83,7 +99,7 @@ export function usePerfumeCatalog() {
         sorted.sort((a, b) => featuredScore(b) - featuredScore(a));
     }
     return sorted;
-  }, [debouncedSearchQuery, filters]);
+  }, [all, debouncedSearchQuery, filters]);
 
   const handleFilterChange = (name: keyof FiltersState, value: string) => {
     setFilters(prev => ({ ...prev, [name]: value }));
@@ -105,8 +121,16 @@ export function usePerfumeCatalog() {
   const handleSearch = (q: string) => setSearchQuery(q);
 
   const toggleCart = () => setIsCartOpen(v => !v);
-  const openDetails = (p: Perfume) => setSelectedPerfume(p);
-  const closeDetails = () => setSelectedPerfume(null);
+  const openDetails = (p: Perfume) => {
+    setSelectedPerfume(p);
+    window.history.replaceState(null, "", `#/perfume/${p.slug}`);
+  };
+  const closeDetails = () => {
+    setSelectedPerfume(null);
+    if (window.location.hash.startsWith("#/perfume/")) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  };
 
   return {
     allPerfumes: all,
@@ -118,6 +142,7 @@ export function usePerfumeCatalog() {
     handleFilterChange,
     handleSearch,
     resetFilters,
+    refreshCustomPerfumes,
     toggleCart,
     openDetails,
     closeDetails,

@@ -10,6 +10,7 @@ import Cart from "./components/Cart";
 import Footer from "./components/Footer";
 import Notice from "./components/Notice";
 import Toast from "./components/Toast";
+import AdminPanel from "./components/AdminPanel";
 import { Grid, List, Sparkles } from "lucide-react";
 import { usePerfumeCatalog } from "./hooks/usePerfumeCatalog";
 import { Perfume } from "./types";
@@ -28,6 +29,7 @@ function App() {
     handleFilterChange,
     handleSearch,
     resetFilters,
+    refreshCustomPerfumes,
     toggleCart,
     openDetails,
     closeDetails,
@@ -35,6 +37,7 @@ function App() {
 
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     const saved = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
     return (saved === 'grid' || saved === 'list') ? saved : 'grid';
@@ -61,7 +64,12 @@ function App() {
     <CartProvider>
       <FavoritesProvider>
       <div className="min-h-screen bg-[#F8F0E3]">
-        <Header searchQuery={searchQuery} onSearch={handleSearch} toggleCart={toggleCart} />
+        <Header
+          searchQuery={searchQuery}
+          onSearch={handleSearch}
+          toggleCart={toggleCart}
+          onOpenAdmin={() => setIsAdminOpen(true)}
+        />
 
         <main>
           <section className="relative overflow-hidden bg-[#101827] text-white">
@@ -224,6 +232,15 @@ function App() {
           message={toastMessage} 
           isVisible={showToast} 
           onClose={() => setShowToast(false)} 
+        />
+        <AdminPanel
+          isOpen={isAdminOpen}
+          onClose={() => setIsAdminOpen(false)}
+          onSaved={() => {
+            refreshCustomPerfumes();
+            setToastMessage("Producto agregado al catálogo local");
+            setShowToast(true);
+          }}
         />
         <Footer />
       </div>

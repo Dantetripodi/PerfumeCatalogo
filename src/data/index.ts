@@ -4,6 +4,8 @@ import { perfumesMinis } from "./minis";
 import { otrosProductos } from "./otros";
 import { perfumesArabes } from "./arabes";
 
+const CUSTOM_PERFUMES_STORAGE_KEY = "dtfragancias_custom_perfumes";
+
 const ID_RANGES = {
   regulares: { start: 1, end: 999 },
   minis: { start: 1000, end: 1999 },
@@ -33,9 +35,33 @@ export const perfumes: Perfume[] = [
 
 export { perfumesRegulares, perfumesMinis, otrosProductos, perfumesArabes };
 
+export function getStoredPerfumes(): Perfume[] {
+  return getStoredPerfumeInputs().map((item, index) => normalizePerfume(item, 5000 + index, "regular"));
+}
+
+export function getStoredPerfumeInputs(): PerfumeInput[] {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const saved = localStorage.getItem(CUSTOM_PERFUMES_STORAGE_KEY);
+    if (!saved) return [];
+
+    return JSON.parse(saved) as PerfumeInput[];
+  } catch (error) {
+    console.error("Error loading custom perfumes:", error);
+    return [];
+  }
+}
+
+export function saveStoredPerfumes(items: PerfumeInput[]) {
+  localStorage.setItem(CUSTOM_PERFUMES_STORAGE_KEY, JSON.stringify(items));
+}
+
+export { CUSTOM_PERFUMES_STORAGE_KEY };
+
 function normalizePerfume(item: PerfumeInput, id: number, collection: PerfumeCollection): Perfume {
   const category = normalizeCategory(item.category);
-  const stock = item.price === "Consultar" ? "consult" : collection === "arabe" ? "low" : "available";
+  const stock = item.price === "Consultar" ? "consult" : "by-order";
   const tags = buildTags(item, category, collection, stock);
 
   return {
@@ -49,6 +75,7 @@ function normalizePerfume(item: PerfumeInput, id: number, collection: PerfumeCol
     notes: normalizeNotes(item.notes),
     collection,
     stock,
+    slug: buildSlug(`${item.name}-${id}`),
     tags,
     ...buildCommercialMetadata(item, category, collection, stock, id),
   };
@@ -56,6 +83,15 @@ function normalizePerfume(item: PerfumeInput, id: number, collection: PerfumeCol
 
 function normalizeText(value: string) {
   return value.replace(/\s+/g, " ").trim();
+}
+
+export function buildSlug(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 }
 
 function normalizeDescription(value: string) {
@@ -119,6 +155,7 @@ function buildTags(item: PerfumeInput, category: PerfumeCategory, collection: Pe
   if (collection === "mini") tags.add("mini perfume");
   if (collection === "arabe") tags.add("perfume árabe");
   if (stock === "consult") tags.add("precio a consultar");
+  if (stock === "by-order") tags.add("por pedido");
   if (category.includes("vainilla") || item.description.toLowerCase().includes("dulce")) tags.add("dulce");
   if (category.includes("amader")) tags.add("amaderado");
   if (category.includes("floral")) tags.add("floral");
@@ -151,6 +188,6 @@ function buildCommercialMetadata(
     longevity: isIntense || collection === "arabe" ? "Duración alta estimada" : "Duración media estimada",
     whatsappHint: stock === "consult"
       ? "Consultá precio y disponibilidad actual antes de confirmar."
-      : "Podés pedirlo directo o consultar combinaciones similares.",
+      : "Producto mayormente por pedido. Consultá disponibilidad y tiempo estimado antes de confirmar.",
   };
 }

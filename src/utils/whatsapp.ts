@@ -12,7 +12,7 @@ export function buildWhatsappMessage(cart: CartItem[]): string {
   const lines = cart.map(item => {
     const unit = formatPrice(item.perfume.price);
     const total = lineItemTotal(item.perfume.price, item.quantity);
-    const stockNote = item.perfume.stock === "consult" ? " - precio/stock a confirmar" : "";
+    const stockNote = item.perfume.stock === "consult" ? " - precio/stock a confirmar" : " - por pedido";
     return `- ${item.quantity} x ${item.perfume.name} (${item.perfume.brand}) | ${item.perfume.size} | ${unit} = ${total}${stockNote}`;
   });
 
@@ -21,7 +21,7 @@ export function buildWhatsappMessage(cart: CartItem[]): string {
   );
 
   const totalText = formatPrice(total);
-  return `Hola DTFragancias, quiero hacer este pedido:\n\n${lines.join("\n")}\n\n*Total estimado: ${totalText}*\n\nMe confirmás stock, precio final y forma de entrega? Gracias.`;
+  return `Hola DTFragancias, quiero hacer este pedido:\n\n${lines.join("\n")}\n\n*Total estimado: ${totalText}*\n\nMe confirmás disponibilidad, precio final, demora por pedido y forma de entrega? Gracias.`;
 }
 
 export function buildProductInquiryMessage(perfume: Perfume): string {
@@ -32,5 +32,5 @@ export function buildProductInquiryMessage(perfume: Perfume): string {
     perfume.intensity && `Intensidad ${perfume.intensity}`,
   ].filter(Boolean).join(" | ");
 
-  return `Hola DTFragancias, quiero consultar por este perfume:\n\n*${perfume.name}*\nMarca: ${perfume.brand}\nTamaño: ${perfume.size}\nPrecio: ${price}\nPerfil: ${perfume.category}\n${notes ? `Detalle: ${notes}\n` : ""}\nMe confirmás disponibilidad y precio final?`;
+  return `Hola DTFragancias, quiero consultar por este perfume:\n\n*${perfume.name}*\nMarca: ${perfume.brand}\nTamaño: ${perfume.size}\nPrecio: ${price}\nPerfil: ${perfume.category}\n${notes ? `Detalle: ${notes}\n` : ""}\nMe confirmás disponibilidad, precio final y demora por pedido?`;
 }

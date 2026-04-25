@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Heart, MessageCircle, Plus, Sparkles, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Heart, Link, MessageCircle, Plus, Sparkles, X } from "lucide-react";
 import { Perfume } from "../types";
 import { useCart } from "../context/useCart";
 import { formatPrice } from "../utils/price";
@@ -16,6 +16,7 @@ interface PerfumeDetailsProps {
 const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAddToCart }) => {
   const { addToCart } = useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const [copiedLink, setCopiedLink] = useState(false);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -29,6 +30,7 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
 
   useEffect(() => {
     if (!perfume) return;
+    setCopiedLink(false);
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -49,6 +51,12 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
 
   const handleWhatsappInquiry = () => {
     window.open(buildWhatsappUrl(buildProductInquiryMessage(perfume)), "_blank");
+  };
+
+  const handleCopyLink = async () => {
+    const productUrl = `${window.location.origin}${window.location.pathname}#/perfume/${perfume.slug}`;
+    await navigator.clipboard.writeText(productUrl);
+    setCopiedLink(true);
   };
 
   const favorite = isFavorite(perfume.id);
@@ -86,12 +94,12 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
           </div>
           <div className="flex flex-col gap-6 p-6 md:flex-row">
             <div className="mb-4 w-full md:mb-0 md:w-1/2">
-              <div className="overflow-hidden rounded-lg bg-[#F2ECE1]">
+              <div className="product-photo-frame overflow-hidden rounded-lg">
                 <LazyImage
                   src={perfume.image}
                   alt={perfume.name}
                   className="aspect-[4/5] w-full"
-                  imgClassName="h-full w-full object-cover"
+                  imgClassName="h-full w-full object-contain p-8"
                 />
               </div>
             </div>
@@ -117,6 +125,11 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
                 {perfume.stock === "consult" && (
                   <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
                     Precio a consultar
+                  </span>
+                )}
+                {perfume.stock === "by-order" && (
+                  <span className="rounded-full bg-[#F8F0E3] px-3 py-1 text-xs font-semibold text-[#1A2238]">
+                    Por pedido
                   </span>
                 )}
               </div>
@@ -182,6 +195,13 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
                 >
                   <Heart size={18} className="mr-2" fill={favorite ? "currentColor" : "none"} />
                   {favorite ? "Guardado en favoritos" : "Guardar favorito"}
+                </button>
+                <button
+                  onClick={handleCopyLink}
+                  className="flex w-full items-center justify-center rounded-md border border-[#D4AF37] py-3 font-medium text-[#1A2238] transition-colors duration-200 hover:bg-[#F8F0E3]"
+                >
+                  <Link size={18} className="mr-2" />
+                  {copiedLink ? "Link copiado" : "Copiar link del perfume"}
                 </button>
               </div>
             </div>

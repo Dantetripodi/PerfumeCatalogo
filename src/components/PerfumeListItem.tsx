@@ -32,12 +32,12 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
       onClick={() => onShowDetails(perfume)}
     >
       <div className="flex flex-col sm:flex-row gap-4 p-4">
-        <div className="relative h-48 w-full flex-shrink-0 overflow-hidden rounded-lg bg-[#F2ECE1] sm:h-32 sm:w-32">
+        <div className="product-photo-frame relative h-48 w-full flex-shrink-0 overflow-hidden rounded-lg sm:h-32 sm:w-32">
           <LazyImage
             src={perfume.image}
             alt={perfume.name}
             className="h-full w-full"
-            imgClassName="h-full w-full object-cover"
+            imgClassName="h-full w-full object-contain p-3"
           />
           <div className="absolute right-2 top-2 z-10 rounded-full bg-[#D4AF37] px-2 py-1 text-xs font-semibold text-white">
             {perfume.gender}

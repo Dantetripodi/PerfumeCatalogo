@@ -44,7 +44,7 @@ export type PerfumeCategory =
   | "vainilla especiada";
 
 export type PerfumeCollection = "regular" | "mini" | "accesorio" | "arabe";
-export type PerfumeStock = "available" | "low" | "consult";
+export type PerfumeStock = "by-order" | "consult";
 export type PerfumeIntensity = "suave" | "media" | "intensa";
 
 export interface Perfume {
@@ -69,6 +69,7 @@ export interface Perfume {
   intensity?: PerfumeIntensity;
   longevity?: string;
   whatsappHint?: string;
+  slug: string;
 }
 
 export type PerfumeInput = Omit<
@@ -85,6 +86,7 @@ export type PerfumeInput = Omit<
   | "intensity"
   | "longevity"
   | "whatsappHint"
+  | "slug"
 >;
 
 export interface CartItem {

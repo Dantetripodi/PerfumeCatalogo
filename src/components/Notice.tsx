@@ -15,7 +15,7 @@ const Notice: React.FC = () => {
         </div>    
         <div className="ml-3">
           <p className="text-sm leading-6 text-amber-800">
-            <strong>Aviso importante:</strong> algunos perfumes árabes tienen precios a consultar. Los valores pueden variar según stock y cotización del dólar.
+            <strong>Aviso importante:</strong> la mayoría de los perfumes se trabaja por pedido. Algunos árabes tienen precio a consultar y pueden variar según disponibilidad y cotización del dólar.
           </p>
         </div>
       </div>

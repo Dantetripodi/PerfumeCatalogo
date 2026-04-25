@@ -31,12 +31,12 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAdd
       className="group cursor-pointer overflow-hidden rounded-lg border border-[#E8DDBF] bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
       onClick={() => onShowDetails(perfume)}
     >
-      <div className="relative aspect-[4/5] overflow-hidden bg-[#F2ECE1]">
+      <div className="product-photo-frame relative aspect-[4/5] overflow-hidden">
         <LazyImage
           src={perfume.image}
           alt={perfume.name}
           className="h-full w-full"
-          imgClassName="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          imgClassName="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/45 to-transparent" />
         <div className="absolute left-3 top-3 flex flex-wrap gap-2">
@@ -115,6 +115,7 @@ function getPerfumeBadges(perfume: Perfume) {
   const badges: string[] = [];
 
   if (typeof perfume.price !== "number") badges.push("Consultar");
+  if (perfume.stock === "by-order") badges.push("Por pedido");
   if (perfume.collection === "arabe") badges.push("Arabe");
   if (perfume.collection === "mini") badges.push("Mini");
   if (perfume.isBestSeller) badges.push("Mas vendido");
