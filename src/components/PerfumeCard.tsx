@@ -36,10 +36,10 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAdd
           src={perfume.image}
           alt={perfume.name}
           className="h-full w-full"
-          imgClassName="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-105"
+          imgClassName="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/45 to-transparent" />
-        <div className="absolute left-3 top-3 flex flex-wrap gap-2">
+        <div className="absolute left-3 top-3 z-10 flex flex-wrap gap-2">
           {badges.map((badge) => (
             <span key={badge} className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-[#1A2238] shadow-sm backdrop-blur">
               {badge}
@@ -53,13 +53,13 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAdd
           }}
           className={`absolute right-3 top-3 rounded-full p-2 shadow-sm backdrop-blur transition-colors ${
             favorite ? "bg-[#D4AF37] text-white" : "bg-white/90 text-[#1A2238] hover:bg-white"
-          }`}
+          } z-10`}
           aria-label={favorite ? `Quitar ${perfume.name} de favoritos` : `Guardar ${perfume.name} en favoritos`}
           title={favorite ? "Quitar de favoritos" : "Guardar favorito"}
         >
           <Heart size={17} fill={favorite ? "currentColor" : "none"} />
         </button>
-        <div className="absolute bottom-3 right-3 rounded-full bg-[#D4AF37] px-3 py-1 text-xs font-bold text-white shadow-sm">
+        <div className="absolute bottom-3 right-3 z-10 rounded-full bg-[#D4AF37] px-3 py-1 text-xs font-bold text-white shadow-sm">
           {perfume.gender}
         </div>
       </div>

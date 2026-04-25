@@ -99,7 +99,7 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
                   src={perfume.image}
                   alt={perfume.name}
                   className="aspect-[4/5] w-full"
-                  imgClassName="h-full w-full object-contain p-8"
+                  imgClassName="h-full w-full object-cover"
                 />
               </div>
             </div>

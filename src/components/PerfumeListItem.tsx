@@ -37,7 +37,7 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
             src={perfume.image}
             alt={perfume.name}
             className="h-full w-full"
-            imgClassName="h-full w-full object-contain p-3"
+            imgClassName="h-full w-full object-cover"
           />
           <div className="absolute right-2 top-2 z-10 rounded-full bg-[#D4AF37] px-2 py-1 text-xs font-semibold text-white">
             {perfume.gender}
@@ -47,7 +47,7 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
               e.stopPropagation();
               toggleFavorite(perfume.id);
             }}
-            className={`absolute bottom-2 right-2 rounded-full p-2 shadow-sm backdrop-blur transition-colors ${
+            className={`absolute bottom-2 right-2 z-10 rounded-full p-2 shadow-sm backdrop-blur transition-colors ${
               favorite ? "bg-[#D4AF37] text-white" : "bg-white/90 text-[#1A2238]"
             }`}
             aria-label={favorite ? `Quitar ${perfume.name} de favoritos` : `Guardar ${perfume.name} en favoritos`}

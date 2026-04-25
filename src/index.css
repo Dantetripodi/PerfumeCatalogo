@@ -64,25 +64,11 @@ img {
 }
 
 .product-photo-frame {
-  background:
-    radial-gradient(circle at 50% 18%, rgba(255, 230, 205, 0.9), transparent 34%),
-    linear-gradient(180deg, #efc29e 0%, #f6d6b9 58%, #eab78e 100%);
-}
-
-.product-photo-frame::after {
-  content: "";
-  position: absolute;
-  left: 14%;
-  right: 14%;
-  bottom: 5%;
-  height: 16%;
-  border-radius: 999px 999px 20px 20px;
-  background: linear-gradient(180deg, rgba(255, 231, 204, 0.95), rgba(224, 169, 128, 0.95));
-  box-shadow: 0 20px 40px rgba(92, 45, 20, 0.18);
+  background: linear-gradient(180deg, #f5d0ad 0%, #f8dfc7 55%, #d5a37d 100%);
 }
 
 .product-photo-frame picture,
 .product-photo-frame img {
   position: relative;
-  z-index: 1;
+  z-index: 0;
 }
