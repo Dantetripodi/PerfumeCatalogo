@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { X, Minus, Plus, ShoppingBag, Send } from "lucide-react";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../context/useCart";
 import { formatPrice, lineItemTotal } from "../utils/price";
 import { buildWhatsappMessage } from "../utils/whatsapp";
 
@@ -13,6 +13,23 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
   const { cart, removeFromCart, updateQuantity, getCartTotal, clearCart } =
     useCart();
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    const originalOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleEsc);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [isOpen, onClose]);
+
   const handleWhatsAppCheckout = () => {
     if (cart.length === 0) return;
     const phoneNumber = "541145630304";
@@ -23,20 +40,30 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
   const total = getCartTotal();
 
   return (
-    <div
-      className={`fixed inset-y-0 right-0 max-w-md w-full bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
-        isOpen ? "translate-x-0" : "translate-x-full"
-      }`}
-    >
-      <div className="flex flex-col h-full">
-        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-          <h2 className="text-xl font-serif font-semibold text-[#1A2238] flex items-center">
+    <>
+      <div
+        className={`fixed inset-0 z-40 bg-[#101827]/55 backdrop-blur-sm transition-opacity duration-300 ${
+          isOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <aside
+        className={`fixed inset-y-0 right-0 z-50 w-full max-w-md transform bg-white shadow-2xl transition-transform duration-300 ease-in-out ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+        aria-hidden={!isOpen}
+      >
+      <div className="flex h-full flex-col">
+        <div className="flex items-center justify-between border-b border-gray-200 p-4">
+          <h2 className="flex items-center font-serif text-xl font-semibold text-[#1A2238]">
             <ShoppingBag size={20} className="mr-2 text-[#D4AF37]" />
-            Carrito de Compras
+            Carrito
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="rounded-md p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+            aria-label="Cerrar carrito"
           >
             <X size={24} />
           </button>
@@ -46,7 +73,8 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
           {cart.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <ShoppingBag size={64} className="text-gray-300 mb-4" />
-              <p className="text-gray-500">Tu carrito está vacío</p>
+              <p className="font-medium text-[#1A2238]">Tu carrito está vacío</p>
+              <p className="mt-2 text-sm text-gray-500">Agregá fragancias para armar tu pedido.</p>
             </div>
           ) : (
             <ul className="space-y-4">
@@ -80,7 +108,8 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                         </div>
                         <button
                           onClick={() => removeFromCart(item.perfume.id)}
-                          className="text-gray-400 hover:text-gray-600"
+                          className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                          aria-label={`Quitar ${item.perfume.name}`}
                         >
                           <X size={16} />
                         </button>
@@ -90,7 +119,8 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                           onClick={() =>
                             updateQuantity(item.perfume.id, item.quantity - 1)
                           }
-                          className="text-gray-500 hover:text-[#1A2238] p-1"
+                          className="rounded p-1 text-gray-500 hover:bg-[#F8F0E3] hover:text-[#1A2238]"
+                          aria-label={`Restar ${item.perfume.name}`}
                         >
                           <Minus size={16} />
                         </button>
@@ -101,7 +131,8 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                           onClick={() =>
                             updateQuantity(item.perfume.id, item.quantity + 1)
                           }
-                          className="text-gray-500 hover:text-[#1A2238] p-1"
+                          className="rounded p-1 text-gray-500 hover:bg-[#F8F0E3] hover:text-[#1A2238]"
+                          aria-label={`Sumar ${item.perfume.name}`}
                         >
                           <Plus size={16} />
                         </button>
@@ -118,7 +149,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
         </div>
 
         {cart.length > 0 && (
-          <div className="border-t border-gray-200 p-4 bg-gray-50">
+          <div className="border-t border-gray-200 bg-[#FBF8F1] p-4">
             <div className="flex justify-between mb-2">
               <span className="text-sm text-gray-600">Subtotal</span>
               <span className="text-sm font-medium">
@@ -137,7 +168,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
             <div className="space-y-2">
               <button
                 onClick={handleWhatsAppCheckout}
-                className="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition-colors duration-200 flex items-center justify-center"
+                className="flex w-full items-center justify-center rounded-md bg-green-600 py-3 font-medium text-white transition-colors duration-200 hover:bg-green-700"
               >
                 <Send size={18} className="mr-2" />
                 Pedir por WhatsApp
@@ -145,7 +176,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
 
               <button
                 onClick={clearCart}
-                className="w-full bg-gray-200 text-gray-700 py-2 rounded-md hover:bg-gray-300 transition-colors duration-200"
+                className="w-full rounded-md bg-gray-200 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-300"
               >
                 Vaciar carrito
               </button>
@@ -153,7 +184,8 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
           </div>
         )}
       </div>
-    </div>
+      </aside>
+    </>
   );
 };
 

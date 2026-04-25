@@ -1,7 +1,7 @@
 import React from 'react';
 import { Plus, Info } from 'lucide-react';
 import { Perfume } from '../types';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
 import { formatPrice } from '../utils/price';
 import LazyImage from './LazyImage';
 
@@ -13,6 +13,7 @@ interface PerfumeCardProps {
 
 const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAddToCart }) => {
   const { addToCart } = useCart();
+  const badges = getPerfumeBadges(perfume);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -24,33 +25,53 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAdd
 
   return (
     <div 
-      className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer transform hover:-translate-y-1 transition-transform duration-300"
+      className="group cursor-pointer overflow-hidden rounded-lg border border-[#E8DDBF] bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
       onClick={() => onShowDetails(perfume)}
     >
-      <div className="relative h-64 overflow-hidden bg-gray-100">
+      <div className="relative aspect-[4/5] overflow-hidden bg-[#F2ECE1]">
         <LazyImage
           src={perfume.image}
           alt={perfume.name}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          className="h-full w-full"
+          imgClassName="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute top-2 right-2 bg-[#D4AF37] text-white px-2 py-1 rounded-full text-xs font-semibold z-10">
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/45 to-transparent" />
+        <div className="absolute left-3 top-3 flex flex-wrap gap-2">
+          {badges.map((badge) => (
+            <span key={badge} className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-[#1A2238] shadow-sm backdrop-blur">
+              {badge}
+            </span>
+          ))}
+        </div>
+        <div className="absolute bottom-3 right-3 rounded-full bg-[#D4AF37] px-3 py-1 text-xs font-bold text-white shadow-sm">
           {perfume.gender}
         </div>
       </div>
       
       <div className="p-4">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="text-lg font-serif font-semibold text-[#1A2238] line-clamp-1">{perfume.name}</h3>
-          <span className="font-bold text-[#D4AF37]">{formatPrice(perfume.price)}</span>
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h3 className="line-clamp-1 font-serif text-lg font-semibold text-[#1A2238]">{perfume.name}</h3>
+            <p className="mt-1 text-sm text-gray-600">{perfume.brand}</p>
+          </div>
+          <span className="shrink-0 text-right text-lg font-bold text-[#9A7A1F]">{formatPrice(perfume.price)}</span>
         </div>
         
-        <p className="text-sm text-gray-600 mb-2">{perfume.brand}</p>
-        <p className="text-sm text-gray-500 mb-4 line-clamp-2">{perfume.description}</p>
+        <p className="mb-4 line-clamp-2 min-h-[2.5rem] text-sm leading-5 text-gray-500">{perfume.description}</p>
+
+        <div className="mb-4 flex flex-wrap gap-2">
+          <span className="rounded-full bg-[#F8F0E3] px-2.5 py-1 text-xs font-medium text-[#1A2238]">
+            {perfume.category}
+          </span>
+          <span className="rounded-full bg-[#EEF0F4] px-2.5 py-1 text-xs font-medium text-[#1A2238]">
+            {perfume.size}
+          </span>
+        </div>
         
-        <div className="flex justify-between space-x-2">
+        <div className="flex gap-2">
           <button
             onClick={(e) => handleAddToCart(e)}
-            className="flex-1 bg-[#1A2238] text-white py-2 rounded-md hover:bg-opacity-90 transition-colors duration-200 flex items-center justify-center"
+            className="flex flex-1 items-center justify-center rounded-md bg-[#1A2238] py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-[#25304F]"
           >
             <Plus size={16} className="mr-1" />
             Agregar
@@ -61,7 +82,7 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAdd
               e.stopPropagation();
               onShowDetails(perfume);
             }}
-            className="flex-1 border border-[#1A2238] text-[#1A2238] py-2 rounded-md hover:bg-[#1A2238] hover:text-white transition-colors duration-200 flex items-center justify-center"
+            className="flex flex-1 items-center justify-center rounded-md border border-[#1A2238] py-2 text-sm font-medium text-[#1A2238] transition-colors duration-200 hover:bg-[#1A2238] hover:text-white"
           >
             <Info size={16} className="mr-1" />
             Detalles
@@ -73,3 +94,14 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAdd
 };
 
 export default PerfumeCard;
+
+function getPerfumeBadges(perfume: Perfume) {
+  const badges: string[] = [];
+
+  if (typeof perfume.price !== "number") badges.push("Consultar");
+  if (perfume.id >= 3000) badges.push("Arabe");
+  if (perfume.id >= 1000 && perfume.id < 2000) badges.push("Mini");
+  if (badges.length === 0 && (perfume.id < 6 || perfume.gender === "unisex")) badges.push("Destacado");
+
+  return badges.slice(0, 2);
+}

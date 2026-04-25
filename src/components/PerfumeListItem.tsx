@@ -1,7 +1,7 @@
 import React from 'react';
 import { Plus, Info } from 'lucide-react';
 import { Perfume } from '../types';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
 import { formatPrice } from '../utils/price';
 import LazyImage from './LazyImage';
 
@@ -13,6 +13,7 @@ interface PerfumeListItemProps {
 
 const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetails, onAddToCart }) => {
   const { addToCart } = useCart();
+  const isConsultPrice = typeof perfume.price !== "number";
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -24,17 +25,18 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
 
   return (
     <div 
-      className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+      className="cursor-pointer overflow-hidden rounded-lg border border-[#E8DDBF] bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-lg"
       onClick={() => onShowDetails(perfume)}
     >
       <div className="flex flex-col sm:flex-row gap-4 p-4">
-        <div className="relative w-full sm:w-32 h-48 sm:h-32 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+        <div className="relative h-48 w-full flex-shrink-0 overflow-hidden rounded-lg bg-[#F2ECE1] sm:h-32 sm:w-32">
           <LazyImage
             src={perfume.image}
             alt={perfume.name}
-            className="w-full h-full object-cover"
+            className="h-full w-full"
+            imgClassName="h-full w-full object-cover"
           />
-          <div className="absolute top-2 right-2 bg-[#D4AF37] text-white px-2 py-1 rounded-full text-xs font-semibold z-10">
+          <div className="absolute right-2 top-2 z-10 rounded-full bg-[#D4AF37] px-2 py-1 text-xs font-semibold text-white">
             {perfume.gender}
           </div>
         </div>
@@ -43,7 +45,7 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
           <div className="flex-1 min-w-0">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
               <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-serif font-semibold text-[#1A2238] line-clamp-1 mb-1">
+                <h3 className="mb-1 line-clamp-1 font-serif text-lg font-semibold text-[#1A2238]">
                   {perfume.name}
                 </h3>
                 <p className="text-sm text-gray-600 mb-1">{perfume.brand}</p>
@@ -52,7 +54,7 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
                 </p>
               </div>
               <div className="flex-shrink-0">
-                <span className="text-xl font-bold text-[#D4AF37]">
+                <span className="text-xl font-bold text-[#9A7A1F]">
                   {formatPrice(perfume.price)}
                 </span>
               </div>
@@ -65,13 +67,18 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
               <span className="bg-[#F8F0E3] text-[#1A2238] text-xs px-2 py-1 rounded-full">
                 {perfume.size}
               </span>
+              {isConsultPrice && (
+                <span className="rounded-full bg-[#1A2238] px-2 py-1 text-xs font-medium text-white">
+                  Consultar stock
+                </span>
+              )}
             </div>
           </div>
           
           <div className="flex gap-2 sm:flex-col sm:w-32 flex-shrink-0">
             <button
               onClick={(e) => handleAddToCart(e)}
-              className="flex-1 sm:flex-none bg-[#1A2238] text-white py-2 px-4 rounded-md hover:bg-opacity-90 transition-colors duration-200 flex items-center justify-center text-sm"
+              className="flex flex-1 items-center justify-center rounded-md bg-[#1A2238] px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-[#25304F] sm:flex-none"
             >
               <Plus size={16} className="mr-1" />
               Agregar
@@ -82,7 +89,7 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
                 e.stopPropagation();
                 onShowDetails(perfume);
               }}
-              className="flex-1 sm:flex-none border border-[#1A2238] text-[#1A2238] py-2 px-4 rounded-md hover:bg-[#1A2238] hover:text-white transition-colors duration-200 flex items-center justify-center text-sm"
+              className="flex flex-1 items-center justify-center rounded-md border border-[#1A2238] px-4 py-2 text-sm font-medium text-[#1A2238] transition-colors duration-200 hover:bg-[#1A2238] hover:text-white sm:flex-none"
             >
               <Info size={16} className="mr-1" />
               Detalles
@@ -95,4 +102,3 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
 };
 
 export default PerfumeListItem;
-

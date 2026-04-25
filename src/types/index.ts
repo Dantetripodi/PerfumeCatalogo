@@ -16,7 +16,7 @@ export type PerfumeCategory =
   | "cítrico acuático"
   | "acuático oriental"
   | "floral frutal"
-  | "oriental especiaido"
+  | "oriental especiado"
   | "oriental floral"
   | "amaderado frutal"
   | "cítrico floral"
@@ -60,6 +60,6 @@ export interface CartContextType {
   removeFromCart: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
   clearCart: () => void;
-  getCartTotal: () => number;
+  getCartTotal: () => number | "Consultar";
   getCartCount: () => number;
 }
