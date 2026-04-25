@@ -2,6 +2,8 @@ import React from "react";
 import { Instagram, CreditCard, Wallet, Send } from "lucide-react";
 
 const Footer: React.FC = () => {
+  const year = new Date().getFullYear();
+
   return (
     <footer className="bg-[#1A2238] text-white py-8">
       <div className="container mx-auto px-4">
@@ -19,7 +21,7 @@ const Footer: React.FC = () => {
               <a href="https://www.instagram.com/dt_fragancias/" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors">
                 <Instagram size={24} />
               </a>
-              <a href="https://wa.me/1145630304" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors">
+              <a href="https://wa.me/541145630304" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors">
                 <Send size={24} />
               </a>
             </div>
@@ -41,7 +43,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="text-center mt-8 pt-4 border-t border-gray-700">
-          <p className="text-sm text-gray-300">© 2025 DTFragancias. Todos los derechos reservados.</p>
+          <p className="text-sm text-gray-300">© {year} DTFragancias. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

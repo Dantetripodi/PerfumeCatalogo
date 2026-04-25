@@ -21,10 +21,12 @@ function App() {
     allPerfumes,
     filteredPerfumes,
     filters,
+    searchQuery,
     selectedPerfume,
     isCartOpen,
     handleFilterChange,
     handleSearch,
+    resetFilters,
     toggleCart,
     openDetails,
     closeDetails,
@@ -49,29 +51,80 @@ function App() {
   return (
     <CartProvider>
       <div className="min-h-screen bg-[#F8F0E3]">
-        <Header onSearch={handleSearch} toggleCart={toggleCart} />
+        <Header searchQuery={searchQuery} onSearch={handleSearch} toggleCart={toggleCart} />
 
-        <main className="container mx-auto px-4 py-8">
-          <h2 className="text-3xl font-serif font-bold text-center mb-8 text-[#1A2238]">
-            Catálogo de <span className="text-[#D4AF37]">Perfumes</span>
-          </h2>
+        <main>
+          <section className="relative overflow-hidden bg-[#101827] text-white">
+            <div className="absolute inset-0">
+              <img
+                src="/imagenes/perfumes/fotos-varias.jpg"
+                alt=""
+                className="h-full w-full object-cover opacity-35"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#101827] via-[#101827]/85 to-[#101827]/45" />
+            </div>
+            <div className="container relative mx-auto px-4 py-12 sm:py-16 lg:py-20">
+              <div className="max-w-2xl">
+                <p className="mb-3 text-sm font-semibold uppercase tracking-[0.24em] text-[#D4AF37]">
+                  DTFragancias
+                </p>
+                <h2 className="font-serif text-4xl font-bold leading-tight sm:text-5xl">
+                  Un perfume, una historia.
+                </h2>
+                <p className="mt-4 max-w-xl text-base leading-7 text-white/80">
+                  Explorá fragancias seleccionadas, compará precios y armá tu pedido directo por WhatsApp.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3 text-sm text-white/90">
+                  <span className="rounded-full border border-white/25 bg-white/10 px-4 py-2 backdrop-blur">
+                    {allPerfumes.length} productos
+                  </span>
+                  <span className="rounded-full border border-white/25 bg-white/10 px-4 py-2 backdrop-blur">
+                    Perfumes árabes
+                  </span>
+                  <span className="rounded-full border border-white/25 bg-white/10 px-4 py-2 backdrop-blur">
+                    Pedido por WhatsApp
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
 
-          <Notice />
+          <div className="container mx-auto px-4 py-8">
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-sm font-medium uppercase tracking-[0.18em] text-[#9A7A1F]">
+                  Catálogo
+                </p>
+                <h2 className="font-serif text-3xl font-bold text-[#1A2238]">
+                  Perfumes disponibles
+                </h2>
+              </div>
+              <p className="max-w-xl text-sm leading-6 text-gray-600">
+                Usá filtros para encontrar una fragancia por marca, perfil, género o presupuesto.
+              </p>
+            </div>
 
-          <div className="flex flex-col lg:flex-row gap-8">
+            <Notice />
+
+          <div className="flex flex-col gap-8 lg:flex-row">
             <div className="lg:w-1/4">
-              <Filters filters={filters} onFilterChange={handleFilterChange} perfumes={allPerfumes} />
+              <Filters
+                filters={filters}
+                onFilterChange={handleFilterChange}
+                onResetFilters={resetFilters}
+                perfumes={allPerfumes}
+              />
             </div>
 
             <div className="lg:w-3/4">
-              <div className="flex justify-between items-center mb-4">
+              <div className="mb-4 flex flex-col gap-3 rounded-lg border border-white/70 bg-white/80 p-3 shadow-sm backdrop-blur sm:flex-row sm:items-center sm:justify-between">
                 <div className="text-sm text-gray-600">
-                  Mostrando {filteredPerfumes.length} de {allPerfumes.length} perfumes
+                  Mostrando <strong className="text-[#1A2238]">{filteredPerfumes.length}</strong> de {allPerfumes.length} perfumes
                 </div>
-                <div className="flex gap-2 bg-white rounded-lg p-1 shadow-sm">
+                <div className="flex w-fit gap-1 rounded-lg bg-[#EEF0F4] p-1">
                   <button
                     onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded transition-colors duration-200 ${
+                    className={`rounded p-2 transition-colors duration-200 ${
                       viewMode === 'grid'
                         ? 'bg-[#1A2238] text-white'
                         : 'text-gray-600 hover:bg-gray-100'
@@ -83,7 +136,7 @@ function App() {
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
-                    className={`p-2 rounded transition-colors duration-200 ${
+                    className={`rounded p-2 transition-colors duration-200 ${
                       viewMode === 'list'
                         ? 'bg-[#1A2238] text-white'
                         : 'text-gray-600 hover:bg-gray-100'
@@ -100,6 +153,12 @@ function App() {
                 <div className="text-center py-16">
                   <h3 className="text-xl font-medium text-gray-600 mb-2">No se encontraron perfumes</h3>
                   <p className="text-gray-500">Intenta cambiar los filtros de búsqueda</p>
+                  <button
+                    onClick={resetFilters}
+                    className="mt-5 rounded-md bg-[#1A2238] px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-[#25304F]"
+                  >
+                    Limpiar búsqueda
+                  </button>
                 </div>
               ) : viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -125,6 +184,7 @@ function App() {
                 </div>
               )}
             </div>
+          </div>
           </div>
         </main>
 

@@ -2,7 +2,7 @@ import React from "react";
 
 const Notice: React.FC = () => {
   return (
-    <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mb-8 rounded-r-lg shadow-sm">
+    <div className="mb-8 rounded-lg border border-amber-200 bg-amber-50 p-4 shadow-sm">
       <div className="flex">
         <div className="flex-shrink-0">
           <svg className="h-5 w-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
@@ -14,9 +14,8 @@ const Notice: React.FC = () => {
           </svg>
         </div>    
         <div className="ml-3">
-          <p className="text-sm text-amber-700">
-            <strong>Aviso importante:</strong> Los perfumes árabes tienen precios a consultar. Los precios mostrados son aproximados y pueden
-            variar según cotización del dólar.
+          <p className="text-sm leading-6 text-amber-800">
+            <strong>Aviso importante:</strong> algunos perfumes árabes tienen precios a consultar. Los valores pueden variar según stock y cotización del dólar.
           </p>
         </div>
       </div>

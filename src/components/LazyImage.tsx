@@ -5,6 +5,7 @@ interface LazyImageProps {
   src: string;
   alt: string;
   className?: string;
+  imgClassName?: string;
   base?: string;
   webpDefault?: string;
 }
@@ -13,6 +14,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
   src, 
   alt, 
   className = '', 
+  imgClassName = '',
   base, 
   webpDefault 
 }) => {
@@ -29,7 +31,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
   }
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={`relative overflow-hidden ${className}`}>
       {isIntersecting && (
         <picture>
           {base && webpDefault && (
@@ -51,7 +53,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
             decoding="async"
             onLoad={() => setLoaded(true)}
             onError={() => setError(true)}
-            className={`transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+            className={`${imgClassName} transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
           />
         </picture>
       )}

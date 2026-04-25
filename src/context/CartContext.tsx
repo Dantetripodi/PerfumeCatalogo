@@ -1,19 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import { Perfume, CartItem } from '../types';
-
-interface CartContextType {
-  cart: CartItem[];
-  addToCart: (perfume: Perfume) => void;
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
-  clearCart: () => void;
-  getCartTotal: () => number | "Consultar";
-  getCartCount: () => number;
-}
-
-const CartContext = createContext<CartContextType | undefined>(undefined);
-
-const CART_STORAGE_KEY = 'dtfragancias_cart';
+import { CART_STORAGE_KEY, CartContext } from './cartState';
 
 const loadCartFromStorage = (): CartItem[] => {
   try {
@@ -93,12 +80,4 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       {children}
     </CartContext.Provider>
   );
-};
-
-export const useCart = (): CartContextType => {
-  const context = useContext(CartContext);
-  if (context === undefined) {
-    throw new Error('useCart must be used within a CartProvider');
-  }
-  return context;
 };

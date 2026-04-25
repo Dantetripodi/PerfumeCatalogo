@@ -24,7 +24,7 @@ export const perfumesMinis: PerfumeInput[] = [
     gender: "masculino",
     category: "amaderado",
     size: "50ml",
-    image: "/imagenes//minis/sauvage-50ml.jpg",
+    image: "/imagenes/minis/sauvage-50ml.jpg",
     description:
       "Miniatura de Sauvage. Fresco con bergamota, lavanda y vetiver.",
     notes: {
@@ -82,4 +82,3 @@ export const perfumesMinis: PerfumeInput[] = [
     image: "/imagenes/minis/Stronger-with-you.png",
   },
 ];
-
