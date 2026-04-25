@@ -1,15 +1,14 @@
 import React from 'react';
-import { Search, Settings, ShoppingBag } from 'lucide-react';
+import { Search, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/useCart';
 
 interface HeaderProps {
   searchQuery: string;
   onSearch: (query: string) => void;
   toggleCart: () => void;
-  onOpenAdmin: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ searchQuery, onSearch, toggleCart, onOpenAdmin }) => {
+const Header: React.FC<HeaderProps> = ({ searchQuery, onSearch, toggleCart }) => {
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
 
@@ -28,13 +27,6 @@ const Header: React.FC<HeaderProps> = ({ searchQuery, onSearch, toggleCart, onOp
             </h1>
             
             <div className="sm:hidden">
-              <button
-                onClick={onOpenAdmin}
-                className="relative mr-1 rounded-md p-2 text-[#1A2238] transition-colors duration-200 hover:bg-[#F8F0E3] hover:text-[#9A7A1F]"
-                aria-label="Abrir panel admin"
-              >
-                <Settings size={22} />
-              </button>
               <button 
                 onClick={toggleCart}
                 className="relative rounded-md p-2 text-[#1A2238] transition-colors duration-200 hover:bg-[#F8F0E3] hover:text-[#9A7A1F]"
@@ -63,14 +55,6 @@ const Header: React.FC<HeaderProps> = ({ searchQuery, onSearch, toggleCart, onOp
           </div>
           
           <div className="hidden sm:block">
-            <button
-              onClick={onOpenAdmin}
-              className="mr-2 rounded-md p-2 text-[#1A2238] transition-colors duration-200 hover:bg-[#F8F0E3] hover:text-[#9A7A1F]"
-              aria-label="Abrir panel admin"
-              title="Panel admin"
-            >
-              <Settings size={22} />
-            </button>
             <button 
               onClick={toggleCart}
               className="relative rounded-md p-2 text-[#1A2238] transition-colors duration-200 hover:bg-[#F8F0E3] hover:text-[#9A7A1F]"

@@ -25,9 +25,15 @@ const emptyForm: PerfumeInput = {
   },
 };
 
+const ADMIN_PASSWORD = "DTFragancias2026";
+const ADMIN_SESSION_KEY = "dtfragancias_admin_session";
+
 const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose, onSaved }) => {
   const [form, setForm] = useState<PerfumeInput>(emptyForm);
   const [savedCount, setSavedCount] = useState(0);
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem(ADMIN_SESSION_KEY) === "true");
 
   useEffect(() => {
     if (!isOpen) return;
@@ -59,19 +65,56 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose, onSaved }) => 
     onSaved();
   };
 
+  const handleLogin = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (password !== ADMIN_PASSWORD) {
+      setLoginError("Contraseña incorrecta");
+      return;
+    }
+
+    sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
+    setIsAuthenticated(true);
+    setLoginError("");
+    setPassword("");
+  };
+
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#101827]/70 p-4 backdrop-blur-sm">
       <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-white shadow-2xl">
         <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white/95 p-4 backdrop-blur">
           <div>
             <h2 className="font-serif text-2xl font-bold text-[#1A2238]">Panel admin</h2>
-            <p className="text-sm text-gray-500">{savedCount} productos cargados localmente</p>
+            <p className="text-sm text-gray-500">
+              {isAuthenticated ? `${savedCount} productos cargados localmente` : "Ingresá la contraseña para administrar productos"}
+            </p>
           </div>
           <button onClick={onClose} className="rounded-md p-2 text-gray-500 hover:bg-gray-100" aria-label="Cerrar admin">
             <X size={22} />
           </button>
         </div>
 
+        {!isAuthenticated ? (
+          <form onSubmit={handleLogin} className="mx-auto grid max-w-md gap-4 p-6">
+            <label className="text-sm font-medium text-[#1A2238]">
+              Contraseña
+              <input
+                type="password"
+                value={password}
+                onChange={event => setPassword(event.target.value)}
+                className="mt-1 w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
+                autoFocus
+              />
+            </label>
+            {loginError && <p className="text-sm font-medium text-red-600">{loginError}</p>}
+            <button className="rounded-md bg-[#1A2238] px-4 py-3 font-medium text-white hover:bg-[#25304F]">
+              Entrar al admin
+            </button>
+            <p className="rounded-lg bg-amber-50 p-3 text-sm leading-6 text-amber-800">
+              Protección temporal del frontend. Con Supabase vamos a reemplazar esto por login real, base de datos y subida de imágenes.
+            </p>
+          </form>
+        ) : (
         <form onSubmit={handleSubmit} className="grid gap-4 p-5 sm:grid-cols-2">
           <TextInput label="Nombre" value={form.name} onChange={value => updateField("name", value)} required />
           <TextInput label="Marca" value={form.brand} onChange={value => updateField("brand", value)} required />
@@ -138,9 +181,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose, onSaved }) => 
           </div>
 
           <p className="rounded-lg bg-[#F8F0E3] p-3 text-sm leading-6 text-[#1A2238] sm:col-span-2">
-            Este panel guarda productos en este navegador. Para que queden online para todos, después podemos conectarlo a una base de datos o generar un archivo exportable.
+            Este panel guarda productos en este navegador. Para imágenes locales, primero agregá el archivo en public/imagenes/perfumes o public/imagenes/arabes y pegá una ruta como /imagenes/perfumes/nombre.jpg. Con Supabase vamos a reemplazar esto por carga real de imágenes, edición y borrado.
           </p>
         </form>
+        )}
       </div>
     </div>
   );

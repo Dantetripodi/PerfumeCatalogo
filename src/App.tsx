@@ -47,6 +47,16 @@ function App() {
     localStorage.setItem(VIEW_MODE_STORAGE_KEY, viewMode);
   }, [viewMode]);
 
+  useEffect(() => {
+    const syncAdminRoute = () => {
+      setIsAdminOpen(window.location.hash === "#/admin");
+    };
+
+    syncAdminRoute();
+    window.addEventListener("hashchange", syncAdminRoute);
+    return () => window.removeEventListener("hashchange", syncAdminRoute);
+  }, []);
+
   const handleAddToCart = (perfume: Perfume) => {
     setToastMessage(`${perfume.name} agregado al carrito`);
     setShowToast(true);
@@ -68,7 +78,6 @@ function App() {
           searchQuery={searchQuery}
           onSearch={handleSearch}
           toggleCart={toggleCart}
-          onOpenAdmin={() => setIsAdminOpen(true)}
         />
 
         <main>
@@ -235,7 +244,12 @@ function App() {
         />
         <AdminPanel
           isOpen={isAdminOpen}
-          onClose={() => setIsAdminOpen(false)}
+          onClose={() => {
+            setIsAdminOpen(false);
+            if (window.location.hash === "#/admin") {
+              window.history.replaceState(null, "", window.location.pathname);
+            }
+          }}
           onSaved={() => {
             refreshCustomPerfumes();
             setToastMessage("Producto agregado al catálogo local");
