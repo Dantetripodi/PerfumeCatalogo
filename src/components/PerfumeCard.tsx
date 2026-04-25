@@ -1,9 +1,10 @@
 import React from 'react';
-import { Plus, Info } from 'lucide-react';
+import { Heart, Info, Plus } from 'lucide-react';
 import { Perfume } from '../types';
 import { useCart } from '../context/useCart';
 import { formatPrice } from '../utils/price';
 import LazyImage from './LazyImage';
+import { useFavorites } from '../hooks/useFavorites';
 
 interface PerfumeCardProps {
   perfume: Perfume;
@@ -13,7 +14,9 @@ interface PerfumeCardProps {
 
 const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAddToCart }) => {
   const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const badges = getPerfumeBadges(perfume);
+  const favorite = isFavorite(perfume.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -43,6 +46,19 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAdd
             </span>
           ))}
         </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleFavorite(perfume.id);
+          }}
+          className={`absolute right-3 top-3 rounded-full p-2 shadow-sm backdrop-blur transition-colors ${
+            favorite ? "bg-[#D4AF37] text-white" : "bg-white/90 text-[#1A2238] hover:bg-white"
+          }`}
+          aria-label={favorite ? `Quitar ${perfume.name} de favoritos` : `Guardar ${perfume.name} en favoritos`}
+          title={favorite ? "Quitar de favoritos" : "Guardar favorito"}
+        >
+          <Heart size={17} fill={favorite ? "currentColor" : "none"} />
+        </button>
         <div className="absolute bottom-3 right-3 rounded-full bg-[#D4AF37] px-3 py-1 text-xs font-bold text-white shadow-sm">
           {perfume.gender}
         </div>
@@ -99,9 +115,11 @@ function getPerfumeBadges(perfume: Perfume) {
   const badges: string[] = [];
 
   if (typeof perfume.price !== "number") badges.push("Consultar");
-  if (perfume.id >= 3000) badges.push("Arabe");
-  if (perfume.id >= 1000 && perfume.id < 2000) badges.push("Mini");
-  if (badges.length === 0 && (perfume.id < 6 || perfume.gender === "unisex")) badges.push("Destacado");
+  if (perfume.collection === "arabe") badges.push("Arabe");
+  if (perfume.collection === "mini") badges.push("Mini");
+  if (perfume.isBestSeller) badges.push("Mas vendido");
+  if (perfume.isNew) badges.push("Nuevo");
+  if (badges.length === 0 && perfume.isFeatured) badges.push("Destacado");
 
   return badges.slice(0, 2);
 }

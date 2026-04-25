@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
-import { X, Plus } from "lucide-react";
+import { Heart, MessageCircle, Plus, Sparkles, X } from "lucide-react";
 import { Perfume } from "../types";
 import { useCart } from "../context/useCart";
 import { formatPrice } from "../utils/price";
 import LazyImage from "./LazyImage";
+import { buildProductInquiryMessage, buildWhatsappUrl } from "../utils/whatsapp";
+import { useFavorites } from "../hooks/useFavorites";
 
 interface PerfumeDetailsProps {
   perfume: Perfume | null;
@@ -13,6 +15,7 @@ interface PerfumeDetailsProps {
 
 const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAddToCart }) => {
   const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -43,6 +46,12 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
       onAddToCart(perfume);
     }
   };
+
+  const handleWhatsappInquiry = () => {
+    window.open(buildWhatsappUrl(buildProductInquiryMessage(perfume)), "_blank");
+  };
+
+  const favorite = isFavorite(perfume.id);
 
   const renderNotes = (title: string, notes: string[]) => (
     <div className="mb-3">
@@ -93,6 +102,25 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
               </h2>
               <h3 className="text-xl text-gray-600 mb-4">{perfume.brand}</h3>
 
+              <div className="mb-4 flex flex-wrap gap-2">
+                {perfume.isBestSeller && (
+                  <span className="flex items-center rounded-full bg-[#1A2238] px-3 py-1 text-xs font-semibold text-white">
+                    <Sparkles size={13} className="mr-1" />
+                    Más vendido
+                  </span>
+                )}
+                {perfume.isNew && (
+                  <span className="rounded-full bg-[#D4AF37] px-3 py-1 text-xs font-semibold text-white">
+                    Nuevo
+                  </span>
+                )}
+                {perfume.stock === "consult" && (
+                  <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
+                    Precio a consultar
+                  </span>
+                )}
+              </div>
+
               <div className="flex items-center mb-4">
                 <div className="mr-2 rounded-full bg-[#D4AF37] px-3 py-1 text-sm font-medium text-white">
                   {perfume.gender}
@@ -111,6 +139,13 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
 
               <p className="text-gray-700 mb-6">{perfume.description}</p>
 
+              <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <InfoBox label="Uso ideal" value={perfume.occasion} />
+                <InfoBox label="Temporada" value={perfume.season} />
+                <InfoBox label="Intensidad" value={perfume.intensity} />
+                <InfoBox label="Duración" value={perfume.longevity} />
+              </div>
+
               <div className="mb-6">
                 <h3 className="text-lg font-serif font-semibold text-[#1A2238] mb-3">
                   Notas de fragancia
@@ -120,13 +155,35 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
                 {renderNotes("Notas de fondo", perfume.notes.base)}
               </div>
 
-              <button
-                onClick={handleAddToCart}
-                className="flex w-full items-center justify-center rounded-md bg-[#1A2238] py-3 font-medium text-white transition-colors duration-200 hover:bg-[#25304F]"
-              >
-                <Plus size={18} className="mr-2" />
-                Agregar al carrito
-              </button>
+              {perfume.whatsappHint && (
+                <p className="mb-4 rounded-lg bg-[#F8F0E3] p-3 text-sm leading-6 text-[#1A2238]">
+                  {perfume.whatsappHint}
+                </p>
+              )}
+
+              <div className="space-y-2">
+                <button
+                  onClick={handleAddToCart}
+                  className="flex w-full items-center justify-center rounded-md bg-[#1A2238] py-3 font-medium text-white transition-colors duration-200 hover:bg-[#25304F]"
+                >
+                  <Plus size={18} className="mr-2" />
+                  Agregar al carrito
+                </button>
+                <button
+                  onClick={handleWhatsappInquiry}
+                  className="flex w-full items-center justify-center rounded-md bg-green-600 py-3 font-medium text-white transition-colors duration-200 hover:bg-green-700"
+                >
+                  <MessageCircle size={18} className="mr-2" />
+                  Consultar este perfume por WhatsApp
+                </button>
+                <button
+                  onClick={() => toggleFavorite(perfume.id)}
+                  className="flex w-full items-center justify-center rounded-md border border-[#1A2238] py-3 font-medium text-[#1A2238] transition-colors duration-200 hover:bg-[#1A2238] hover:text-white"
+                >
+                  <Heart size={18} className="mr-2" fill={favorite ? "currentColor" : "none"} />
+                  {favorite ? "Guardado en favoritos" : "Guardar favorito"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -136,3 +193,14 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
 };
 
 export default PerfumeDetails;
+
+const InfoBox: React.FC<{ label: string; value?: string }> = ({ label, value }) => {
+  if (!value) return null;
+
+  return (
+    <div className="rounded-lg border border-[#E8DDBF] bg-[#FBF8F1] p-3">
+      <div className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9A7A1F]">{label}</div>
+      <div className="mt-1 text-sm font-medium text-[#1A2238]">{value}</div>
+    </div>
+  );
+};

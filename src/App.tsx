@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { CartProvider } from "./context/CartContext";
+import { FavoritesProvider } from "./context/FavoritesContext";
 import Header from "./components/Header";
 import Filters from "./components/Filters";
 import PerfumeCard from "./components/PerfumeCard";
@@ -9,7 +10,7 @@ import Cart from "./components/Cart";
 import Footer from "./components/Footer";
 import Notice from "./components/Notice";
 import Toast from "./components/Toast";
-import { Grid, List } from "lucide-react";
+import { Grid, List, Sparkles } from "lucide-react";
 import { usePerfumeCatalog } from "./hooks/usePerfumeCatalog";
 import { Perfume } from "./types";
 
@@ -48,8 +49,17 @@ function App() {
     setShowToast(true);
   };
 
+  const quickFilters = [
+    { label: "Todos", value: "all" },
+    { label: "Destacados", value: "featured" },
+    { label: "Arabes", value: "arabe" },
+    { label: "Mini perfumes", value: "mini" },
+    { label: "Consultar precio", value: "consult" },
+  ];
+
   return (
     <CartProvider>
+      <FavoritesProvider>
       <div className="min-h-screen bg-[#F8F0E3]">
         <Header searchQuery={searchQuery} onSearch={handleSearch} toggleCart={toggleCart} />
 
@@ -105,6 +115,26 @@ function App() {
             </div>
 
             <Notice />
+
+            <div className="mb-6 flex gap-2 overflow-x-auto pb-1">
+              {quickFilters.map(filter => {
+                const isActive = filters.collection === filter.value;
+                return (
+                  <button
+                    key={filter.value}
+                    onClick={() => handleFilterChange("collection", filter.value)}
+                    className={`flex shrink-0 items-center rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                      isActive
+                        ? "border-[#1A2238] bg-[#1A2238] text-white"
+                        : "border-[#E8DDBF] bg-white text-[#1A2238] hover:border-[#D4AF37]"
+                    }`}
+                  >
+                    {filter.value === "featured" && <Sparkles size={15} className="mr-2" />}
+                    {filter.label}
+                  </button>
+                );
+              })}
+            </div>
 
           <div className="flex flex-col gap-8 lg:flex-row">
             <div className="lg:w-1/4">
@@ -197,6 +227,7 @@ function App() {
         />
         <Footer />
       </div>
+      </FavoritesProvider>
     </CartProvider>
   );
 }

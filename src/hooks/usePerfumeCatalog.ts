@@ -4,6 +4,7 @@ import { Perfume } from "../types";
 import { useDebounce } from "./useDebounce";
 
 interface FiltersState {
+  collection: string;
   brand: string;
   gender: string;
   category: string;
@@ -14,6 +15,7 @@ interface FiltersState {
 
 export function usePerfumeCatalog() {
   const [filters, setFilters] = useState<FiltersState>({
+    collection: "all",
     brand: "",
     gender: "",
     category: "",
@@ -43,6 +45,13 @@ export function usePerfumeCatalog() {
     if (filters.brand) result = result.filter(p => p.brand === filters.brand);
     if (filters.gender) result = result.filter(p => p.gender === filters.gender);
     if (filters.category) result = result.filter(p => p.category === filters.category);
+    if (filters.collection !== "all") {
+      result = result.filter(p => {
+        if (filters.collection === "featured") return Boolean(p.isFeatured);
+        if (filters.collection === "consult") return p.stock === "consult";
+        return p.collection === filters.collection;
+      });
+    }
 
     const minPrice = Number(filters.minPrice);
     const maxPrice = Number(filters.maxPrice);
@@ -82,6 +91,7 @@ export function usePerfumeCatalog() {
 
   const resetFilters = () => {
     setFilters({
+      collection: "all",
       brand: "",
       gender: "",
       category: "",
@@ -121,6 +131,9 @@ function numericPrice(price: Perfume["price"]) {
 function featuredScore(perfume: Perfume) {
   let score = 0;
 
+  if (perfume.isBestSeller) score += 5;
+  if (perfume.isFeatured) score += 4;
+  if (perfume.isNew) score += 3;
   if (perfume.category.includes("ambar") || perfume.category.includes("oriental")) score += 3;
   if (perfume.gender === "unisex") score += 2;
   if (typeof perfume.price !== "number") score += 1;

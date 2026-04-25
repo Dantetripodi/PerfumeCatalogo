@@ -5,6 +5,7 @@ import { formatPrice } from '../utils/price';
 
 interface FilterProps {
   filters: {
+    collection: string;
     brand: string;
     gender: string;
     category: string;
