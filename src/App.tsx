@@ -11,11 +11,13 @@ import Footer from "./components/Footer";
 import Notice from "./components/Notice";
 import Toast from "./components/Toast";
 import AdminPanel from "./components/AdminPanel";
+import ContentStudio from "./content-studio/ContentStudio";
 import { Grid, List, Sparkles } from "lucide-react";
 import { usePerfumeCatalog } from "./hooks/usePerfumeCatalog";
 import { Perfume } from "./types";
 
 type ViewMode = 'grid' | 'list';
+type AppView = 'catalog' | 'content-studio';
 const VIEW_MODE_STORAGE_KEY = 'dtfragancias_view_mode';
 
 function App() {
@@ -38,6 +40,7 @@ function App() {
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [appView, setAppView] = useState<AppView>('catalog');
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     const saved = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
     return (saved === 'grid' || saved === 'list') ? saved : 'grid';
@@ -62,6 +65,20 @@ function App() {
     setShowToast(true);
   };
 
+  // ── Content Studio view ──────────────────────────────────────────────────
+  if (appView === 'content-studio') {
+    return (
+      <CartProvider>
+        <FavoritesProvider>
+          <ContentStudio
+            perfumes={allPerfumes}
+            onBack={() => setAppView('catalog')}
+          />
+        </FavoritesProvider>
+      </CartProvider>
+    );
+  }
+
   const quickFilters = [
     { label: "Todos", value: "all" },
     { label: "Destacados", value: "featured" },
@@ -78,6 +95,7 @@ function App() {
           searchQuery={searchQuery}
           onSearch={handleSearch}
           toggleCart={toggleCart}
+          onOpenContentStudio={() => setAppView('content-studio')}
         />
 
         <main>
