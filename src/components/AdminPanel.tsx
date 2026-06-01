@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Save, X } from "lucide-react";
+import { Save, X, FlaskConical, Images } from "lucide-react";
 import { getStoredPerfumeInputs, saveStoredPerfumes } from "../data";
 import { PerfumeCategory, PerfumeInput } from "../types";
 
@@ -7,6 +7,8 @@ interface AdminPanelProps {
   isOpen: boolean;
   onClose: () => void;
   onSaved: () => void;
+  onOpenContentStudio?: () => void;
+  onOpenCarousel?: () => void;
 }
 
 const emptyForm: PerfumeInput = {
@@ -28,7 +30,7 @@ const emptyForm: PerfumeInput = {
 const ADMIN_PASSWORD = "DTFragancias2026";
 const ADMIN_SESSION_KEY = "dtfragancias_admin_session";
 
-const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose, onSaved }) => {
+const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose, onSaved, onOpenContentStudio, onOpenCarousel }) => {
   const [form, setForm] = useState<PerfumeInput>(emptyForm);
   const [savedCount, setSavedCount] = useState(0);
   const [password, setPassword] = useState("");
@@ -89,9 +91,31 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose, onSaved }) => 
               {isAuthenticated ? `${savedCount} productos cargados localmente` : "Ingresá la contraseña para administrar productos"}
             </p>
           </div>
-          <button onClick={onClose} className="rounded-md p-2 text-gray-500 hover:bg-gray-100" aria-label="Cerrar admin">
-            <X size={22} />
-          </button>
+          <div className="flex items-center gap-2">
+            {isAuthenticated && onOpenCarousel && (
+              <button
+                onClick={() => { onClose(); onOpenCarousel(); }}
+                className="flex items-center gap-1.5 rounded-md border border-[#E8DDBF] px-3 py-2 text-sm font-medium text-[#1A2238] transition-colors hover:border-[#D4AF37] hover:text-[#D4AF37]"
+                title="Generador de carruseles para Instagram"
+              >
+                <Images size={16} />
+                Carrusel
+              </button>
+            )}
+            {isAuthenticated && onOpenContentStudio && (
+              <button
+                onClick={() => { onClose(); onOpenContentStudio(); }}
+                className="flex items-center gap-1.5 rounded-md border border-[#E8DDBF] px-3 py-2 text-sm font-medium text-[#1A2238] transition-colors hover:border-[#D4AF37] hover:text-[#D4AF37]"
+                title="Ir al Content Studio"
+              >
+                <FlaskConical size={16} />
+                Content Studio
+              </button>
+            )}
+            <button onClick={onClose} className="rounded-md p-2 text-gray-500 hover:bg-gray-100" aria-label="Cerrar admin">
+              <X size={22} />
+            </button>
+          </div>
         </div>
 
         {!isAuthenticated ? (

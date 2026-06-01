@@ -1,15 +1,16 @@
 import React from 'react';
-import { Search, ShoppingBag, FlaskConical } from 'lucide-react';
+import { Search, ShoppingBag, Lock } from 'lucide-react';
 import { useCart } from '../context/useCart';
 
 interface HeaderProps {
   searchQuery: string;
   onSearch: (query: string) => void;
   toggleCart: () => void;
-  onOpenContentStudio: () => void;
+  /** Abre el AdminPanel (que tiene su propio gate con contraseña). Opcional. */
+  onOpenAdmin?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ searchQuery, onSearch, toggleCart, onOpenContentStudio }) => {
+const Header: React.FC<HeaderProps> = ({ searchQuery, onSearch, toggleCart, onOpenAdmin }) => {
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
 
@@ -22,16 +23,17 @@ const Header: React.FC<HeaderProps> = ({ searchQuery, onSearch, toggleCart, onOp
               <span className="text-[#D4AF37]">DT</span>Fragancias
             </h1>
 
-            {/* Mobile actions */}
             <div className="sm:hidden flex items-center gap-1">
-              <button
-                onClick={onOpenContentStudio}
-                className="rounded-md p-2 text-[#1A2238] transition-colors hover:bg-[#F8F0E3] hover:text-[#D4AF37]"
-                aria-label="Abrir Content Studio"
-                title="Content Studio"
-              >
-                <FlaskConical size={22} />
-              </button>
+              {onOpenAdmin && (
+                <button
+                  onClick={onOpenAdmin}
+                  className="rounded-md p-2 text-gray-400 transition-colors duration-200 hover:bg-[#F8F0E3] hover:text-[#9A7A1F]"
+                  aria-label="Acceso admin"
+                  title="Acceso admin"
+                >
+                  <Lock size={18} />
+                </button>
+              )}
               <button
                 onClick={toggleCart}
                 className="relative rounded-md p-2 text-[#1A2238] transition-colors duration-200 hover:bg-[#F8F0E3] hover:text-[#9A7A1F]"
@@ -59,17 +61,17 @@ const Header: React.FC<HeaderProps> = ({ searchQuery, onSearch, toggleCart, onOp
             <Search className="absolute right-3 top-2.5 text-gray-400" size={20} />
           </div>
 
-          {/* Desktop actions */}
-          <div className="hidden sm:flex items-center gap-2">
-            <button
-              onClick={onOpenContentStudio}
-              className="flex items-center gap-1.5 rounded-md border border-[#E8DDBF] px-3 py-2 text-sm font-medium text-[#1A2238] transition-colors hover:border-[#D4AF37] hover:bg-[#F8F0E3] hover:text-[#D4AF37]"
-              aria-label="Abrir Content Studio"
-            >
-              <FlaskConical size={17} />
-              <span className="hidden lg:inline">Content Studio</span>
-            </button>
-
+          <div className="hidden sm:flex items-center gap-1">
+            {onOpenAdmin && (
+              <button
+                onClick={onOpenAdmin}
+                className="rounded-md p-2 text-gray-400 transition-colors duration-200 hover:bg-[#F8F0E3] hover:text-[#9A7A1F]"
+                aria-label="Acceso admin"
+                title="Acceso admin"
+              >
+                <Lock size={18} />
+              </button>
+            )}
             <button
               onClick={toggleCart}
               className="relative rounded-md p-2 text-[#1A2238] transition-colors duration-200 hover:bg-[#F8F0E3] hover:text-[#9A7A1F]"
