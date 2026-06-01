@@ -1,9 +1,10 @@
 import React from 'react';
-import { Plus, Info } from 'lucide-react';
+import { Heart, Info, Plus } from 'lucide-react';
 import { Perfume } from '../types';
 import { useCart } from '../context/useCart';
 import { formatPrice } from '../utils/price';
 import LazyImage from './LazyImage';
+import { useFavorites } from '../hooks/useFavorites';
 
 interface PerfumeListItemProps {
   perfume: Perfume;
@@ -13,7 +14,9 @@ interface PerfumeListItemProps {
 
 const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetails, onAddToCart }) => {
   const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const isConsultPrice = typeof perfume.price !== "number";
+  const favorite = isFavorite(perfume.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -29,7 +32,7 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
       onClick={() => onShowDetails(perfume)}
     >
       <div className="flex flex-col sm:flex-row gap-4 p-4">
-        <div className="relative h-48 w-full flex-shrink-0 overflow-hidden rounded-lg bg-[#F2ECE1] sm:h-32 sm:w-32">
+        <div className="product-photo-frame relative h-48 w-full flex-shrink-0 overflow-hidden rounded-lg sm:h-32 sm:w-32">
           <LazyImage
             src={perfume.image}
             alt={perfume.name}
@@ -39,6 +42,18 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
           <div className="absolute right-2 top-2 z-10 rounded-full bg-[#D4AF37] px-2 py-1 text-xs font-semibold text-white">
             {perfume.gender}
           </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleFavorite(perfume.id);
+            }}
+            className={`absolute bottom-2 right-2 z-10 rounded-full p-2 shadow-sm backdrop-blur transition-colors ${
+              favorite ? "bg-[#D4AF37] text-white" : "bg-white/90 text-[#1A2238]"
+            }`}
+            aria-label={favorite ? `Quitar ${perfume.name} de favoritos` : `Guardar ${perfume.name} en favoritos`}
+          >
+            <Heart size={15} fill={favorite ? "currentColor" : "none"} />
+          </button>
         </div>
         
         <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-4">

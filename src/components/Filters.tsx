@@ -5,6 +5,7 @@ import { formatPrice } from '../utils/price';
 
 interface FilterProps {
   filters: {
+    collection: string;
     brand: string;
     gender: string;
     category: string;
@@ -12,7 +13,7 @@ interface FilterProps {
     maxPrice: string;
     sort: string;
   };
-  onFilterChange: (name: string, value: string) => void;
+  onFilterChange: (name: keyof FilterProps['filters'], value: string) => void;
   onResetFilters: () => void;
   perfumes: Perfume[];
 }

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { X, Minus, Plus, ShoppingBag, Send } from "lucide-react";
 import { useCart } from "../context/useCart";
 import { formatPrice, lineItemTotal } from "../utils/price";
-import { buildWhatsappMessage } from "../utils/whatsapp";
+import { buildWhatsappMessage, buildWhatsappUrl } from "../utils/whatsapp";
 
 interface CartProps {
   isOpen: boolean;
@@ -32,9 +32,8 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
 
   const handleWhatsAppCheckout = () => {
     if (cart.length === 0) return;
-    const phoneNumber = "541145630304";
     const message = buildWhatsappMessage(cart);
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
+    window.open(buildWhatsappUrl(message), "_blank");
   };
 
   const total = getCartTotal();

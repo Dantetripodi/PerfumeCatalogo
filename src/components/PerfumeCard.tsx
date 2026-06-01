@@ -1,9 +1,10 @@
 import React from 'react';
-import { Plus, Info } from 'lucide-react';
+import { Heart, Info, Plus } from 'lucide-react';
 import { Perfume } from '../types';
 import { useCart } from '../context/useCart';
 import { formatPrice } from '../utils/price';
 import LazyImage from './LazyImage';
+import { useFavorites } from '../hooks/useFavorites';
 
 interface PerfumeCardProps {
   perfume: Perfume;
@@ -13,7 +14,9 @@ interface PerfumeCardProps {
 
 const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAddToCart }) => {
   const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const badges = getPerfumeBadges(perfume);
+  const favorite = isFavorite(perfume.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -28,7 +31,7 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAdd
       className="group cursor-pointer overflow-hidden rounded-lg border border-[#E8DDBF] bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
       onClick={() => onShowDetails(perfume)}
     >
-      <div className="relative aspect-[4/5] overflow-hidden bg-[#F2ECE1]">
+      <div className="product-photo-frame relative aspect-[4/5] overflow-hidden">
         <LazyImage
           src={perfume.image}
           alt={perfume.name}
@@ -36,14 +39,27 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAdd
           imgClassName="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/45 to-transparent" />
-        <div className="absolute left-3 top-3 flex flex-wrap gap-2">
+        <div className="absolute left-3 top-3 z-10 flex flex-wrap gap-2">
           {badges.map((badge) => (
             <span key={badge} className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-[#1A2238] shadow-sm backdrop-blur">
               {badge}
             </span>
           ))}
         </div>
-        <div className="absolute bottom-3 right-3 rounded-full bg-[#D4AF37] px-3 py-1 text-xs font-bold text-white shadow-sm">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleFavorite(perfume.id);
+          }}
+          className={`absolute right-3 top-3 rounded-full p-2 shadow-sm backdrop-blur transition-colors ${
+            favorite ? "bg-[#D4AF37] text-white" : "bg-white/90 text-[#1A2238] hover:bg-white"
+          } z-10`}
+          aria-label={favorite ? `Quitar ${perfume.name} de favoritos` : `Guardar ${perfume.name} en favoritos`}
+          title={favorite ? "Quitar de favoritos" : "Guardar favorito"}
+        >
+          <Heart size={17} fill={favorite ? "currentColor" : "none"} />
+        </button>
+        <div className="absolute bottom-3 right-3 z-10 rounded-full bg-[#D4AF37] px-3 py-1 text-xs font-bold text-white shadow-sm">
           {perfume.gender}
         </div>
       </div>
@@ -99,9 +115,12 @@ function getPerfumeBadges(perfume: Perfume) {
   const badges: string[] = [];
 
   if (typeof perfume.price !== "number") badges.push("Consultar");
-  if (perfume.id >= 3000) badges.push("Arabe");
-  if (perfume.id >= 1000 && perfume.id < 2000) badges.push("Mini");
-  if (badges.length === 0 && (perfume.id < 6 || perfume.gender === "unisex")) badges.push("Destacado");
+  if (perfume.stock === "by-order") badges.push("Por pedido");
+  if (perfume.collection === "arabe") badges.push("Arabe");
+  if (perfume.collection === "mini") badges.push("Mini");
+  if (perfume.isBestSeller) badges.push("Mas vendido");
+  if (perfume.isNew) badges.push("Nuevo");
+  if (badges.length === 0 && perfume.isFeatured) badges.push("Destacado");
 
   return badges.slice(0, 2);
 }

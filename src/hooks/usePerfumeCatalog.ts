@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
-import { perfumes as all } from "../data";
+import { useEffect, useMemo, useState } from "react";
+import { getStoredPerfumes, perfumes as basePerfumes } from "../data";
 import { Perfume } from "../types";
 import { useDebounce } from "./useDebounce";
 
 interface FiltersState {
+  collection: string;
   brand: string;
   gender: string;
   category: string;
@@ -14,6 +15,7 @@ interface FiltersState {
 
 export function usePerfumeCatalog() {
   const [filters, setFilters] = useState<FiltersState>({
+    collection: "all",
     brand: "",
     gender: "",
     category: "",
@@ -25,6 +27,22 @@ export function usePerfumeCatalog() {
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [selectedPerfume, setSelectedPerfume] = useState<Perfume | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [customPerfumes, setCustomPerfumes] = useState<Perfume[]>(() => getStoredPerfumes());
+
+  const all = useMemo(() => [...basePerfumes, ...customPerfumes], [customPerfumes]);
+
+  const refreshCustomPerfumes = () => {
+    setCustomPerfumes(getStoredPerfumes());
+  };
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    const match = hash.match(/^#\/perfume\/(.+)$/);
+    if (!match) return;
+
+    const perfume = all.find(item => item.slug === match[1]);
+    if (perfume) setSelectedPerfume(perfume);
+  }, [all]);
 
   const filteredPerfumes = useMemo(() => {
     let result = all;
@@ -43,6 +61,13 @@ export function usePerfumeCatalog() {
     if (filters.brand) result = result.filter(p => p.brand === filters.brand);
     if (filters.gender) result = result.filter(p => p.gender === filters.gender);
     if (filters.category) result = result.filter(p => p.category === filters.category);
+    if (filters.collection !== "all") {
+      result = result.filter(p => {
+        if (filters.collection === "featured") return Boolean(p.isFeatured);
+        if (filters.collection === "consult") return p.stock === "consult";
+        return p.collection === filters.collection;
+      });
+    }
 
     const minPrice = Number(filters.minPrice);
     const maxPrice = Number(filters.maxPrice);
@@ -74,7 +99,7 @@ export function usePerfumeCatalog() {
         sorted.sort((a, b) => featuredScore(b) - featuredScore(a));
     }
     return sorted;
-  }, [debouncedSearchQuery, filters]);
+  }, [all, debouncedSearchQuery, filters]);
 
   const handleFilterChange = (name: keyof FiltersState, value: string) => {
     setFilters(prev => ({ ...prev, [name]: value }));
@@ -82,6 +107,7 @@ export function usePerfumeCatalog() {
 
   const resetFilters = () => {
     setFilters({
+      collection: "all",
       brand: "",
       gender: "",
       category: "",
@@ -95,8 +121,16 @@ export function usePerfumeCatalog() {
   const handleSearch = (q: string) => setSearchQuery(q);
 
   const toggleCart = () => setIsCartOpen(v => !v);
-  const openDetails = (p: Perfume) => setSelectedPerfume(p);
-  const closeDetails = () => setSelectedPerfume(null);
+  const openDetails = (p: Perfume) => {
+    setSelectedPerfume(p);
+    window.history.replaceState(null, "", `#/perfume/${p.slug}`);
+  };
+  const closeDetails = () => {
+    setSelectedPerfume(null);
+    if (window.location.hash.startsWith("#/perfume/")) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  };
 
   return {
     allPerfumes: all,
@@ -108,6 +142,7 @@ export function usePerfumeCatalog() {
     handleFilterChange,
     handleSearch,
     resetFilters,
+    refreshCustomPerfumes,
     toggleCart,
     openDetails,
     closeDetails,
@@ -121,6 +156,9 @@ function numericPrice(price: Perfume["price"]) {
 function featuredScore(perfume: Perfume) {
   let score = 0;
 
+  if (perfume.isBestSeller) score += 5;
+  if (perfume.isFeatured) score += 4;
+  if (perfume.isNew) score += 3;
   if (perfume.category.includes("ambar") || perfume.category.includes("oriental")) score += 3;
   if (perfume.gender === "unisex") score += 2;
   if (typeof perfume.price !== "number") score += 1;

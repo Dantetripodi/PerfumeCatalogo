@@ -62,3 +62,13 @@ img {
 .animate-slide-up {
   animation: slide-up 0.3s ease-out;
 }
+
+.product-photo-frame {
+  background: linear-gradient(180deg, #f5d0ad 0%, #f8dfc7 55%, #d5a37d 100%);
+}
+
+.product-photo-frame picture,
+.product-photo-frame img {
+  position: relative;
+  z-index: 0;
+}

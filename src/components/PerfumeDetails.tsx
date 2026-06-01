@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
-import { X, Plus } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Heart, Link, MessageCircle, Plus, Sparkles, X } from "lucide-react";
 import { Perfume } from "../types";
 import { useCart } from "../context/useCart";
 import { formatPrice } from "../utils/price";
 import LazyImage from "./LazyImage";
+import { buildProductInquiryMessage, buildWhatsappUrl } from "../utils/whatsapp";
+import { useFavorites } from "../hooks/useFavorites";
 
 interface PerfumeDetailsProps {
   perfume: Perfume | null;
@@ -13,6 +15,8 @@ interface PerfumeDetailsProps {
 
 const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAddToCart }) => {
   const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const [copiedLink, setCopiedLink] = useState(false);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -26,6 +30,7 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
 
   useEffect(() => {
     if (!perfume) return;
+    setCopiedLink(false);
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -43,6 +48,18 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
       onAddToCart(perfume);
     }
   };
+
+  const handleWhatsappInquiry = () => {
+    window.open(buildWhatsappUrl(buildProductInquiryMessage(perfume)), "_blank");
+  };
+
+  const handleCopyLink = async () => {
+    const productUrl = `${window.location.origin}${window.location.pathname}#/perfume/${perfume.slug}`;
+    await navigator.clipboard.writeText(productUrl);
+    setCopiedLink(true);
+  };
+
+  const favorite = isFavorite(perfume.id);
 
   const renderNotes = (title: string, notes: string[]) => (
     <div className="mb-3">
@@ -77,7 +94,7 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
           </div>
           <div className="flex flex-col gap-6 p-6 md:flex-row">
             <div className="mb-4 w-full md:mb-0 md:w-1/2">
-              <div className="overflow-hidden rounded-lg bg-[#F2ECE1]">
+              <div className="product-photo-frame overflow-hidden rounded-lg">
                 <LazyImage
                   src={perfume.image}
                   alt={perfume.name}
@@ -92,6 +109,30 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
                 {perfume.name}
               </h2>
               <h3 className="text-xl text-gray-600 mb-4">{perfume.brand}</h3>
+
+              <div className="mb-4 flex flex-wrap gap-2">
+                {perfume.isBestSeller && (
+                  <span className="flex items-center rounded-full bg-[#1A2238] px-3 py-1 text-xs font-semibold text-white">
+                    <Sparkles size={13} className="mr-1" />
+                    Más vendido
+                  </span>
+                )}
+                {perfume.isNew && (
+                  <span className="rounded-full bg-[#D4AF37] px-3 py-1 text-xs font-semibold text-white">
+                    Nuevo
+                  </span>
+                )}
+                {perfume.stock === "consult" && (
+                  <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
+                    Precio a consultar
+                  </span>
+                )}
+                {perfume.stock === "by-order" && (
+                  <span className="rounded-full bg-[#F8F0E3] px-3 py-1 text-xs font-semibold text-[#1A2238]">
+                    Por pedido
+                  </span>
+                )}
+              </div>
 
               <div className="flex items-center mb-4">
                 <div className="mr-2 rounded-full bg-[#D4AF37] px-3 py-1 text-sm font-medium text-white">
@@ -111,6 +152,13 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
 
               <p className="text-gray-700 mb-6">{perfume.description}</p>
 
+              <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <InfoBox label="Uso ideal" value={perfume.occasion} />
+                <InfoBox label="Temporada" value={perfume.season} />
+                <InfoBox label="Intensidad" value={perfume.intensity} />
+                <InfoBox label="Duración" value={perfume.longevity} />
+              </div>
+
               <div className="mb-6">
                 <h3 className="text-lg font-serif font-semibold text-[#1A2238] mb-3">
                   Notas de fragancia
@@ -120,13 +168,42 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
                 {renderNotes("Notas de fondo", perfume.notes.base)}
               </div>
 
-              <button
-                onClick={handleAddToCart}
-                className="flex w-full items-center justify-center rounded-md bg-[#1A2238] py-3 font-medium text-white transition-colors duration-200 hover:bg-[#25304F]"
-              >
-                <Plus size={18} className="mr-2" />
-                Agregar al carrito
-              </button>
+              {perfume.whatsappHint && (
+                <p className="mb-4 rounded-lg bg-[#F8F0E3] p-3 text-sm leading-6 text-[#1A2238]">
+                  {perfume.whatsappHint}
+                </p>
+              )}
+
+              <div className="space-y-2">
+                <button
+                  onClick={handleAddToCart}
+                  className="flex w-full items-center justify-center rounded-md bg-[#1A2238] py-3 font-medium text-white transition-colors duration-200 hover:bg-[#25304F]"
+                >
+                  <Plus size={18} className="mr-2" />
+                  Agregar al carrito
+                </button>
+                <button
+                  onClick={handleWhatsappInquiry}
+                  className="flex w-full items-center justify-center rounded-md bg-green-600 py-3 font-medium text-white transition-colors duration-200 hover:bg-green-700"
+                >
+                  <MessageCircle size={18} className="mr-2" />
+                  Consultar este perfume por WhatsApp
+                </button>
+                <button
+                  onClick={() => toggleFavorite(perfume.id)}
+                  className="flex w-full items-center justify-center rounded-md border border-[#1A2238] py-3 font-medium text-[#1A2238] transition-colors duration-200 hover:bg-[#1A2238] hover:text-white"
+                >
+                  <Heart size={18} className="mr-2" fill={favorite ? "currentColor" : "none"} />
+                  {favorite ? "Guardado en favoritos" : "Guardar favorito"}
+                </button>
+                <button
+                  onClick={handleCopyLink}
+                  className="flex w-full items-center justify-center rounded-md border border-[#D4AF37] py-3 font-medium text-[#1A2238] transition-colors duration-200 hover:bg-[#F8F0E3]"
+                >
+                  <Link size={18} className="mr-2" />
+                  {copiedLink ? "Link copiado" : "Copiar link del perfume"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -136,3 +213,14 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
 };
 
 export default PerfumeDetails;
+
+const InfoBox: React.FC<{ label: string; value?: string }> = ({ label, value }) => {
+  if (!value) return null;
+
+  return (
+    <div className="rounded-lg border border-[#E8DDBF] bg-[#FBF8F1] p-3">
+      <div className="text-xs font-semibold uppercase tracking-[0.14em] text-[#9A7A1F]">{label}</div>
+      <div className="mt-1 text-sm font-medium text-[#1A2238]">{value}</div>
+    </div>
+  );
+};

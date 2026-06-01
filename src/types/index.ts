@@ -23,16 +23,29 @@ export type PerfumeCategory =
   | "acuático floral"
   | "aromático especiado"
   | "perfumeria"
+  | "perfumería"
   | "aromatica"
+  | "aromático"
   | "ambar"
+  | "ámbar"
   | "ambar floral"
+  | "ámbar floral"
   | "ambar oriental"
+  | "ámbar oriental"
   | "ambar especiado"
+  | "ámbar especiado"
   | "ambar frutal"
+  | "ámbar frutal"
   | "ambar cítrico"
+  | "ámbar cítrico"
   | "ambar acuático"
+  | "ámbar acuático"
   | "vainilla dulce"
   | "vainilla especiada";
+
+export type PerfumeCollection = "regular" | "mini" | "accesorio" | "arabe";
+export type PerfumeStock = "by-order" | "consult";
+export type PerfumeIntensity = "suave" | "media" | "intensa";
 
 export interface Perfume {
   id: number;
@@ -45,9 +58,36 @@ export interface Perfume {
   image: string;
   description: string;
   notes: Notes;
+  collection: PerfumeCollection;
+  stock: PerfumeStock;
+  tags: string[];
+  isFeatured?: boolean;
+  isBestSeller?: boolean;
+  isNew?: boolean;
+  occasion?: string;
+  season?: string;
+  intensity?: PerfumeIntensity;
+  longevity?: string;
+  whatsappHint?: string;
+  slug: string;
 }
 
-export type PerfumeInput = Omit<Perfume, 'id'>;
+export type PerfumeInput = Omit<
+  Perfume,
+  | "id"
+  | "collection"
+  | "stock"
+  | "tags"
+  | "isFeatured"
+  | "isBestSeller"
+  | "isNew"
+  | "occasion"
+  | "season"
+  | "intensity"
+  | "longevity"
+  | "whatsappHint"
+  | "slug"
+>;
 
 export interface CartItem {
   perfume: Perfume;
