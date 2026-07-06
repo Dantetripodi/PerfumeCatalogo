@@ -60,7 +60,10 @@ function App() {
   const [pinTarget, setPinTarget] = useState<PinTarget>("content-studio");
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     const saved = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
-    return saved === "grid" || saved === "list" ? saved : "grid";
+    if (saved === "grid" || saved === "list") return saved;
+    // Default: compact list on mobile, grid on larger screens
+    if (typeof window !== "undefined" && window.innerWidth < 640) return "list";
+    return "grid";
   });
 
   // Persiste preferencia de vista
@@ -178,7 +181,9 @@ function App() {
   const quickFilters = [
     { label: "Todos", value: "all" },
     { label: "Destacados", value: "featured" },
+    { label: "Yves", value: "regular" },
     { label: "Arabes", value: "arabe" },
+    { label: "Arabic", value: "arabic" },
     { label: "Mini perfumes", value: "mini" },
     { label: "Consultar precio", value: "consult" },
   ];
@@ -364,7 +369,7 @@ function App() {
                       ))}
                     </div>
                   ) : (
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2.5">
                       {filteredPerfumes.map((perfume) => (
                         <PerfumeListItem
                           key={perfume.id}
