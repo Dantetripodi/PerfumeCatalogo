@@ -117,6 +117,7 @@ function getPerfumeBadges(perfume: Perfume) {
   if (typeof perfume.price !== "number") badges.push("Consultar");
   if (perfume.stock === "by-order") badges.push("Por pedido");
   if (perfume.collection === "arabe") badges.push("Arabe");
+  if (perfume.collection === "arabic") badges.push("Arabic");
   if (perfume.collection === "mini") badges.push("Mini");
   if (perfume.isBestSeller) badges.push("Mas vendido");
   if (perfume.isNew) badges.push("Nuevo");

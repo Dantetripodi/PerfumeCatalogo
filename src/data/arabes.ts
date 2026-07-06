@@ -3,7 +3,7 @@ import { PerfumeInput } from "../types";
 export const perfumesArabes: PerfumeInput[] = [
   {
     name: "9pm",
-    brand: "Arabes",
+    brand: "Yves Dorgeval",
     price: "Consultar",
     gender: "masculino",
     category: "oriental",
@@ -19,7 +19,7 @@ export const perfumesArabes: PerfumeInput[] = [
   },
   {
     name: "Asad Lattafa",
-    brand: "Arabes",
+    brand: "Yves Dorgeval",
     price: "Consultar",
     gender: "masculino",
     category: "oriental",
@@ -35,7 +35,7 @@ export const perfumesArabes: PerfumeInput[] = [
   },
   {
     name: "Bharara King",
-    brand: "Arabes",
+    brand: "Yves Dorgeval",
     price: "Consultar",
     gender: "masculino",
     category: "aromatica",
@@ -51,7 +51,7 @@ export const perfumesArabes: PerfumeInput[] = [
   },
   {
     name: "Al Haramain Amber Oud",
-    brand: "Arabes",
+    brand: "Yves Dorgeval",
     price: "Consultar",
     gender: "masculino",
     category: "amaderado",
@@ -67,7 +67,7 @@ export const perfumesArabes: PerfumeInput[] = [
   },
   {
     name: "Yara Moi Lattafa",
-    brand: "Arabes",
+    brand: "Yves Dorgeval",
     price: "Consultar",
     gender: "femenino",
     category: "cítrico",
@@ -83,7 +83,7 @@ export const perfumesArabes: PerfumeInput[] = [
   },
   {
     name: "Yara Pink Lattafa",
-    brand: "Arabes",
+    brand: "Yves Dorgeval",
     price: "Consultar",
     gender: "femenino",
     category: "ambar",
@@ -99,7 +99,7 @@ export const perfumesArabes: PerfumeInput[] = [
   },
   {
     name: "Yara Tous Lattafa ",
-    brand: "Arabes",
+    brand: "Yves Dorgeval",
     price: "Consultar",
     gender: "femenino",
     category: "oriental",
@@ -115,7 +115,7 @@ export const perfumesArabes: PerfumeInput[] = [
   },
   {
     name: "Haya de Lattafa",
-    brand: "Arabes",
+    brand: "Yves Dorgeval",
     price: "Consultar",
     gender: "femenino",
     category: "floral",
@@ -136,7 +136,7 @@ export const perfumesArabes: PerfumeInput[] = [
   },
   {
     name: "Odyssey Mandarin Sky",
-    brand: "Arabes",
+    brand: "Yves Dorgeval",
     price: "Consultar",
     gender: "masculino",
     category: "floral",
@@ -152,7 +152,7 @@ export const perfumesArabes: PerfumeInput[] = [
   },
   {
     name: "Armaf Club de Nuit Intense",
-    brand: "Arabes",
+    brand: "Yves Dorgeval",
     price: "Consultar",
     gender: "masculino",
     category: "amaderado especiado",
@@ -178,7 +178,7 @@ export const perfumesArabes: PerfumeInput[] = [
   },
   {
     name: "Honor & Glory",
-    brand: "Arabes",
+    brand: "Yves Dorgeval",
     price: "Consultar",
     gender: "masculino",
     category: "amaderada dulce",
@@ -194,7 +194,7 @@ export const perfumesArabes: PerfumeInput[] = [
   },
   {
     name: "Khamrah Qahwa Lattafa",
-    brand: "Arabes",
+    brand: "Yves Dorgeval",
     price: "Consultar",
     gender: "masculino",
     category: "amaderada dulce",
@@ -206,38 +206,6 @@ export const perfumesArabes: PerfumeInput[] = [
       top: ["canela", "Cardamomo", "jengibre"],
       middle: ["praliné", "Frutas confitadas", "flores blancas"],
       base: ["vainilla", "Cafe", "Haba tonka", "benjuí", "almizcle"],
-    },
-  },
-  {
-    name: "Pure Herbal",
-    brand: "Arabic",
-    price: 45000,
-    gender: "unisex",
-    category: "oriental",
-    size: "100ml",
-    image: "/imagenes/perfumes/Pure-Herbal-X.jpg",
-    description:
-      "Pure Herbal X de Lattafa Perfumes es una fragancia de la familia olfativa para Hombres y Mujeres. Esta fragrancia es nueva. Pure Herbal X se lanzó en 2019",
-    notes: {
-      top: ["naranja siciliana", "bergamota de Calabria", "limón siciliano"],
-      middle: ["frutas"],
-      base: ["almizcle blanco", "vainilla de Madagascar ", "ámbar"],
-    },
-  },
-  {
-    name: "Clayton",
-    brand: "Arabic",
-    price: 45000,
-    gender: "masculino",
-    category: "oriental floral",
-    size: "120ml",
-    image: "/imagenes/perfumes/Clayton-X.jpg",
-    description:
-      "Layton de Parfums de Marly es una fragancia de la familia olfativa Oriental Floral para Hombres y Mujeres",
-    notes: {
-      top: ["manzana", "lavanda", "bergamota", "mandarina"],
-      middle: ["geranio", "violeta", "jazmín"],
-      base: ["vainilla", "cardamomo", "sándalo", "pimienta", "madera de gaiac", "pachulí"],
     },
   },
 ];

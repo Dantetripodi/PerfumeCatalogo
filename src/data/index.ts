@@ -1,8 +1,9 @@
-import { Perfume, PerfumeCategory, PerfumeCollection, PerfumeInput, Notes } from "../types";
+import { Perfume, PerfumeCategory, PerfumeCollection, PerfumeInput, PerfumeRow, Notes } from "../types";
 import { perfumesRegulares } from "./perfumesRegulares";
 import { perfumesMinis } from "./minis";
 import { otrosProductos } from "./otros";
 import { perfumesArabes } from "./arabes";
+import { perfumesArabic } from "./arabic";
 
 const CUSTOM_PERFUMES_STORAGE_KEY = "dtfragancias_custom_perfumes";
 
@@ -11,6 +12,7 @@ const ID_RANGES = {
   minis: { start: 1000, end: 1999 },
   otros: { start: 2000, end: 2999 },
   arabes: { start: 3000, end: 3999 },
+  arabic: { start: 4000, end: 4999 },
 };
 
 function assignIds(
@@ -25,15 +27,17 @@ const regularesWithIds = assignIds(perfumesRegulares, ID_RANGES.regulares.start,
 const minisWithIds = assignIds(perfumesMinis, ID_RANGES.minis.start, "mini");
 const otrosWithIds = assignIds(otrosProductos, ID_RANGES.otros.start, "accesorio");
 const arabesWithIds = assignIds(perfumesArabes, ID_RANGES.arabes.start, "arabe");
+const arabicWithIds = assignIds(perfumesArabic, ID_RANGES.arabic.start, "arabic");
 
 export const perfumes: Perfume[] = [
   ...regularesWithIds,
   ...minisWithIds,
   ...otrosWithIds,
   ...arabesWithIds,
+  ...arabicWithIds,
 ];
 
-export { perfumesRegulares, perfumesMinis, otrosProductos, perfumesArabes };
+export { perfumesRegulares, perfumesMinis, otrosProductos, perfumesArabes, perfumesArabic };
 
 export function getStoredPerfumes(): Perfume[] {
   return getStoredPerfumeInputs().map((item, index) => normalizePerfume(item, 5000 + index, "regular"));
@@ -59,7 +63,7 @@ export function saveStoredPerfumes(items: PerfumeInput[]) {
 
 export { CUSTOM_PERFUMES_STORAGE_KEY };
 
-function normalizePerfume(item: PerfumeInput, id: number, collection: PerfumeCollection): Perfume {
+export function normalizePerfume(item: PerfumeInput, id: number, collection: PerfumeCollection, isFeaturedOverride?: boolean): Perfume {
   const category = normalizeCategory(item.category);
   const stock = item.price === "Consultar" ? "consult" : "by-order";
   const tags = buildTags(item, category, collection, stock);
@@ -68,7 +72,7 @@ function normalizePerfume(item: PerfumeInput, id: number, collection: PerfumeCol
     ...item,
     id,
     name: normalizeText(item.name),
-    brand: normalizeBrand(item.brand, collection),
+    brand: normalizeBrand(item.brand),
     category,
     size: normalizeSize(item.size),
     description: normalizeDescription(item.description),
@@ -77,8 +81,23 @@ function normalizePerfume(item: PerfumeInput, id: number, collection: PerfumeCol
     stock,
     slug: buildSlug(`${item.name}-${id}`),
     tags,
-    ...buildCommercialMetadata(item, category, collection, stock, id),
+    ...buildCommercialMetadata(item, category, collection, stock, id, isFeaturedOverride),
   };
+}
+
+export function rowToInput(row: PerfumeRow): { input: PerfumeInput; id: number; collection: PerfumeCollection; isFeatured: boolean } {
+  const input: PerfumeInput = {
+    name: row.name,
+    brand: row.brand,
+    price: row.price === null ? "Consultar" : row.price,
+    gender: row.gender,
+    category: row.category,
+    size: row.size,
+    image: row.image_url,
+    description: row.description,
+    notes: row.notes,
+  };
+  return { input, id: row.id, collection: row.collection, isFeatured: row.is_featured };
 }
 
 function normalizeText(value: string) {
@@ -103,11 +122,8 @@ function normalizeDescription(value: string) {
     .replace(/IMPORTANTE\(/g, "IMPORTANTE (");
 }
 
-function normalizeBrand(brand: string, collection: PerfumeCollection) {
+function normalizeBrand(brand: string) {
   const cleanedBrand = normalizeText(brand);
-  if (collection === "arabe" || cleanedBrand.toLowerCase() === "arabic" || cleanedBrand.toLowerCase() === "arabes") {
-    return "Árabes";
-  }
   if (cleanedBrand === "Jaques Ryon") return "Jacques Ryon";
   return cleanedBrand;
 }
@@ -154,6 +170,7 @@ function buildTags(item: PerfumeInput, category: PerfumeCategory, collection: Pe
 
   if (collection === "mini") tags.add("mini perfume");
   if (collection === "arabe") tags.add("perfume árabe");
+  if (collection === "arabic") tags.add("arabic");
   if (stock === "consult") tags.add("precio a consultar");
   if (stock === "by-order") tags.add("por pedido");
   if (category.includes("vainilla") || item.description.toLowerCase().includes("dulce")) tags.add("dulce");
@@ -170,22 +187,27 @@ function buildCommercialMetadata(
   category: PerfumeCategory,
   collection: PerfumeCollection,
   stock: Perfume["stock"],
-  id: number
+  id: number,
+  isFeaturedOverride?: boolean
 ): Pick<Perfume, "isFeatured" | "isBestSeller" | "isNew" | "occasion" | "season" | "intensity" | "longevity" | "whatsappHint"> {
   const text = `${item.name} ${item.description} ${category}`.toLowerCase();
   const isFresh = category.includes("cítrico") || category.includes("acuático") || text.includes("fresco");
   const isSweet = category.includes("vainilla") || text.includes("dulce") || text.includes("caramelo");
   const isIntense = category.includes("oriental") || category.includes("ámbar") || text.includes("intensa") || text.includes("seductor");
-  const isFeatured = collection === "arabe" || id < 8 || text.includes("sauvage") || text.includes("good girl") || text.includes("one million");
+  // When an explicit DB flag is provided (remote path), it is authoritative.
+  // When called from the static pipeline (no override), fall back to the heuristic so local data still works.
+  const isFeatured = isFeaturedOverride !== undefined
+    ? isFeaturedOverride
+    : collection === "arabe" || collection === "arabic" || id < 8 || text.includes("sauvage") || text.includes("good girl") || text.includes("one million");
 
   return {
     isFeatured,
     isBestSeller: text.includes("sauvage") || text.includes("good girl") || text.includes("yara") || text.includes("one million"),
-    isNew: collection === "arabe" && (text.includes("2023") || text.includes("nueva")),
+    isNew: (collection === "arabe" || collection === "arabic") && (text.includes("2023") || text.includes("nueva")),
     occasion: isFresh ? "Ideal para uso diario y climas cálidos" : isIntense || isSweet ? "Ideal para noche, salidas y ocasiones especiales" : "Versátil para uso diario",
     season: isFresh ? "Primavera / verano" : isIntense || isSweet ? "Otoño / invierno" : "Todo el año",
     intensity: isIntense ? "intensa" : isFresh ? "suave" : "media",
-    longevity: isIntense || collection === "arabe" ? "Duración alta estimada" : "Duración media estimada",
+    longevity: isIntense || collection === "arabe" || collection === "arabic" ? "Duración alta estimada" : "Duración media estimada",
     whatsappHint: stock === "consult"
       ? "Consultá precio y disponibilidad actual antes de confirmar."
       : "Producto mayormente por pedido. Consultá disponibilidad y tiempo estimado antes de confirmar.",
