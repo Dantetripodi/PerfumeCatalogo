@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { ChevronDown, Filter, SlidersHorizontal, X } from 'lucide-react';
-import { Perfume } from '../types';
+import { Perfume, COLLECTION_LABELS, PerfumeCollection } from '../types';
 import { formatPrice } from '../utils/price';
+
+const LINE_COLLECTIONS: PerfumeCollection[] = ["regular", "arabe", "arabic", "mini"];
 
 interface FilterProps {
   filters: {
     collection: string;
+    line: string;
     brand: string;
     gender: string;
     category: string;
@@ -28,7 +31,9 @@ const Filters: React.FC<FilterProps> = ({ filters, onFilterChange, onResetFilter
     .filter((price): price is number => typeof price === "number");
   const minCatalogPrice = Math.min(...numericPrices);
   const maxCatalogPrice = Math.max(...numericPrices);
+  const lineLabel = filters.line ? COLLECTION_LABELS[filters.line as PerfumeCollection] : "";
   const activeFilters = [
+    lineLabel,
     filters.brand,
     filters.gender,
     filters.category,
@@ -67,6 +72,23 @@ const Filters: React.FC<FilterProps> = ({ filters, onFilterChange, onResetFilter
           </div>
         )}
         
+        <div className="mb-4">
+          <label htmlFor="line-filter" className="mb-2 block font-medium text-[#1A2238]">Línea</label>
+          <select
+            id="line-filter"
+            value={filters.line}
+            onChange={(e) => onFilterChange('line', e.target.value)}
+            className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
+          >
+            <option value="">Todas las líneas</option>
+            {LINE_COLLECTIONS.map((col) => (
+              <option key={col} value={col}>
+                {COLLECTION_LABELS[col]}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="mb-4">
           <label htmlFor="brand-filter" className="mb-2 block font-medium text-[#1A2238]">Marca</label>
           <select

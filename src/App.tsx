@@ -16,6 +16,7 @@ import { CarouselGenerator } from "./content-studio/Carousel";
 import PinModal, { isStudioUnlocked } from "./content-studio/PinModal";
 import { Grid, List, Sparkles } from "lucide-react";
 import { usePerfumeCatalog } from "./hooks/usePerfumeCatalog";
+import { useAdminAuth } from "./hooks/useAdminAuth";
 import { Perfume } from "./types";
 
 type ViewMode = "grid" | "list";
@@ -25,16 +26,14 @@ type AppView = "catalog" | "content-studio" | "carousel";
 type PinTarget = "content-studio" | "carousel";
 const VIEW_MODE_STORAGE_KEY = "dtfragancias_view_mode";
 
-// Si el admin ya está autenticado, el Content Studio también está desbloqueado
-const ADMIN_SESSION_KEY = "dtfragancias_admin_session";
-function canAccessStudio(): boolean {
-  return (
-    isStudioUnlocked() ||
-    sessionStorage.getItem(ADMIN_SESSION_KEY) === "true"
-  );
+// Declared at module scope so it can be called before the hook result is available;
+// the hook result is passed in as the second argument.
+function canAccessStudio(hasAdminSession: boolean): boolean {
+  return isStudioUnlocked() || hasAdminSession;
 }
 
 function App() {
+  const { session } = useAdminAuth();
   const {
     allPerfumes,
     filteredPerfumes,
@@ -42,10 +41,12 @@ function App() {
     searchQuery,
     selectedPerfume,
     isCartOpen,
+    loading: catalogLoading,
+    error: catalogError,
+    refetch: refetchCatalog,
     handleFilterChange,
     handleSearch,
     resetFilters,
-    refreshCustomPerfumes,
     toggleCart,
     openDetails,
     closeDetails,
@@ -59,7 +60,10 @@ function App() {
   const [pinTarget, setPinTarget] = useState<PinTarget>("content-studio");
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     const saved = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
-    return saved === "grid" || saved === "list" ? saved : "grid";
+    if (saved === "grid" || saved === "list") return saved;
+    // Default: compact list on mobile, grid on larger screens
+    if (typeof window !== "undefined" && window.innerWidth < 640) return "list";
+    return "grid";
   });
 
   // Persiste preferencia de vista
@@ -107,7 +111,7 @@ function App() {
 
   // Intenta abrir el Content Studio — si ya tiene acceso va directo, si no pide PIN
   const handleTryOpenStudio = () => {
-    if (canAccessStudio()) {
+    if (canAccessStudio(session !== null)) {
       setAppView("content-studio");
     } else {
       setPinTarget("content-studio");
@@ -117,7 +121,7 @@ function App() {
 
   // Mismo flujo para el generador de carruseles (mismo PIN, mismo gate)
   const handleTryOpenCarousel = () => {
-    if (canAccessStudio()) {
+    if (canAccessStudio(session !== null)) {
       setAppView("carousel");
     } else {
       setPinTarget("carousel");
@@ -177,7 +181,9 @@ function App() {
   const quickFilters = [
     { label: "Todos", value: "all" },
     { label: "Destacados", value: "featured" },
+    { label: "Yves", value: "regular" },
     { label: "Arabes", value: "arabe" },
+    { label: "Arabic", value: "arabic" },
     { label: "Mini perfumes", value: "mini" },
     { label: "Consultar precio", value: "consult" },
   ];
@@ -273,6 +279,26 @@ function App() {
                 })}
               </div>
 
+              {catalogLoading && (
+                <div className="flex items-center justify-center py-24">
+                  <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#E8DDBF] border-t-[#D4AF37]" />
+                  <span className="ml-4 text-sm text-gray-500">Cargando catálogo…</span>
+                </div>
+              )}
+
+              {!catalogLoading && catalogError && (
+                <div className="rounded-lg border border-red-200 bg-red-50 px-6 py-8 text-center">
+                  <p className="mb-4 text-sm font-medium text-red-700">{catalogError}</p>
+                  <button
+                    onClick={() => void refetchCatalog()}
+                    className="rounded-md bg-[#1A2238] px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-[#25304F]"
+                  >
+                    Reintentar
+                  </button>
+                </div>
+              )}
+
+              {!catalogLoading && !catalogError && (
               <div className="flex flex-col gap-8 lg:flex-row">
                 <div className="lg:w-1/4">
                   <Filters
@@ -343,7 +369,7 @@ function App() {
                       ))}
                     </div>
                   ) : (
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2.5">
                       {filteredPerfumes.map((perfume) => (
                         <PerfumeListItem
                           key={perfume.id}
@@ -356,6 +382,7 @@ function App() {
                   )}
                 </div>
               </div>
+              )}
             </div>
           </main>
 
@@ -379,8 +406,8 @@ function App() {
               }
             }}
             onSaved={() => {
-              refreshCustomPerfumes();
-              setToastMessage("Producto agregado al catálogo local");
+              void refetchCatalog();
+              setToastMessage("Catálogo actualizado");
               setShowToast(true);
             }}
             onOpenContentStudio={handleTryOpenStudio}

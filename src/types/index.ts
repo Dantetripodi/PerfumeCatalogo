@@ -43,7 +43,15 @@ export type PerfumeCategory =
   | "vainilla dulce"
   | "vainilla especiada";
 
-export type PerfumeCollection = "regular" | "mini" | "accesorio" | "arabe";
+export type PerfumeCollection = "regular" | "mini" | "accesorio" | "arabe" | "arabic";
+
+export const COLLECTION_LABELS: Record<PerfumeCollection, string> = {
+  regular: "Yves",
+  arabe: "Árabes",
+  arabic: "Arabic",
+  mini: "Minis",
+  accesorio: "Accesorios",
+};
 export type PerfumeStock = "by-order" | "consult";
 export type PerfumeIntensity = "suave" | "media" | "intensa";
 
@@ -88,6 +96,23 @@ export type PerfumeInput = Omit<
   | "whatsappHint"
   | "slug"
 >;
+
+export interface PerfumeRow {
+  id: number;
+  name: string;
+  brand: string;
+  price: number | null;
+  gender: "masculino" | "femenino" | "unisex";
+  category: PerfumeCategory;
+  size: string;
+  image_url: string;
+  description: string;
+  notes: Notes;
+  collection: PerfumeCollection;
+  is_featured: boolean;
+  created_at: string;
+  updated_at: string;
+}
 
 export interface CartItem {
   perfume: Perfume;

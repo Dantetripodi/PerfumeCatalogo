@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { getStoredPerfumes, perfumes as basePerfumes } from "../data";
 import { Perfume } from "../types";
 import { useDebounce } from "./useDebounce";
+import { useRemotePerfumes } from "./useRemotePerfumes";
 
 interface FiltersState {
   collection: string;
+  line: string;
   brand: string;
   gender: string;
   category: string;
@@ -14,8 +15,11 @@ interface FiltersState {
 }
 
 export function usePerfumeCatalog() {
+  const { perfumes: remotePerfumes, loading, error, refetch } = useRemotePerfumes();
+
   const [filters, setFilters] = useState<FiltersState>({
     collection: "all",
+    line: "",
     brand: "",
     gender: "",
     category: "",
@@ -27,13 +31,8 @@ export function usePerfumeCatalog() {
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [selectedPerfume, setSelectedPerfume] = useState<Perfume | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [customPerfumes, setCustomPerfumes] = useState<Perfume[]>(() => getStoredPerfumes());
 
-  const all = useMemo(() => [...basePerfumes, ...customPerfumes], [customPerfumes]);
-
-  const refreshCustomPerfumes = () => {
-    setCustomPerfumes(getStoredPerfumes());
-  };
+  const all = useMemo(() => remotePerfumes, [remotePerfumes]);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -58,6 +57,7 @@ export function usePerfumeCatalog() {
         p.notes.base.some(note => note.toLowerCase().includes(q))
       );
     }
+    if (filters.line) result = result.filter(p => p.collection === filters.line);
     if (filters.brand) result = result.filter(p => p.brand === filters.brand);
     if (filters.gender) result = result.filter(p => p.gender === filters.gender);
     if (filters.category) result = result.filter(p => p.category === filters.category);
@@ -108,6 +108,7 @@ export function usePerfumeCatalog() {
   const resetFilters = () => {
     setFilters({
       collection: "all",
+      line: "",
       brand: "",
       gender: "",
       category: "",
@@ -139,10 +140,12 @@ export function usePerfumeCatalog() {
     searchQuery,
     selectedPerfume,
     isCartOpen,
+    loading,
+    error,
+    refetch,
     handleFilterChange,
     handleSearch,
     resetFilters,
-    refreshCustomPerfumes,
     toggleCart,
     openDetails,
     closeDetails,

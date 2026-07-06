@@ -1,7 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Save, X, FlaskConical, Images } from "lucide-react";
-import { getStoredPerfumeInputs, saveStoredPerfumes } from "../data";
-import { PerfumeCategory, PerfumeInput } from "../types";
+import React, { useState } from "react";
+import { X, FlaskConical, Images, LogOut, AlertCircle } from "lucide-react";
+import { supabase } from "../lib/supabase";
+import { useAdminAuth } from "../hooks/useAdminAuth";
+import { useRemotePerfumes } from "../hooks/useRemotePerfumes";
+import { Perfume } from "../types";
+import Toast from "./Toast";
+import PerfumeList from "./admin/PerfumeList";
+import PerfumeForm from "./admin/PerfumeForm";
+
+// ─── Types ─────────────────────────────────────────────────────────────────────
+
+type PanelMode = "list" | "form";
 
 interface AdminPanelProps {
   isOpen: boolean;
@@ -11,85 +20,144 @@ interface AdminPanelProps {
   onOpenCarousel?: () => void;
 }
 
-const emptyForm: PerfumeInput = {
-  name: "",
-  brand: "",
-  price: "Consultar",
-  gender: "unisex",
-  category: "oriental",
-  size: "100ml",
-  image: "",
-  description: "",
-  notes: {
-    top: [],
-    middle: [],
-    base: [],
-  },
-};
+// ─── AdminPanel ────────────────────────────────────────────────────────────────
 
-const ADMIN_PASSWORD = "DTFragancias2026";
-const ADMIN_SESSION_KEY = "dtfragancias_admin_session";
+const AdminPanel: React.FC<AdminPanelProps> = ({
+  isOpen,
+  onClose,
+  onSaved,
+  onOpenContentStudio,
+  onOpenCarousel,
+}) => {
+  const { session, loading: authLoading, signIn, signOut } = useAdminAuth();
 
-const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose, onSaved, onOpenContentStudio, onOpenCarousel }) => {
-  const [form, setForm] = useState<PerfumeInput>(emptyForm);
-  const [savedCount, setSavedCount] = useState(0);
+  // Auth form state
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem(ADMIN_SESSION_KEY) === "true");
+  const [signingIn, setSigningIn] = useState(false);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    setSavedCount(getStoredPerfumeInputs().length);
-  }, [isOpen]);
+  // Panel mode
+  const [mode, setMode] = useState<PanelMode>("list");
+  const [editingPerfume, setEditingPerfume] = useState<Perfume | null>(null);
+
+  // Error banner (for CRUD errors surfaced by child forms)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Toast
+  const [toastMessage, setToastMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
+
+  const isAuthenticated = session !== null;
+
+  // Remote data — only fetch when panel is open and user is authenticated
+  const { perfumes, loading: perfumesLoading, refetch } = useRemotePerfumes();
 
   if (!isOpen) return null;
 
-  const updateField = <K extends keyof PerfumeInput>(field: K, value: PerfumeInput[K]) => {
-    setForm(prev => ({ ...prev, [field]: value }));
-  };
+  // ── Auth handlers ────────────────────────────────────────────────────────────
 
-  const updateNotes = (field: keyof PerfumeInput["notes"], value: string) => {
-    setForm(prev => ({
-      ...prev,
-      notes: {
-        ...prev.notes,
-        [field]: value.split(",").map(note => note.trim()).filter(Boolean),
-      },
-    }));
-  };
-
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
-    const current = getStoredPerfumeInputs();
-    saveStoredPerfumes([...current, form]);
-    setForm(emptyForm);
-    setSavedCount(current.length + 1);
-    onSaved();
+    setLoginError("");
+    setSigningIn(true);
+    const error = await signIn(email, password);
+    setSigningIn(false);
+    if (error) {
+      setLoginError(error);
+    } else {
+      setEmail("");
+      setPassword("");
+    }
   };
 
-  const handleLogin = (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSignOut = async () => {
+    await signOut();
+    setMode("list");
+    setEditingPerfume(null);
+  };
 
-    if (password !== ADMIN_PASSWORD) {
-      setLoginError("Contraseña incorrecta");
+  // ── List actions ─────────────────────────────────────────────────────────────
+
+  const handleNew = () => {
+    setEditingPerfume(null);
+    setErrorMessage(null);
+    setMode("form");
+  };
+
+  const handleEdit = (perfume: Perfume) => {
+    setEditingPerfume(perfume);
+    setErrorMessage(null);
+    setMode("form");
+  };
+
+  const handleDelete = async (perfume: Perfume) => {
+    setErrorMessage(null);
+    const { error } = await supabase.from("perfumes").delete().eq("id", perfume.id);
+
+    if (error) {
+      setErrorMessage(`Error al borrar: ${error.message}`);
       return;
     }
 
-    sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
-    setIsAuthenticated(true);
-    setLoginError("");
-    setPassword("");
+    // Best-effort: try to remove the storage object if it's a Supabase-hosted URL
+    if (perfume.image.includes("/storage/v1/object/public/perfume-images/")) {
+      const storageKey = perfume.image.split("/storage/v1/object/public/perfume-images/")[1];
+      if (storageKey) {
+        // Fire and forget — don't block on this
+        void supabase.storage.from("perfume-images").remove([storageKey]);
+      }
+    }
+
+    setToastMessage(`"${perfume.name}" borrado del catálogo.`);
+    setShowToast(true);
+    await refetch();
+    onSaved();
   };
+
+  // ── Form callbacks ────────────────────────────────────────────────────────────
+
+  const handleFormSaved = async (operation: "created" | "updated") => {
+    const label = operation === "created" ? "creado" : "actualizado";
+    setToastMessage(`Perfume ${label} correctamente.`);
+    setShowToast(true);
+    setMode("list");
+    setEditingPerfume(null);
+    await refetch();
+    onSaved();
+  };
+
+  const handleFormError = (message: string) => {
+    setErrorMessage(message);
+  };
+
+  const handleBack = () => {
+    setMode("list");
+    setEditingPerfume(null);
+    setErrorMessage(null);
+  };
+
+  // ── Header subtitle ───────────────────────────────────────────────────────────
+
+  const subtitle = authLoading
+    ? "Verificando sesión..."
+    : !isAuthenticated
+    ? "Ingresá tu email y contraseña para administrar productos"
+    : mode === "form"
+    ? editingPerfume
+      ? `Editando: ${editingPerfume.name}`
+      : "Nuevo perfume"
+    : `${perfumes.length} perfumes en el catálogo`;
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#101827]/70 p-4 backdrop-blur-sm">
       <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-white shadow-2xl">
+
+        {/* ── Sticky header ──────────────────────────────────────────────────── */}
         <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white/95 p-4 backdrop-blur">
           <div>
             <h2 className="font-serif text-2xl font-bold text-[#1A2238]">Panel admin</h2>
-            <p className="text-sm text-gray-500">
-              {isAuthenticated ? `${savedCount} productos cargados localmente` : "Ingresá la contraseña para administrar productos"}
-            </p>
+            <p className="text-sm text-gray-500">{subtitle}</p>
           </div>
           <div className="flex items-center gap-2">
             {isAuthenticated && onOpenCarousel && (
@@ -112,127 +180,108 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose, onSaved, onOpe
                 Content Studio
               </button>
             )}
-            <button onClick={onClose} className="rounded-md p-2 text-gray-500 hover:bg-gray-100" aria-label="Cerrar admin">
+            {isAuthenticated && (
+              <button
+                onClick={handleSignOut}
+                className="flex items-center gap-1.5 rounded-md border border-[#E8DDBF] px-3 py-2 text-sm font-medium text-[#1A2238] transition-colors hover:border-red-300 hover:text-red-600"
+                title="Cerrar sesión"
+              >
+                <LogOut size={16} />
+                Cerrar sesión
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="rounded-md p-2 text-gray-500 hover:bg-gray-100"
+              aria-label="Cerrar admin"
+            >
               <X size={22} />
             </button>
           </div>
         </div>
 
-        {!isAuthenticated ? (
+        {/* ── Error banner ───────────────────────────────────────────────────── */}
+        {errorMessage && (
+          <div className="mx-5 mt-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3">
+            <AlertCircle size={16} className="mt-0.5 shrink-0 text-red-600" />
+            <p className="flex-1 text-sm text-red-700">{errorMessage}</p>
+            <button
+              onClick={() => setErrorMessage(null)}
+              className="text-red-400 hover:text-red-600"
+              aria-label="Cerrar error"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        )}
+
+        {/* ── Body ───────────────────────────────────────────────────────────── */}
+        {authLoading ? (
+          <div className="flex items-center justify-center p-12">
+            <p className="text-sm text-gray-500">Verificando sesión…</p>
+          </div>
+        ) : !isAuthenticated ? (
+          /* ── Login form ──────────────────────────────────────────────────── */
           <form onSubmit={handleLogin} className="mx-auto grid max-w-md gap-4 p-6">
+            <label className="text-sm font-medium text-[#1A2238]">
+              Email
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                className="mt-1 w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
+                autoFocus
+                required
+              />
+            </label>
             <label className="text-sm font-medium text-[#1A2238]">
               Contraseña
               <input
                 type="password"
                 value={password}
-                onChange={event => setPassword(event.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 className="mt-1 w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
-                autoFocus
+                required
               />
             </label>
-            {loginError && <p className="text-sm font-medium text-red-600">{loginError}</p>}
-            <button className="rounded-md bg-[#1A2238] px-4 py-3 font-medium text-white hover:bg-[#25304F]">
-              Entrar al admin
-            </button>
-            <p className="rounded-lg bg-amber-50 p-3 text-sm leading-6 text-amber-800">
-              Protección temporal del frontend. Con Supabase vamos a reemplazar esto por login real, base de datos y subida de imágenes.
-            </p>
-          </form>
-        ) : (
-        <form onSubmit={handleSubmit} className="grid gap-4 p-5 sm:grid-cols-2">
-          <TextInput label="Nombre" value={form.name} onChange={value => updateField("name", value)} required />
-          <TextInput label="Marca" value={form.brand} onChange={value => updateField("brand", value)} required />
-          <TextInput
-            label="Precio"
-            value={String(form.price)}
-            onChange={value => updateField("price", value.toLowerCase() === "consultar" ? "Consultar" : Number(value))}
-            placeholder="40000 o Consultar"
-            required
-          />
-          <TextInput label="Tamaño" value={form.size} onChange={value => updateField("size", value)} required />
-
-          <label className="text-sm font-medium text-[#1A2238]">
-            Género
-            <select
-              value={form.gender}
-              onChange={event => updateField("gender", event.target.value as PerfumeInput["gender"])}
-              className="mt-1 w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
+            {loginError && (
+              <p className="text-sm font-medium text-red-600">{loginError}</p>
+            )}
+            <button
+              disabled={signingIn}
+              className="rounded-md bg-[#1A2238] px-4 py-3 font-medium text-white hover:bg-[#25304F] disabled:opacity-60"
             >
-              <option value="unisex">Unisex</option>
-              <option value="masculino">Masculino</option>
-              <option value="femenino">Femenino</option>
-            </select>
-          </label>
-
-          <TextInput
-            label="Categoría"
-            value={form.category}
-            onChange={value => updateField("category", value as PerfumeCategory)}
-            placeholder="oriental, floral, cítrico..."
-            required
-          />
-
-          <label className="text-sm font-medium text-[#1A2238] sm:col-span-2">
-            Imagen
-            <input
-              value={form.image}
-              onChange={event => updateField("image", event.target.value)}
-              placeholder="/imagenes/perfumes/nombre.jpg o URL"
-              className="mt-1 w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
-              required
-            />
-          </label>
-
-          <label className="text-sm font-medium text-[#1A2238] sm:col-span-2">
-            Descripción
-            <textarea
-              value={form.description}
-              onChange={event => updateField("description", event.target.value)}
-              className="mt-1 min-h-24 w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
-              required
-            />
-          </label>
-
-          <TextInput label="Notas de salida" value={form.notes.top.join(", ")} onChange={value => updateNotes("top", value)} placeholder="Bergamota, limón" />
-          <TextInput label="Notas de corazón" value={form.notes.middle.join(", ")} onChange={value => updateNotes("middle", value)} placeholder="Jazmín, lavanda" />
-          <TextInput label="Notas de fondo" value={form.notes.base.join(", ")} onChange={value => updateNotes("base", value)} placeholder="Vainilla, ámbar" />
-
-          <div className="flex items-end sm:col-span-2">
-            <button className="flex w-full items-center justify-center rounded-md bg-[#1A2238] px-4 py-3 font-medium text-white hover:bg-[#25304F]">
-              <Save size={18} className="mr-2" />
-              Guardar producto local
+              {signingIn ? "Ingresando…" : "Entrar al admin"}
             </button>
-          </div>
-
-          <p className="rounded-lg bg-[#F8F0E3] p-3 text-sm leading-6 text-[#1A2238] sm:col-span-2">
-            Este panel guarda productos en este navegador. Para imágenes locales, primero agregá el archivo en public/imagenes/perfumes o public/imagenes/arabes y pegá una ruta como /imagenes/perfumes/nombre.jpg. Con Supabase vamos a reemplazar esto por carga real de imágenes, edición y borrado.
-          </p>
-        </form>
+          </form>
+        ) : mode === "list" ? (
+          /* ── Product list ────────────────────────────────────────────────── */
+          <PerfumeList
+            perfumes={perfumes}
+            loading={perfumesLoading}
+            onNew={handleNew}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        ) : (
+          /* ── Create / Edit form ──────────────────────────────────────────── */
+          <PerfumeForm
+            editingPerfume={editingPerfume}
+            onBack={handleBack}
+            onSaved={handleFormSaved}
+            onError={handleFormError}
+          />
         )}
       </div>
+
+      {/* Toast — rendered inside the modal overlay so z-index stacks correctly */}
+      <Toast
+        message={toastMessage}
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+      />
     </div>
   );
 };
-
-interface TextInputProps {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  required?: boolean;
-}
-
-const TextInput: React.FC<TextInputProps> = ({ label, value, onChange, placeholder, required }) => (
-  <label className="text-sm font-medium text-[#1A2238]">
-    {label}
-    <input
-      value={value}
-      onChange={event => onChange(event.target.value)}
-      placeholder={placeholder}
-      required={required}
-      className="mt-1 w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
-    />
-  </label>
-);
 
 export default AdminPanel;

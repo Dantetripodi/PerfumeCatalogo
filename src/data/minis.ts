@@ -3,8 +3,8 @@ import { PerfumeInput } from "../types";
 export const perfumesMinis: PerfumeInput[] = [
   {
     name: "Badboy Mini",
-    brand: "Jaques Ryon",
-    price: 15000,
+    brand: "Yves Dorgeval",
+    price: 18000,
     gender: "femenino",
     category: "amaderado",
     size: "50ml",
@@ -19,8 +19,8 @@ export const perfumesMinis: PerfumeInput[] = [
   },
   {
     name: "Sauvage Mini",
-    brand: "Jaques Ryon",
-    price: 15000,
+    brand: "Yves Dorgeval",
+    price: 18000,
     gender: "masculino",
     category: "amaderado",
     size: "50ml",
@@ -35,8 +35,8 @@ export const perfumesMinis: PerfumeInput[] = [
   },
   {
     name: "Invictus Mini",
-    brand: "Jaques Ryon",
-    price: 15000,
+    brand: "Yves Dorgeval",
+    price: 18000,
     gender: "masculino",
     category: "acuático",
     size: "50ml",
@@ -51,8 +51,8 @@ export const perfumesMinis: PerfumeInput[] = [
   },
   {
     name: "12Heroes  Mini",
-    brand: "Jaques Ryon",
-    price: 15000,
+    brand: "Yves Dorgeval",
+    price: 18000,
     gender: "masculino",
     category: "amaderado",
     size: "50ml",
@@ -67,8 +67,8 @@ export const perfumesMinis: PerfumeInput[] = [
   },
   {
     name: "Stronger with you",
-    brand: "Jaques Ryon",
-    price: 15000,
+    brand: "Yves Dorgeval",
+    price: 18000,
     gender: "masculino",
     category: "vainilla dulce",
     size: "50ml",
