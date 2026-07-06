@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Save, Upload } from "lucide-react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { ArrowLeft, ImageIcon, Save, X } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Perfume, PerfumeCategory, PerfumeCollection, PerfumeInput, COLLECTION_LABELS } from "../../types";
 import { buildSlug } from "../../data";
@@ -129,6 +129,9 @@ const PerfumeForm: React.FC<PerfumeFormProps> = ({
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newImageUrl, setNewImageUrl] = useState<string | null>(null); // URL after upload
+  const [isDragging, setIsDragging] = useState(false);
+  // Track locally-created object URLs so we can revoke them on cleanup
+  const localPreviewRef = useRef<string | null>(null);
 
   // Re-init when editingPerfume changes (e.g. opening a different perfume)
   useEffect(() => {
@@ -149,12 +152,19 @@ const PerfumeForm: React.FC<PerfumeFormProps> = ({
 
   // ── Photo upload ────────────────────────────────────────────────────────────
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  /** Single entry point for all three input methods (click, drag, paste). */
+  const handleFile = useCallback(async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      onError("Ese archivo no es una imagen.");
+      return;
+    }
 
-    // Immediate local preview
+    // Revoke previous local object URL to avoid leaks
+    if (localPreviewRef.current) {
+      URL.revokeObjectURL(localPreviewRef.current);
+    }
     const localPreview = URL.createObjectURL(file);
+    localPreviewRef.current = localPreview;
     setPreviewUrl(localPreview);
 
     setUploadingImage(true);
@@ -184,7 +194,82 @@ const PerfumeForm: React.FC<PerfumeFormProps> = ({
     } finally {
       setUploadingImage(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.name, form.collection, isEditing]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) void handleFile(file);
+    // Reset so the same file can be re-selected
+    e.target.value = "";
   };
+
+  // ── Drag & drop ─────────────────────────────────────────────────────────────
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    // Only clear when leaving the drop zone itself, not its children
+    if (e.currentTarget.contains(e.relatedTarget as Node)) return;
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) void handleFile(file);
+  };
+
+  // ── Clipboard paste ──────────────────────────────────────────────────────────
+
+  useEffect(() => {
+    const onPaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      // Find the first image item, if any
+      let imageFile: File | null = null;
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.type.startsWith("image/")) {
+          imageFile = item.getAsFile();
+          break;
+        }
+      }
+
+      // Only intercept when the clipboard actually contains an image.
+      // If the user is pasting text into a text field, imageFile is null
+      // and we return without calling preventDefault — normal paste proceeds.
+      if (!imageFile) return;
+
+      // Don't hijack if focus is inside a regular text input / textarea
+      const active = document.activeElement;
+      const isTextTarget =
+        active instanceof HTMLInputElement ||
+        active instanceof HTMLTextAreaElement;
+      if (isTextTarget) return;
+
+      e.preventDefault();
+      void handleFile(imageFile);
+    };
+
+    document.addEventListener("paste", onPaste);
+    return () => document.removeEventListener("paste", onPaste);
+  }, [handleFile]);
+
+  // ── Cleanup object URLs on unmount ───────────────────────────────────────────
+
+  useEffect(() => {
+    return () => {
+      if (localPreviewRef.current) {
+        URL.revokeObjectURL(localPreviewRef.current);
+      }
+    };
+  }, []);
 
   // ── Submit ──────────────────────────────────────────────────────────────────
 
@@ -395,38 +480,88 @@ const PerfumeForm: React.FC<PerfumeFormProps> = ({
           placeholder="Vainilla, ámbar"
         />
 
-        {/* Image — file input + URL fallback */}
+        {/* Image — drop zone (click / drag / paste) + URL fallback */}
         <div className="flex flex-col gap-2 sm:col-span-2">
           <span className="text-sm font-medium text-[#1A2238]">Imagen</span>
 
-          {/* Preview */}
-          {previewUrl && (
-            <img
-              src={previewUrl}
-              alt="Preview"
-              className="h-28 w-28 rounded-md border border-[#E8DDBF] object-cover"
-            />
-          )}
+          {/* Hidden file input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+          />
 
-          {/* File picker */}
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="hidden"
-            />
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploadingImage}
-              className="flex items-center gap-2 rounded-md border border-[#E8DDBF] px-4 py-2 text-sm font-medium text-[#1A2238] transition-colors hover:border-[#D4AF37] disabled:opacity-50"
-            >
-              <Upload size={15} />
-              {uploadingImage ? "Subiendo…" : "Subir foto"}
-            </button>
-            <span className="text-xs text-gray-400">o pegá una URL:</span>
+          {/* Drop zone */}
+          <div
+            role="button"
+            tabIndex={0}
+            aria-label="Zona de carga de imagen"
+            onClick={() => !uploadingImage && fileInputRef.current?.click()}
+            onKeyDown={e => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                if (!uploadingImage) fileInputRef.current?.click();
+              }
+            }}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={[
+              "relative flex min-h-[120px] cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 text-center transition-colors",
+              isDragging
+                ? "border-[#D4AF37] bg-[#D4AF37]/10"
+                : "border-[#E8DDBF] bg-[#FBF8F1] hover:border-[#D4AF37] hover:bg-[#FBF8F1]",
+              uploadingImage ? "pointer-events-none opacity-60" : "",
+            ].join(" ")}
+          >
+            {previewUrl ? (
+              /* Preview with a "remove" button */
+              <>
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="h-28 w-auto max-w-full rounded-md object-cover shadow"
+                />
+                <button
+                  type="button"
+                  onClick={e => {
+                    e.stopPropagation();
+                    if (localPreviewRef.current) {
+                      URL.revokeObjectURL(localPreviewRef.current);
+                      localPreviewRef.current = null;
+                    }
+                    setPreviewUrl(null);
+                    setNewImageUrl(null);
+                    setField("imageUrl", "");
+                  }}
+                  className="absolute right-2 top-2 rounded-full bg-white/80 p-1 text-gray-500 shadow transition-colors hover:bg-white hover:text-red-500"
+                  aria-label="Quitar imagen"
+                >
+                  <X size={14} />
+                </button>
+                <span className="text-xs text-gray-400">
+                  {uploadingImage ? "Subiendo…" : "Clic para cambiar"}
+                </span>
+              </>
+            ) : (
+              /* Empty state */
+              <>
+                <ImageIcon size={28} className="text-[#D4AF37]/70" />
+                <p className="text-sm font-medium text-[#1A2238]">
+                  {uploadingImage
+                    ? "Subiendo imagen a Supabase Storage…"
+                    : "Arrastrá una imagen, pegá (Ctrl/Cmd+V) o hacé clic para elegir"}
+                </p>
+                <p className="text-xs text-gray-400">PNG, JPG, WEBP · máx. recomendado 2 MB</p>
+              </>
+            )}
+          </div>
+
+          {/* URL fallback */}
+          <div className="flex items-center gap-2">
+            <span className="whitespace-nowrap text-xs text-gray-400">o pegá una URL:</span>
             <input
               type="url"
               value={newImageUrl ?? form.imageUrl}
@@ -439,10 +574,6 @@ const PerfumeForm: React.FC<PerfumeFormProps> = ({
               className="flex-1 rounded border border-gray-300 p-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
             />
           </div>
-
-          {uploadingImage && (
-            <p className="text-xs text-[#9A7A1F]">Subiendo imagen a Supabase Storage…</p>
-          )}
         </div>
 
         {/* Submit */}
