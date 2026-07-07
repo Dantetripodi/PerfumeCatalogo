@@ -10,9 +10,10 @@ interface PerfumeListItemProps {
   perfume: Perfume;
   onShowDetails: (perfume: Perfume) => void;
   onAddToCart?: (perfume: Perfume) => void;
+  priority?: boolean;
 }
 
-const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetails, onAddToCart }) => {
+const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetails, onAddToCart, priority = false }) => {
   const { addToCart } = useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
   const isConsultPrice = typeof perfume.price !== "number";
@@ -38,6 +39,7 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
           alt={perfume.name}
           className="h-full w-full"
           imgClassName="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          priority={priority}
         />
       </div>
 

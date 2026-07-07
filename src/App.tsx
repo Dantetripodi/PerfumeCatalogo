@@ -359,10 +359,11 @@ function App() {
                     </div>
                   ) : viewMode === "grid" ? (
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                      {filteredPerfumes.map((perfume) => (
+                      {filteredPerfumes.map((perfume, index) => (
                         <PerfumeCard
                           key={perfume.id}
                           perfume={perfume}
+                          priority={index < 6}
                           onShowDetails={openDetails}
                           onAddToCart={handleAddToCart}
                         />
@@ -370,10 +371,11 @@ function App() {
                     </div>
                   ) : (
                     <div className="flex flex-col gap-2.5">
-                      {filteredPerfumes.map((perfume) => (
+                      {filteredPerfumes.map((perfume, index) => (
                         <PerfumeListItem
                           key={perfume.id}
                           perfume={perfume}
+                          priority={index < 6}
                           onShowDetails={openDetails}
                           onAddToCart={handleAddToCart}
                         />

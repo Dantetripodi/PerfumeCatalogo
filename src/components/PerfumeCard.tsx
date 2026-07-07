@@ -10,9 +10,10 @@ interface PerfumeCardProps {
   perfume: Perfume;
   onShowDetails: (perfume: Perfume) => void;
   onAddToCart?: (perfume: Perfume) => void;
+  priority?: boolean;
 }
 
-const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAddToCart }) => {
+const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAddToCart, priority = false }) => {
   const { addToCart } = useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
   const badges = getPerfumeBadges(perfume);
@@ -37,6 +38,7 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAdd
           alt={perfume.name}
           className="h-full w-full"
           imgClassName="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          priority={priority}
         />
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/45 to-transparent" />
         <div className="absolute left-3 top-3 z-10 flex flex-wrap gap-2">

@@ -84,6 +84,73 @@ function makeSafeSlug(name: string, collection: PerfumeCollection, ext: string):
   return `perfumes/${collection}/${ts}-${slug}.${ext}`;
 }
 
+const MAX_SIDE = 900;
+const WEBP_QUALITY = 0.82;
+const JPEG_QUALITY = 0.82;
+
+/**
+ * Resize `file` so its longest side is at most MAX_SIDE px,
+ * then encode as WebP (falling back to JPEG if unavailable).
+ * Returns { blob, ext, contentType }.
+ */
+async function resizeImage(
+  file: File
+): Promise<{ blob: Blob; ext: string; contentType: string }> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+
+      const { naturalWidth: w, naturalHeight: h } = img;
+      const scale = Math.min(1, MAX_SIDE / Math.max(w, h));
+      const targetW = Math.round(w * scale);
+      const targetH = Math.round(h * scale);
+
+      const canvas = document.createElement("canvas");
+      canvas.width = targetW;
+      canvas.height = targetH;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        reject(new Error("Canvas 2D context unavailable"));
+        return;
+      }
+      ctx.drawImage(img, 0, 0, targetW, targetH);
+
+      // Try WebP first, fall back to JPEG
+      canvas.toBlob(
+        (webpBlob) => {
+          if (webpBlob && webpBlob.size > 0) {
+            resolve({ blob: webpBlob, ext: "webp", contentType: "image/webp" });
+          } else {
+            canvas.toBlob(
+              (jpegBlob) => {
+                if (jpegBlob) {
+                  resolve({ blob: jpegBlob, ext: "jpg", contentType: "image/jpeg" });
+                } else {
+                  reject(new Error("Failed to encode image"));
+                }
+              },
+              "image/jpeg",
+              JPEG_QUALITY
+            );
+          }
+        },
+        "image/webp",
+        WEBP_QUALITY
+      );
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("Failed to load image for resizing"));
+    };
+
+    img.src = objectUrl;
+  });
+}
+
 // ─── TextInput sub-component ─────────────────────────────────────────────────
 
 interface TextInputProps {
@@ -169,12 +236,13 @@ const PerfumeForm: React.FC<PerfumeFormProps> = ({
 
     setUploadingImage(true);
     try {
-      const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
+      // Resize + convert to WebP (or JPEG fallback) before uploading
+      const { blob: optimizedBlob, ext, contentType } = await resizeImage(file);
       const storageKey = makeSafeSlug(form.name || "perfume", form.collection, ext);
 
       const { error: uploadError } = await supabase.storage
         .from("perfume-images")
-        .upload(storageKey, file, { contentType: file.type, upsert: true });
+        .upload(storageKey, optimizedBlob, { contentType, upsert: true });
 
       if (uploadError) {
         onError(`Error al subir la imagen: ${uploadError.message}`);
