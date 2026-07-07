@@ -18,7 +18,7 @@ export function usePerfumeCatalog() {
   const { perfumes: remotePerfumes, loading, error, refetch } = useRemotePerfumes();
 
   const [filters, setFilters] = useState<FiltersState>({
-    collection: "all",
+    collection: "featured",
     line: "",
     brand: "",
     gender: "",
@@ -107,7 +107,7 @@ export function usePerfumeCatalog() {
 
   const resetFilters = () => {
     setFilters({
-      collection: "all",
+      collection: "featured",
       line: "",
       brand: "",
       gender: "",

@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "migrate": "tsx scripts/migrate-to-supabase.ts"
+    "migrate": "tsx scripts/migrate-to-supabase.ts",
+    "optimize-images": "tsx scripts/optimize-images.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.0",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "dotenv": "^16.0.0",
+    "sharp": "^0.33.0",
     "tsx": "^4.0.0",
     "@eslint/js": "^9.9.1",
     "@types/react": "^18.3.5",
