@@ -121,6 +121,7 @@ function getPerfumeBadges(perfume: Perfume) {
   if (perfume.collection === "arabe") badges.push("Arabe");
   if (perfume.collection === "arabic") badges.push("Arabic");
   if (perfume.collection === "mini") badges.push("Mini");
+  if (perfume.collection === "home") badges.push("Home");
   if (perfume.isBestSeller) badges.push("Mas vendido");
   if (perfume.isNew) badges.push("Nuevo");
   if (badges.length === 0 && perfume.isFeatured) badges.push("Destacado");

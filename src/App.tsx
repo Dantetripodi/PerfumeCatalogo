@@ -185,6 +185,7 @@ function App() {
     { label: "Arabes", value: "arabe" },
     { label: "Arabic", value: "arabic" },
     { label: "Mini perfumes", value: "mini" },
+    { label: "Home", value: "home" },
     { label: "Consultar precio", value: "consult" },
   ];
 
