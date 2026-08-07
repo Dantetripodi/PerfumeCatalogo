@@ -34,22 +34,6 @@ export const perfumesRegulares: PerfumeInput[] = [
     },
   },
   {
-    name: "212-Vip Black",
-    brand: "Yves Dorgeval",
-    price: 60000,
-    gender: "masculino",
-    category: "oriental",
-    size: "100ml",
-    image: "/imagenes/perfumes/212-vipBlack-hombres.jpg",
-    description:
-      "Inspirado en 212 VIP Black de Carolina Herrera. Una fragancia intensa y seductora con anis y hinojo en salida, corazón de lavanda y fondo de vainilla negra y almizcle.",
-    notes: {
-      top: ["Anis", "Hinojo"],
-      middle: ["Lavanda"],
-      base: ["Vainilla negra", "Almizcle"],
-    },
-  },
-  {
     name: "212-Vip Night Club Men",
     brand: "Yves Dorgeval",
     price: 60000,
@@ -111,22 +95,6 @@ export const perfumesRegulares: PerfumeInput[] = [
       top: ["Limón", "Bergamota"],
       middle: ["Anís estrellado", "Flor de olivo"],
       base: ["Cuero", "Haba tonka", "Tabaco"],
-    },
-  },
-  {
-    name: "Bad Boy Cobalt",
-    brand: "Yves Dorgeval",
-    price: 60000,
-    gender: "masculino",
-    category: "frutal",
-    size: "100ml",
-    image: "/imagenes/perfumes/badboy-cobalt-hombres.jpg",
-    description:
-      "Inspirado en Bad Boy de Carolina Herrera. Dinámico y audaz con pimienta rosa y vetiver.",
-    notes: {
-      top: ["Pimienta rosa", "Lavanda"],
-      middle: ["Geranio", "Ciruela negra"],
-      base: ["Vetiver"],
     },
   },
   {
@@ -226,38 +194,6 @@ export const perfumesRegulares: PerfumeInput[] = [
     },
   },
   {
-    name: "Halloween Women",
-    brand: "Yves Dorgeval",
-    price: 60000,
-    gender: "femenino",
-    category: "floral",
-    size: "100ml",
-    image: "/imagenes/perfumes/Halloween-women-mujeres.jpg",
-    description:
-      "Inspirado en Halloween Women de Jesús del Pozo. Misteriosa con violeta, tuberosa y fondo de mirra.",
-    notes: {
-      top: ["Violeta", "Petitgrain"],
-      middle: ["Magnolia", "Tuberosa"],
-      base: ["Incienso", "Mirra"],
-    },
-  },
-  {
-    name: "Hugo Boss Just Different",
-    brand: "Yves Dorgeval",
-    price: 60000,
-    gender: "masculino",
-    category: "oriental",
-    size: "100ml",
-    image: "/imagenes/perfumes/HugoBoss-hombres.jpg",
-    description:
-      "Inspirado en Boss Bottled de Hugo Boss. Fresco con menta y manzana, fondo especiado y amaderado.",
-    notes: {
-      top: ["Menta", "Manzana Granny Smith"],
-      middle: ["Albahaca", "Cilantro"],
-      base: ["Cachemira", "Tabaco"],
-    },
-  },
-  {
     name: "L'Interdit",
     brand: "Yves Dorgeval",
     price: 60000,
@@ -303,54 +239,6 @@ export const perfumesRegulares: PerfumeInput[] = [
       top: ["Bergamota", "Azahar"],
       middle: ["Jazmín"],
       base: ["Cedro"],
-    },
-  },
-  {
-    name: "Nina Ricci",
-    brand: "Yves Dorgeval",
-    price: 60000,
-    gender: "femenino",
-    category: "frutal",
-    size: "100ml",
-    image: "/imagenes/perfumes/NinaRicci-women-mujeres.jpg",
-    description:
-      "Inspirado en Nina Ricci. Fresco y joven con limón, manzana y fondo suave amaderado.",
-    notes: {
-      top: ["Limón", "Lima de Amalfi"],
-      middle: ["Manzana Granny Smith", "Peonía"],
-      base: ["Almizcle", "Cedro"],
-    },
-  },
-  {
-    name: "Phantom Black Parfum",
-    brand: "Yves Dorgeval",
-    price: 60000,
-    gender: "masculino",
-    category: "oriental",
-    size: "100ml",
-    image: "/imagenes/perfumes/Phantom-black-hombres.jpg",
-    description:
-      "Inspirado en Phantom de Paco Rabanne. Moderno y enérgico con bergamota, lavanda y fondo de vetiver.",
-    notes: {
-      top: ["Bergamota", "Limón"],
-      middle: ["Lavanda", "Geranio"],
-      base: ["Haba de vainilla", "Vetiver"],
-    },
-  },
-  {
-    name: "Phantom",
-    brand: "Yves Dorgeval",
-    price: 60000,
-    gender: "masculino",
-    category: "oriental",
-    size: "100ml",
-    image: "/imagenes/perfumes/Phantom-hombres.jpg",
-    description:
-      "Inspirado en Phantom de Paco Rabanne. Fresco con lavanda, pimienta y fondo amaderado.",
-    notes: {
-      top: ["Lavanda", "Limón de Amalfi"],
-      middle: ["Pachulí", "Pimienta rosa"],
-      base: ["Vainilla"],
     },
   },
   {
@@ -527,22 +415,6 @@ export const perfumesRegulares: PerfumeInput[] = [
       top: ["Mandarina"],
       middle: ["Jazmín"],
       base: ["Vainilla"],
-    },
-  },
-  {
-    name: "One Million",
-    brand: "Yves Dorgeval",
-    price: 60000,
-    gender: "masculino",
-    category: "oriental",
-    size: "100ml",
-    image: "/imagenes/perfumes/One-Million-Hombre.jpg",
-    description:
-      "Inspirado en One Million de Paco Rabanne. Especiado con mandarina roja, canela y fondo amaderado.",
-    notes: {
-      top: ["Mandarina roja", "Pomelo"],
-      middle: ["Canela", "Rosa"],
-      base: ["Ámbar", "Cuero"],
     },
   },
   {
