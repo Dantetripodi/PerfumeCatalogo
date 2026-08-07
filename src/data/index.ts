@@ -4,6 +4,10 @@ import { perfumesMinis } from "./minis";
 import { otrosProductos } from "./otros";
 import { perfumesArabes } from "./arabes";
 import { perfumesArabic } from "./arabic";
+import { yvesRegulares } from "./yvesRegulares";
+import { yvesProbadores } from "./yvesProbadores";
+import { yvesArabic } from "./yvesArabic";
+import { yvesHome } from "./yvesHome";
 
 const CUSTOM_PERFUMES_STORAGE_KEY = "dtfragancias_custom_perfumes";
 
@@ -13,6 +17,8 @@ const ID_RANGES = {
   otros: { start: 2000, end: 2999 },
   arabes: { start: 3000, end: 3999 },
   arabic: { start: 4000, end: 4999 },
+  // 5000-5999 is reserved for locally stored custom perfumes (see getStoredPerfumes).
+  home: { start: 6000, end: 6999 },
 };
 
 function assignIds(
@@ -23,11 +29,14 @@ function assignIds(
   return items.map((item, index) => normalizePerfume(item, startId + index, collection));
 }
 
-const regularesWithIds = assignIds(perfumesRegulares, ID_RANGES.regulares.start, "regular");
-const minisWithIds = assignIds(perfumesMinis, ID_RANGES.minis.start, "mini");
+// Hand-curated entries stay first so their ids never shift when the RED YVES
+// import is re-run and appends or drops products.
+const regularesWithIds = assignIds([...perfumesRegulares, ...yvesRegulares], ID_RANGES.regulares.start, "regular");
+const minisWithIds = assignIds([...perfumesMinis, ...yvesProbadores], ID_RANGES.minis.start, "mini");
 const otrosWithIds = assignIds(otrosProductos, ID_RANGES.otros.start, "accesorio");
 const arabesWithIds = assignIds(perfumesArabes, ID_RANGES.arabes.start, "arabe");
-const arabicWithIds = assignIds(perfumesArabic, ID_RANGES.arabic.start, "arabic");
+const arabicWithIds = assignIds([...perfumesArabic, ...yvesArabic], ID_RANGES.arabic.start, "arabic");
+const homeWithIds = assignIds(yvesHome, ID_RANGES.home.start, "home");
 
 export const perfumes: Perfume[] = [
   ...regularesWithIds,
@@ -35,9 +44,11 @@ export const perfumes: Perfume[] = [
   ...otrosWithIds,
   ...arabesWithIds,
   ...arabicWithIds,
+  ...homeWithIds,
 ];
 
 export { perfumesRegulares, perfumesMinis, otrosProductos, perfumesArabes, perfumesArabic };
+export { yvesRegulares, yvesProbadores, yvesArabic, yvesHome };
 
 export function getStoredPerfumes(): Perfume[] {
   return getStoredPerfumeInputs().map((item, index) => normalizePerfume(item, 5000 + index, "regular"));
@@ -169,6 +180,7 @@ function buildTags(item: PerfumeInput, category: PerfumeCategory, collection: Pe
   const tags = new Set<string>([category, item.gender]);
 
   if (collection === "mini") tags.add("mini perfume");
+  if (collection === "home") tags.add("home");
   if (collection === "arabe") tags.add("perfume árabe");
   if (collection === "arabic") tags.add("arabic");
   if (stock === "consult") tags.add("precio a consultar");
