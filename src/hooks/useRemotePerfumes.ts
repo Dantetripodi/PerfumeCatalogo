@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "../lib/supabase";
-import { normalizePerfume, rowToInput } from "../data";
+import { supabase, USE_LOCAL_CATALOG } from "../lib/supabase";
+import { normalizePerfume, rowToInput, perfumes as localPerfumes } from "../data";
 import { Perfume, PerfumeRow } from "../types";
 
 export interface UseRemotePerfumesResult {
@@ -18,6 +18,13 @@ export function useRemotePerfumes(): UseRemotePerfumesResult {
   const fetchPerfumes = useCallback(async () => {
     setLoading(true);
     setError(null);
+
+    // Preview what src/data holds before pushing it live with `npm run sync-catalog`.
+    if (USE_LOCAL_CATALOG) {
+      setPerfumes(localPerfumes);
+      setLoading(false);
+      return;
+    }
 
     const { data, error: fetchError } = await supabase
       .from("perfumes")
