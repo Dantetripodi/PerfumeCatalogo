@@ -54,7 +54,8 @@ export function usePerfumeCatalog() {
         p.category.toLowerCase().includes(q) ||
         p.notes.top.some(note => note.toLowerCase().includes(q)) ||
         p.notes.middle.some(note => note.toLowerCase().includes(q)) ||
-        p.notes.base.some(note => note.toLowerCase().includes(q))
+        p.notes.base.some(note => note.toLowerCase().includes(q)) ||
+        p.tags.some(tag => tag.toLowerCase().includes(q))
       );
     }
     if (filters.line) result = result.filter(p => p.collection === filters.line);
