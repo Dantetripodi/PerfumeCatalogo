@@ -184,7 +184,9 @@ function App() {
     { label: "Yves", value: "regular" },
     { label: "Arabes", value: "arabe" },
     { label: "Arabic", value: "arabic" },
+    { label: "Jacques Ryon", value: "jacques" },
     { label: "Mini perfumes", value: "mini" },
+    { label: "Probadores", value: "probador" },
     { label: "Home", value: "home" },
     { label: "Consultar precio", value: "consult" },
   ];

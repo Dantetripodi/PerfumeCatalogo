@@ -3,7 +3,9 @@ import { ChevronDown, Filter, SlidersHorizontal, X } from 'lucide-react';
 import { Perfume, COLLECTION_LABELS, PerfumeCollection } from '../types';
 import { formatPrice } from '../utils/price';
 
-const LINE_COLLECTIONS: PerfumeCollection[] = ["regular", "arabe", "arabic", "mini", "home"];
+const LINE_COLLECTIONS: PerfumeCollection[] = [
+  "regular", "arabe", "arabic", "jacques", "mini", "probador", "home",
+];
 
 interface FilterProps {
   filters: {

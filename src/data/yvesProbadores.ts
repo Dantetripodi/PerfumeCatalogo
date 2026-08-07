@@ -10,7 +10,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-ad-10ml-3413.webp",
+    image: "/imagenes/redyves/probador/probador-ad-10ml-3413.webp",
     description: "Probador de AD 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -25,7 +25,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-ad-le-secret-10ml-3412.webp",
+    image: "/imagenes/redyves/probador/probador-ad-le-secret-10ml-3412.webp",
     description: "Probador de AD Le Secret. Elegante sin esfuerzo. Floral y limpio, con una base que dura todo el día sin volverse pesado. Inspirado en Ange ou Démon Le Secret — Givenchy. Familia olfativa: Floral amaderada. Temporada ideal: Todo el año.",
     notes: {
       top: ["Té","Arándano","Limón de Amalfi"],
@@ -40,7 +40,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-ad-le-secret-elixir-10ml-3411.webp",
+    image: "/imagenes/redyves/probador/probador-ad-le-secret-elixir-10ml-3411.webp",
     description: "Probador de AD Le Secret Elixir. Más que un perfume — una declaración. Sensual, denso, para cuando querés impactar de verdad. Inspirado en Ange ou Démon Le Secret Elixir — Givenchy. Familia olfativa: Floral oriental. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Té","Limón de Amalfi","Neroli"],
@@ -55,7 +55,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "amaderado frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-adventure-10ml-3332.webp",
+    image: "/imagenes/redyves/probador/probador-adventure-10ml-3332.webp",
     description: "Probador de Adventure. El perfume de los perfumes.— smoky, frutal, legendario. Inspirado en Aventus — Creed. Familia olfativa: Chipre frutal. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Grosellas negras","Manzana","Limón (lima ácida)","Pimienta rosa"],
@@ -70,7 +70,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-amira-10ml-3382.webp",
+    image: "/imagenes/redyves/probador/probador-amira-10ml-3382.webp",
     description: "Probador de Amira. Floral y frutal como el primer día de calor. Dulce sin empalagar, de los que hacen que la gente se gire. Inspirado en Yara — Lattafa. Familia olfativa: Floral frutal. Temporada ideal: Primavera - Verano.",
     notes: {
       top: ["Orquídea","Heliotropo","Naranja tangerina"],
@@ -85,7 +85,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-amira-tous-10ml-3270.webp",
+    image: "/imagenes/redyves/probador/probador-amira-tous-10ml-3270.webp",
     description: "Probador de Amira Tous. Oriental floral con ese toque de misterio que no se aprende — se hereda. Inspirado en Yara Tous — Lattafa. Familia olfativa: Floral oriental. Temporada ideal: Otoño — Primavera.",
     notes: {
       top: ["Mango","Coco","Maracuyá (fruta de la pasión)"],
@@ -100,7 +100,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-athenea-10ml-3310.webp",
+    image: "/imagenes/redyves/probador/probador-athenea-10ml-3310.webp",
     description: "Probador de Athenea. Olímpica en todo sentido. Floral poderoso, femenino, de los que marcan presencia sin esfuerzo. Inspirado en Olympéa — Paco Rabanne. Familia olfativa: Floral acuática. Temporada ideal: Todo el año.",
     notes: {
       top: ["Jazmín de agua","Mandarina verde","Flor de jengibre"],
@@ -115,7 +115,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-athenea-blossom-10ml-3313.webp",
+    image: "/imagenes/redyves/probador/probador-athenea-blossom-10ml-3313.webp",
     description: "Probador de Athenea Blossom. La diosa en primavera. Más floral, más suave, para el día que quiere sentirse especial sin exagerar. Inspirado en Olympéa Blossom — Paco Rabanne. Familia olfativa: Floral frutal. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Mandarina","Bergamota","Lychee"],
@@ -128,14 +128,14 @@ export const yvesProbadores: PerfumeInput[] = [
     brand: "Yves Dorgeval",
     price: 10000,
     gender: "femenino",
-    category: "perfumería",
+    category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-bad-girl-legere-10ml-3355.webp",
-    description: "Probador de Bad Girl Legere 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
+    image: "/imagenes/redyves/probador/probador-bad-girl-legere-10ml-3355.webp",
+    description: "Probador de Bad Girl Legere. La mala chica en versión más suave. Mismo carácter, menos intensidad — perfecta para el día. Inspirado en Good Girl Légère — Carolina Herrera. Familia olfativa: Floral frutal. Temporada ideal: Primavera — Verano.",
     notes: {
-      top: [],
-      middle: [],
-      base: [],
+      top: ["Ylang-ylang","Mandarina","Bergamota","Limón"],
+      middle: ["Nardo","Jazmín","Flor de naranjo","Rosa búlgara"],
+      base: ["Dulce de leche","Praliné","Haba tonka","Madera de cachemir","Canela","Sándalo","Almizcle","Ámbar","Pachulí","Cedro"],
     },
   },
   {
@@ -145,7 +145,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-baiser-d-amour-10ml-3277.webp",
+    image: "/imagenes/redyves/probador/probador-baiser-d-amour-10ml-3277.webp",
     description: "Probador de Baiser D'amour. Primer amor en frasco. Dulce, frutal, romántico — de los que te hacen sonreír sin razón. Inspirado en Amor Amor — Cacharel. Familia olfativa: Floral frutal. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Grosella negra","Naranja","Mandarina","Pomelo","Casia","Bergamota"],
@@ -160,7 +160,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-bella-diamond-10ml-3971.webp",
+    image: "/imagenes/redyves/probador/probador-bella-diamond-10ml-3971.webp",
     description: "Probador de Bella Diamond 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -175,7 +175,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-bella-legere-10ml-3296.webp",
+    image: "/imagenes/redyves/probador/probador-bella-legere-10ml-3296.webp",
     description: "Probador de Bella Legere. Floral frutal gourmand con esa firma que combina frescura afrutada y dulzura envolvente. Inspirado en La Vie Est Belle L'Eau de Parfum Legere de Lancôme. Familia olfativa: Floral Frutal Gourmand. Temporada ideal: Todo el año.",
     notes: {
       top: ["Grosella negra","Pera"],
@@ -190,7 +190,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-bella-rose-10ml-3297.webp",
+    image: "/imagenes/redyves/probador/probador-bella-rose-10ml-3297.webp",
     description: "Probador de Bella Rose. Una versión rosa y romántica - Floral delicado, suave, para los días tranquilos. Inspirado en La Vie Est Belle en Rose — Lancôme. Familia olfativa: Floral frutal. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Frambuesa","Bayas rojas","Pimienta rosa","Bergamota"],
@@ -205,7 +205,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental especiado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-black-yd-aphrodisiaque-10ml-3488.webp",
+    image: "/imagenes/redyves/probador/probador-black-yd-aphrodisiaque-10ml-3488.webp",
     description: "Probador de Black YD Aphrodisiaque. La versión afrodisíaca. Para los que quieren que el perfume haga el trabajo antes que ellos. Inspirado en Black XS Aphrodisiaque — Paco Rabanne. Familia olfativa: Oriental especiado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Canela","Azafrán"],
@@ -220,7 +220,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-black-yd-l-elixir-10ml-3489.webp",
+    image: "/imagenes/redyves/probador/probador-black-yd-l-elixir-10ml-3489.webp",
     description: "Probador de Black YD L’ Elixir 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -235,7 +235,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental especiado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-black-yd-men-10ml-3250.webp",
+    image: "/imagenes/redyves/probador/probador-black-yd-men-10ml-3250.webp",
     description: "Probador de Black YD Men. Negro, provocador, para los que saben que el escándalo también tiene estilo. Inspirado en Black XS — Paco Rabanne. Familia olfativa: Oriental especiado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Son limón (lima ácida)","Salvia;"],
@@ -250,7 +250,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-blooming-butterfly-10ml-3962.webp",
+    image: "/imagenes/redyves/probador/probador-blooming-butterfly-10ml-3962.webp",
     description: "Probador de Blooming Butterfly. El glamour de Blooming Butterfly sin la lista de espera. Frutal floral con esa firma que combina feminidad moderna y sofisticación. Inspirado en Blooming Butterfly 🌷. Familia olfativa: Frutal floral. Temporada ideal: Todo el año.",
     notes: {
       top: ["Pitahaya 🌸"],
@@ -265,7 +265,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-born-in-roma-10ml-3965.webp",
+    image: "/imagenes/redyves/probador/probador-born-in-roma-10ml-3965.webp",
     description: "Probador de Born In Roma. Elegante, intenso y moderno. Un oriental avainillado que combina una vainilla envolvente con la frescura aromática de la lavanda y un fondo amaderado de vetiver que aporta profundidad y sofisticación. Inspirado en Born In Roma Intense 100ml — Valentino. Familia olfativa: Oriental Vainilla. Temporada ideal: Otoño e invierno (también ideal para noches frescas).",
     notes: {
       top: ["Vainilla"],
@@ -280,7 +280,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-celsius-10ml-3254.webp",
+    image: "/imagenes/redyves/probador/probador-celsius-10ml-3254.webp",
     description: "Probador de Celsius. Frío, potente, único. Para los que quieren oler diferente y que se note. Inspirado en Fahrenheit — Christian Dior. Familia olfativa: Chipre cuero. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Nuez moscada","Lavanda","Cedro","Mandarina","Manzanilla","Bergamota","Espino blanco","Limón"],
@@ -295,7 +295,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-charm-in-black-10ml-3363.webp",
+    image: "/imagenes/redyves/probador/probador-charm-in-black-10ml-3363.webp",
     description: "Probador de Charm In Black. El encanto se viste de negro. Floral oscuro con fondo cálido — elegancia que no necesita explicación. Inspirado en Jesús del Pozo In Black. Familia olfativa: Floral oriental. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Cereza negra","Pomelo","Un delicado acorde de rosa"],
@@ -310,7 +310,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-charm-in-white-10ml-3362.webp",
+    image: "/imagenes/redyves/probador/probador-charm-in-white-10ml-3362.webp",
     description: "Probador de Charm In White. Blanco puro, limpio, con ese encanto clásico que nunca falla. Elegancia en su forma más simple. Inspirado en Jesús del Pozo In White. Familia olfativa: Floral amaderada. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Flor de limón","Hoja de bambú","Bergamota"],
@@ -325,7 +325,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-code-fem-10ml-3272.webp",
+    image: "/imagenes/redyves/probador/probador-code-fem-10ml-3272.webp",
     description: "Probador de Code Fem 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -340,7 +340,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "acuático",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-costa-azul-10ml-3290.webp",
+    image: "/imagenes/redyves/probador/probador-costa-azul-10ml-3290.webp",
     description: "Probador de Costa Azul. La costa en frasco. Mediterráneo, salino, para los que quieren oler como si vivieran frente al mar. Inspirado en Costa Azzurra — Tom Ford. Familia olfativa: Acuático marino. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Madera flotante","Algas marinas","Madera de oud","Semillas de apio","Ambreta","Cardamomo"],
@@ -355,7 +355,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-d-orgeval-blue-10ml-3406.webp",
+    image: "/imagenes/redyves/probador/probador-d-orgeval-blue-10ml-3406.webp",
     description: "Probador de D'orgeval Blue 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -370,7 +370,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-dalilah-10ml-3371.webp",
+    image: "/imagenes/redyves/probador/probador-dalilah-10ml-3371.webp",
     description: "Probador de Dalilah. Delina sin el bolso Louis Vuitton cargado. Floral powdery que te hace sentir que llegaste a ese lugar al que siempre quisiste llegar. Inspirado en Delina — Parfums de Marly. Familia olfativa: Floral powdery. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Nuez moscada","Lichi","Bergamota"],
@@ -385,7 +385,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-dorgeval-code-menc-10ml-3261.webp",
+    image: "/imagenes/redyves/probador/probador-dorgeval-code-menc-10ml-3261.webp",
     description: "Probador de Dorgeval Code Menc 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -400,7 +400,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental gourmand",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-eva-10ml-3315.webp",
+    image: "/imagenes/redyves/probador/probador-eva-10ml-3315.webp",
     description: "Probador de Eva. Divina, literalmente. Femenino gourmand con una presencia que no pasa desapercibida. Inspirado en Divine — Jean Paul Gaultier. Familia olfativa: Oriental gourmand. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Mandarina","Bergamota","Jengibre"],
@@ -415,7 +415,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-eve-10ml-3319.webp",
+    image: "/imagenes/redyves/probador/probador-eve-10ml-3319.webp",
     description: "Probador de Eve. Famosa antes de abrir el frasco. Floral frutal con esa actitud Rabanne que ya es identidad propia. Inspirado en Fame — Paco Rabanne. Familia olfativa: Floral frutal. Temporada ideal: Todo el año.",
     notes: {
       top: ["Mango","Bergamota","Pomelo"],
@@ -430,7 +430,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-fcking-fashion-10ml-3284.webp",
+    image: "/imagenes/redyves/probador/probador-fcking-fashion-10ml-3284.webp",
     description: "Probador de Fcking Fashion 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -445,7 +445,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-fleur-elixir-10ml-3274.webp",
+    image: "/imagenes/redyves/probador/probador-fleur-elixir-10ml-3274.webp",
     description: "Probador de Fleur Elixir 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -460,7 +460,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-g-millonarie-gold-10ml-3294.webp",
+    image: "/imagenes/redyves/probador/probador-g-millonarie-gold-10ml-3294.webp",
     description: "Probador de G. Millonarie Gold 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -475,7 +475,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-g-millonarie-luckiest-10ml-3307.webp",
+    image: "/imagenes/redyves/probador/probador-g-millonarie-luckiest-10ml-3307.webp",
     description: "Probador de G. Millonarie Luckiest 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -490,7 +490,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-g-millonarie-prive-10ml-3302.webp",
+    image: "/imagenes/redyves/probador/probador-g-millonarie-prive-10ml-3302.webp",
     description: "Probador de G. Millonarie Prive 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -505,7 +505,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-gh-classic-10ml-3255.webp",
+    image: "/imagenes/redyves/probador/probador-gh-classic-10ml-3255.webp",
     description: "Probador de GH Classic 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -520,7 +520,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-gh-fem-10ml-3397.webp",
+    image: "/imagenes/redyves/probador/probador-gh-fem-10ml-3397.webp",
     description: "Probador de GH Fem. ▪️​Clásico que no envejece. Elegante sin esfuerzo, de esos que cualquiera te pregunta qué perfume usás. ▪️​ Inspirado en CH — Carolina Herrera ▪️​. Familia olfativa: Floral amaderada. Temporada ideal: Todo el año.",
     notes: {
       top: ["Naranja","Gardenia","Bergamota"],
@@ -535,7 +535,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-gh-l-eau-10ml-3396.webp",
+    image: "/imagenes/redyves/probador/probador-gh-l-eau-10ml-3396.webp",
     description: "Probador de GH L'eau. ​Para el día a día que igual merece oler bien. Fresco, femenino, sin drama. ​ Inspirado en CH L'Eau — Carolina Herrera ​. Familia olfativa: Floral cítrica. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Pomelo","Frambuesa","Limón"],
@@ -550,7 +550,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "aromático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-gh-men-10ml-3247.webp",
+    image: "/imagenes/redyves/probador/probador-gh-men-10ml-3247.webp",
     description: "Probador de GH Men. El hombre de Carolina. Elegante sin esfuerzo, para todos los días y para todas las noches. Inspirado en CH Men — Carolina Herrera. Familia olfativa: Aromático amaderado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Mandarina","Notas verdes"],
@@ -563,14 +563,14 @@ export const yvesProbadores: PerfumeInput[] = [
     brand: "Yves Dorgeval",
     price: 10000,
     gender: "masculino",
-    category: "perfumería",
+    category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-gh-prive-10ml-3484.webp",
-    description: "Probador de GH Prive 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
+    image: "/imagenes/redyves/probador/probador-gh-prive-10ml-3484.webp",
+    description: "Probador de GH Prive. Lo privado de Carolina. La versión más sofisticada y sensual para las noches que importan. Inspirado en CH Prive Men — Carolina Herrera. Familia olfativa: Oriental amaderado. Temporada ideal: Otoño — Invierno.",
     notes: {
-      top: [],
-      middle: [],
-      base: [],
+      top: ["Bergamota","Naranja","Limón"],
+      middle: ["Lavanda","Salvia","Pimienta"],
+      base: ["Sándalo","Cuero","Ámbar"],
     },
   },
   {
@@ -580,7 +580,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-gh-sublime-10ml-3288.webp",
+    image: "/imagenes/redyves/probador/probador-gh-sublime-10ml-3288.webp",
     description: "Probador de GH Sublime. Carolina en su versión más glamorosa. Floral intenso con esa elegancia que no caduca. Inspirado en CH Sublime — Carolina Herrera. Familia olfativa: Floral amaderada. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Mandarina","Gardenia"],
@@ -595,7 +595,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-goddess-athenea-10ml-3312.webp",
+    image: "/imagenes/redyves/probador/probador-goddess-athenea-10ml-3312.webp",
     description: "Probador de Goddess Athenea. La versión más intensa de la diosa. Para cuando Olympéa no alcanza y necesitás más poder. Inspirado en Olympéa Intense — Paco Rabanne. Familia olfativa: Floral oriental. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Pimienta rosa","Bergamota"],
@@ -610,7 +610,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-golden-sweet-girl-10ml-3358.webp",
+    image: "/imagenes/redyves/probador/probador-golden-sweet-girl-10ml-3358.webp",
     description: "Probador de Golden Sweet Girl. CH dorada. Floral luminoso con ese toque insigne que la hace única entre todas las CH. Inspirado en CH Insigné — Carolina Herrera. Familia olfativa: Floral oriental. Temporada ideal: Otoño — Primavera.",
     notes: {
       top: ["Bergamota","Mandarina","Naranja"],
@@ -625,7 +625,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "aromático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-good-boy-10ml-3391.webp",
+    image: "/imagenes/redyves/probador/probador-good-boy-10ml-3391.webp",
     description: "Probador de Good Boy. El chico malo de Carolina Herrera. Fresco de día, oscuro de noche — para los que viven en los dos mundos. Inspirado en Bad Boy — Carolina Herrera. Familia olfativa: Aromático amaderado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Cacao","Salvia"],
@@ -640,7 +640,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "aromático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-good-boy-cobalt-10ml-3389.webp",
+    image: "/imagenes/redyves/probador/probador-good-boy-cobalt-10ml-3389.webp",
     description: "Probador de Good Boy Cobalt. Bad Boy en azul cobalto — el rebelde que se pone elegante cuando quiere. Inspirado en Bad Boy Cobalt — Carolina Herrera. Familia olfativa: Aromático amaderado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Cardamomo","Bergamota"],
@@ -655,7 +655,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-good-boy-parfum-10ml-3390.webp",
+    image: "/imagenes/redyves/probador/probador-good-boy-parfum-10ml-3390.webp",
     description: "Probador de Good Boy Parfum. Bad Boy en parfum. El más intenso de los chicos malos — para las noches que exigen todo. Inspirado en Bad Boy Parfum — Carolina Herrera. Familia olfativa: Oriental amaderado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Pimienta","Bergamota"],
@@ -670,7 +670,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-grand-victorious-10ml-3336.webp",
+    image: "/imagenes/redyves/probador/probador-grand-victorious-10ml-3336.webp",
     description: "Probador de Grand Victorious. Invictus dorado. Para cuando el original no era suficientemente victorioso. Inspirado en Invictus Gold — Paco Rabanne. Familia olfativa: Oriental amaderado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Pomelo","Laurel","Notas marinas"],
@@ -685,7 +685,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-great-musk-10ml-3367.webp",
+    image: "/imagenes/redyves/probador/probador-great-musk-10ml-3367.webp",
     description: "Probador de Great Musk. Almizcle en su versión más limpia y envolvente. Como una segunda piel que nadie quiere sacarse. Inspirado en Musk Is Great — Zimaya / Musk Therapy — Initio. Familia olfativa: Amaderado almizcle. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Aldehídos limpios"],
@@ -700,7 +700,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-great-oud-10ml-3369.webp",
+    image: "/imagenes/redyves/probador/probador-great-oud-10ml-3369.webp",
     description: "Probador de Great Oud. Oud en su estado más puro. Amaderado profundo para el que no necesita convencer a nadie — su aroma lo hace solo. Inspirado en Oud Is Great — Zimaya / Oud for Greatness — Initio. Familia olfativa: Amaderado oud. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Bergamota","Especias orientales"],
@@ -715,7 +715,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "cítrico",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-green-10ml-3364.webp",
+    image: "/imagenes/redyves/probador/probador-green-10ml-3364.webp",
     description: "Probador de Green. Frescura mediterránea. La alternativa terrosa y cítrica para los que quieren algo diferente. Inspirado en Terre d'Hermès Eau Très Fraîche — Hermès. Familia olfativa: Cítrico amaderado. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Pomelo","Naranja"],
@@ -730,7 +730,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "floral amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-haltair-10ml-3269.webp",
+    image: "/imagenes/redyves/probador/probador-haltair-10ml-3269.webp",
     description: "Probador de Haltair. El glamour de Marly sin la lista de espera. Floral amaderado con esa firma que combina elegancia francesa y libertad árabe. Inspirado en Althair 120ml — Parfums de Marly. Familia olfativa: Floral amaderado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Limón","Neroli"],
@@ -745,7 +745,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-horse-10ml-3263.webp",
+    image: "/imagenes/redyves/probador/probador-horse-10ml-3263.webp",
     description: "Probador de Horse. Un clásico que no caduca. Fresco, deportivo, de los que acompañan sin llamar la atención. Inspirado en Polo — Ralph Lauren. Familia olfativa: Chipre amaderado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Hierba de limón","Menta","Pino"],
@@ -760,7 +760,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-horse-black-10ml-3267.webp",
+    image: "/imagenes/redyves/probador/probador-horse-black-10ml-3267.webp",
     description: "Probador de Horse Black. El jinete de negro. Fresco, potente, para los que prefieren llegar sin hacer ruido pero que se note. Inspirado en Polo Black — Ralph Lauren. Familia olfativa: Oriental amaderado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Mango","Artemisia","Absenta"],
@@ -775,7 +775,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "acuático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-horse-blue-10ml-3264.webp",
+    image: "/imagenes/redyves/probador/probador-horse-blue-10ml-3264.webp",
     description: "Probador de Horse Blue. Fresco como el horizonte marino. Clásico de verano que nunca pasa de moda. Inspirado en Polo Blue — Ralph Lauren. Familia olfativa: Acuático amaderado. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Melón","Pepino","Bergamota"],
@@ -790,7 +790,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "amaderado frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-horse-red-10ml-3262.webp",
+    image: "/imagenes/redyves/probador/probador-horse-red-10ml-3262.webp",
     description: "Probador de Horse Red. Rojo, potente, con ese ADN deportivo que energiza desde el primer spray. Inspirado en Polo Red — Ralph Lauren. Familia olfativa: Amaderado frutal. Temporada ideal: Todo el año.",
     notes: {
       top: ["Pomelo rojo","Frambuesa","Café"],
@@ -805,7 +805,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "amaderado especiado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-horse-red-intense-10ml-3266.webp",
+    image: "/imagenes/redyves/probador/probador-horse-red-intense-10ml-3266.webp",
     description: "Probador de Horse Red Intense. Más rojo, más intenso. Para el que ya usaba Polo Red y quería más. Inspirado en Polo Red Intense — Ralph Lauren. Familia olfativa: Amaderado especiado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Pomelo rojo","Café"],
@@ -820,7 +820,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-hvngary-10ml-3409.webp",
+    image: "/imagenes/redyves/probador/probador-hvngary-10ml-3409.webp",
     description: "Probador de Hvngary. Fresco, femenino, con esa elegancia italiana que no hace falta explicar. Inspirado en Bvlgari Femme — Bvlgari. Familia olfativa: Floral amaderada. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Neroli","Rosa"],
@@ -835,7 +835,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "aromático",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-hydo-10ml-3252.webp",
+    image: "/imagenes/redyves/probador/probador-hydo-10ml-3252.webp",
     description: "Probador de Hydo. Fresco y directo. El clásico alemán para el día a día del que siempre tiene todo bajo control. Inspirado en Hugo — Hugo Boss. Familia olfativa: Fougère acuático. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Manzana verde","Hierbabuena","Ciruela"],
@@ -850,7 +850,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "aromático especiado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-hydo-just-different-10ml-3251.webp",
+    image: "/imagenes/redyves/probador/probador-hydo-just-different-10ml-3251.webp",
     description: "Probador de Hydo Just Different. Diferente. Siempre diferente. Hugo que rompe el molde con una propuesta que no espera permiso. Inspirado en Hugo Just Different — Hugo Boss. Familia olfativa: Aromático especiado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Mandarina","Menta"],
@@ -865,7 +865,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-hydo-red-10ml-3973.webp",
+    image: "/imagenes/redyves/probador/probador-hydo-red-10ml-3973.webp",
     description: "Probador de Hydo Red 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -880,7 +880,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-jenko-10ml-3259.webp",
+    image: "/imagenes/redyves/probador/probador-jenko-10ml-3259.webp",
     description: "Probador de Jenko 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -895,7 +895,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-kunyak-10ml-3379.webp",
+    image: "/imagenes/redyves/probador/probador-kunyak-10ml-3379.webp",
     description: "Probador de Kunyak. Ámbar, especias y algo que no te podés sacar de la cabeza. Oriental cálido de los que generan adición desde el primer uso. Inspirado en Khamrah — Lattafa. Familia olfativa: Oriental amaderado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Bergamota","Azafrán","Canela"],
@@ -910,7 +910,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-lintervieux-10ml-3418.webp",
+    image: "/imagenes/redyves/probador/probador-lintervieux-10ml-3418.webp",
     description: "Probador de Lintervieux. Oscuro, floral y con fondo. Para la mujer que no pide permiso para entrar a un lugar. Inspirado en L'Interdit — Givenchy. Familia olfativa: Floral amaderada. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Pera","Naranja","Bergamota"],
@@ -925,7 +925,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-lintevieux-parfum-rouge-10ml-3419.webp",
+    image: "/imagenes/redyves/probador/probador-lintevieux-parfum-rouge-10ml-3419.webp",
     description: "Probador de Lintevieux Parfum Rouge 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -940,7 +940,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-love-jenko-10ml-3394.webp",
+    image: "/imagenes/redyves/probador/probador-love-jenko-10ml-3394.webp",
     description: "Probador de Love Jenko 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -955,7 +955,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-lovely-game-10ml-3404.webp",
+    image: "/imagenes/redyves/probador/probador-lovely-game-10ml-3404.webp",
     description: "Probador de Lovely Game. La versión más profunda y cálida del juego. Más sensual, más noche. Inspirado en Jeu d'Amour L'Elixir — Kenzo. Familia olfativa: Floral oriental. Temporada ideal: Otoño — Primavera.",
     notes: {
       top: ["Naranja","Bergamota"],
@@ -970,7 +970,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-lovely-game-elixir-10ml-3405.webp",
+    image: "/imagenes/redyves/probador/probador-lovely-game-elixir-10ml-3405.webp",
     description: "Probador de Lovely Game Elixir. La versión más profunda y cálida del juego. Más sensual, más noche. Inspirado en Jeu d'Amour L'Elixir — Kenzo. Familia olfativa: Floral oriental. Temporada ideal: Otoño — Primavera.",
     notes: {
       top: ["Naranja","Bergamota"],
@@ -985,7 +985,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-lumiere-10ml-3275.webp",
+    image: "/imagenes/redyves/probador/probador-lumiere-10ml-3275.webp",
     description: "Probador de Lumiere. El perfume más femenino del mundo, dicen. Y tienen razón. Floral, dorado, atemporal. Inspirado en J'adore — Christian Dior. Familia olfativa: Floral. Temporada ideal: Todo el año.",
     notes: {
       top: ["Ylang ylang","Pera","Melón"],
@@ -1000,7 +1000,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-lumiere-black-10ml-3281.webp",
+    image: "/imagenes/redyves/probador/probador-lumiere-black-10ml-3281.webp",
     description: "Probador de Lumiere Black. J'adore en versión oscura. Mismo ADN dorado pero más profundo, más misterioso, más noche. Inspirado en J'adore Black — Christian Dior. Familia olfativa: Floral amaderada. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Bergamota","Damasco negro"],
@@ -1015,7 +1015,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-luomo-dark-10ml-3968.webp",
+    image: "/imagenes/redyves/probador/probador-luomo-dark-10ml-3968.webp",
     description: "Probador de Luomo Dark. Potente, seductor y con mucha personalidad. Un oriental fougère que combina una salida fresca y frutal con un corazón especiado y un fondo cálido, dulce y amaderado que no pasa desapercibido. Inspirado en Ultra Male 100ml — Jean Paul Gaultier. Familia olfativa: Oriental Fougère. Temporada ideal: Otoño e invierno (ideal para noches frescas).",
     notes: {
       top: ["Fresca","Frutal con un"],
@@ -1030,7 +1030,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-luomo-elixir-10ml-3966.webp",
+    image: "/imagenes/redyves/probador/probador-luomo-elixir-10ml-3966.webp",
     description: "Probador de Luomo Elixir. Intenso, cálido y adictivo. Un oriental fougère con una salida fresca que evoluciona hacia una vainilla envolvente y un fondo dulce, ambarado y masculino que deja huella. Inspirado en Le Male Elixir 120ml — Jean Paul Gaultier. Familia olfativa: Oriental Fougère. Temporada ideal: Otoño e invierno (también ideal para noches frescas).",
     notes: {
       top: ["Un"],
@@ -1045,7 +1045,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-m-m-eau-my-gold-10ml-3401.webp",
+    image: "/imagenes/redyves/probador/probador-m-m-eau-my-gold-10ml-3401.webp",
     description: "Probador de M.m.eau My Gold 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -1060,7 +1060,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-miss-millonarie-10ml-3420.webp",
+    image: "/imagenes/redyves/probador/probador-miss-millonarie-10ml-3420.webp",
     description: "Probador de Miss Millonarie 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -1075,7 +1075,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-miss-millonarie-fabulous-10ml-3422.webp",
+    image: "/imagenes/redyves/probador/probador-miss-millonarie-fabulous-10ml-3422.webp",
     description: "Probador de Miss Millonarie Fabulous 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -1090,7 +1090,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-miss-millonarie-gold-10ml-3423.webp",
+    image: "/imagenes/redyves/probador/probador-miss-millonarie-gold-10ml-3423.webp",
     description: "Probador de Miss Millonarie Gold 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -1105,7 +1105,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-miss-millonarie-prive-10ml-3421.webp",
+    image: "/imagenes/redyves/probador/probador-miss-millonarie-prive-10ml-3421.webp",
     description: "Probador de Miss Millonarie Prive 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -1120,7 +1120,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-miu-miu-10ml-3278.webp",
+    image: "/imagenes/redyves/probador/probador-miu-miu-10ml-3278.webp",
     description: "Probador de Miu Miu. Femenino con actitud. Floral rosado pero con carácter — no es para las que pasan desapercibidas. Inspirado en Ricci Ricci — Nina Ricci. Familia olfativa: Floral oriental. Temporada ideal: Otoño — Primavera.",
     notes: {
       top: ["Ruibarbo","Bergamota","Pera"],
@@ -1135,7 +1135,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-my-lady-way-10ml-3299.webp",
+    image: "/imagenes/redyves/probador/probador-my-lady-way-10ml-3299.webp",
     description: "Probador de My Lady Way. Para la mujer que eligió su propio camino. Floral libre, moderno, con una base que acompaña todo el día. Inspirado en My Way — Giorgio Armani. Familia olfativa: Floral amaderada. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Ylang ylang","Naranja"],
@@ -1150,7 +1150,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-my-lady-way-intense-10ml-3301.webp",
+    image: "/imagenes/redyves/probador/probador-my-lady-way-intense-10ml-3301.webp",
     description: "Probador de My Lady Way Intense. El mismo camino pero con más determinación. Más profundo, más cálido, más noche. Inspirado en My Way Intense — Giorgio Armani. Familia olfativa: Floral amaderada oriental. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Bergamota","Ylang ylang"],
@@ -1165,7 +1165,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-nadine-10ml-3410.webp",
+    image: "/imagenes/redyves/probador/probador-nadine-10ml-3410.webp",
     description: "Probador de Nadine. La manzana roja más icónica de la perfumería. Dulce, femenina, con ese toque juguetón que nunca pasa de moda. Inspirado en Nina — Nina Ricci. Familia olfativa: Floral frutal gourmand. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Manzana roja","Caramelo","Bergamota"],
@@ -1180,7 +1180,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-nadine-elixir-10ml-3414.webp",
+    image: "/imagenes/redyves/probador/probador-nadine-elixir-10ml-3414.webp",
     description: "Probador de Nadine Elixir. La versión oscura y golosa de Nina. Chocolate, café y rosas — una combinación que no se olvida. Inspirado en Nina L'Elixir — Nina Ricci. Familia olfativa: Oriental floral gourmand. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Chocolate negro","Café","Cereza"],
@@ -1195,7 +1195,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-nadine-leau-10ml-3415.webp",
+    image: "/imagenes/redyves/probador/probador-nadine-leau-10ml-3415.webp",
     description: "Probador de Nadine Leau. Nina en versión veraniega. La manzana sigue ahí pero más liviana, más cítrica, más de todos los días. Inspirado en Nina L'Eau — Nina Ricci. Familia olfativa: Floral frutal acuática. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Limón","Manzana","Bergamota"],
@@ -1210,7 +1210,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "cítrico floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-neroli-portobello-10ml-3289.webp",
+    image: "/imagenes/redyves/probador/probador-neroli-portobello-10ml-3289.webp",
     description: "Probador de Neroli Portobello. Neroli de Portobello — fresco, sofisticado, el favorito de Libertad. Para todos los que saben elegir. Inspirado en Neroli Portofino — Tom Ford. Familia olfativa: Cítrico floral. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Bergamota","Limón","Naranja amarga"],
@@ -1225,7 +1225,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-night-s-treasure-10ml-3295.webp",
+    image: "/imagenes/redyves/probador/probador-night-s-treasure-10ml-3295.webp",
     description: "Probador de Night's Treasure. El tesoro de la noche. Floral oscuro con un fondo que no se borra fácilmente. Inspirado en Trésor La Nuit — Lancôme. Familia olfativa: Floral oriental. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Bergamota","Limón","Naranja"],
@@ -1240,7 +1240,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "aromático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-optimus-10ml-3325.webp",
+    image: "/imagenes/redyves/probador/probador-optimus-10ml-3325.webp",
     description: "Probador de Optimus. El robot futurista de Paco Rabanne. Phantom para los que saben que el futuro ya llegó. Inspirado en Phantom — Paco Rabanne. Familia olfativa: Aromático amaderado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Limón","Lavanda"],
@@ -1255,7 +1255,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-optimus-black-10ml-3327.webp",
+    image: "/imagenes/redyves/probador/probador-optimus-black-10ml-3327.webp",
     description: "Probador de Optimus Black. El Phantom más oscuro. Negro de noche, para los que Phantom es solo el punto de partida. Inspirado en Phantom Black Parfum — Paco Rabanne. Familia olfativa: Oriental amaderado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Limón negro","Pimienta"],
@@ -1270,7 +1270,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "aromático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-optimus-legion-10ml-3326.webp",
+    image: "/imagenes/redyves/probador/probador-optimus-legion-10ml-3326.webp",
     description: "Probador de Optimus Legion. Phantom en modo legión. Más potente, para cuando el original no alcanza. Inspirado en Phantom Legion — Paco Rabanne. Familia olfativa: Aromático amaderado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Limón","Lavanda","Romero"],
@@ -1285,7 +1285,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-orchidee-10ml-3265.webp",
+    image: "/imagenes/redyves/probador/probador-orchidee-10ml-3265.webp",
     description: "Probador de Orchidee. Misterioso, oscuro, elegante. Orquídea negra para los que no se conforman con lo convencional. Inspirado en Black Orchid — Tom Ford. Familia olfativa: Floral oriental oscuro. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Trufa negra","Ylang ylang","Bergamota"],
@@ -1300,7 +1300,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-orixa-fem-10ml-3395.webp",
+    image: "/imagenes/redyves/probador/probador-orixa-fem-10ml-3395.webp",
     description: "Probador de Orixa Fem. ▪️​Limpio, fresco, como salir recién duchada un mediodía de primavera. ▪️​ Inspirado en L'Eau d'Issey — Issey Miyake ▪️. Familia olfativa: Floral acuática. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Loto acuático","Bergamota","Limón"],
@@ -1315,7 +1315,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "acuático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-orixa-pour-homme-10ml-3260.webp",
+    image: "/imagenes/redyves/probador/probador-orixa-pour-homme-10ml-3260.webp",
     description: "Probador de Orixa Pour Homme. Limpio como el agua, libre como el viento. Para los que prefieren que su perfume no los defina sino que los acompañe. Inspirado en L'Eau d'Issey Pour Homme — Issey Miyake. Familia olfativa: Acuático amaderado. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Bergamota","Yuzu","Limón"],
@@ -1330,7 +1330,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-oud-good-10ml-3286.webp",
+    image: "/imagenes/redyves/probador/probador-oud-good-10ml-3286.webp",
     description: "Probador de Oud Good. Tom Ford en madera. Profundo, especiado, para los que saben exactamente quiénes son. Inspirado en Oud Wood — Tom Ford. Familia olfativa: Oriental amaderado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Cardamomo","Pimienta china","Incienso"],
@@ -1345,7 +1345,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-parismania-absolu-10ml-3276.webp",
+    image: "/imagenes/redyves/probador/probador-parismania-absolu-10ml-3276.webp",
     description: "Probador de Parismania Absolu. El escándalo en su forma más absoluta. Para los que quieren más que un perfume. Inspirado en Scandal Absolu — Jean Paul Gaultier. Familia olfativa: Oriental amaderado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Pimienta","Cardamomo"],
@@ -1360,7 +1360,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-parismania-fatale-10ml-3309.webp",
+    image: "/imagenes/redyves/probador/probador-parismania-fatale-10ml-3309.webp",
     description: "Probador de Parismania Fatale. El escándalo más oscuro. Intenso, seductor, para las noches que no necesitan justificación. Inspirado en So Scandal — Jean Paul Gaultier. Familia olfativa: Floral oriental. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Bergamota","Mandarina","Miel"],
@@ -1375,7 +1375,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-parismania-fem-10ml-3303.webp",
+    image: "/imagenes/redyves/probador/probador-parismania-fem-10ml-3303.webp",
     description: "Probador de Parismania Fem 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -1390,7 +1390,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "aromático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-parismania-pour-homme-10ml-3283.webp",
+    image: "/imagenes/redyves/probador/probador-parismania-pour-homme-10ml-3283.webp",
     description: "Probador de Parismania Pour Homme. El escándalo para él. Jean Paul Gaultier en masculino — elegante, atrevido, memorable. Inspirado en Scandal Pour Homme — Jean Paul Gaultier. Familia olfativa: Aromático amaderado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Mandarina","Tomillo"],
@@ -1405,7 +1405,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-pipe-dram-marron-10ml-3392.webp",
+    image: "/imagenes/redyves/probador/probador-pipe-dram-marron-10ml-3392.webp",
     description: "Probador de Pipe Dram (marron) 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -1420,7 +1420,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "oriental",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-pipe-dream-oud-10ml-3393.webp",
+    image: "/imagenes/redyves/probador/probador-pipe-dream-oud-10ml-3393.webp",
     description: "Probador de Pipe Dream Oud. Pipe Dream en versión oud. Concentrado intenso para los que buscan algo más profundo. Tipo: Concentrado Oud | 35ml Elaborado con esencias francesas de alta concentración. Ideal para recargar perfumeros o difusores personales.",
     notes: {
       top: [],
@@ -1435,7 +1435,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-playing-10ml-3403.webp",
+    image: "/imagenes/redyves/probador/probador-playing-10ml-3403.webp",
     description: "Probador de Playing. Fresco, juguetón, sin pretensiones. El perfume de los días que simplemente querés oler bien. Inspirado en Play Givenchy. Familia olfativa: Frutal floral. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Naranja","Bergamota","Limón"],
@@ -1450,7 +1450,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-printemps-bouquet-10ml-3273.webp",
+    image: "/imagenes/redyves/probador/probador-printemps-bouquet-10ml-3273.webp",
     description: "Probador de Printemps Bouquet. La versión más fresca y luminosa del jardín. Floral afrutado con un toque primaveral irresistible. Inspirado en Flower Poppy Bouquet — Kenzo. Familia olfativa: Floral frutal. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Naranja","Pomelo","Bergamota"],
@@ -1465,7 +1465,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental gourmand",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-pure-yd-10ml-3485.webp",
+    image: "/imagenes/redyves/probador/probador-pure-yd-10ml-3485.webp",
     description: "Probador de Pure YD. Puro, excesivo, para los que no conocen el término medio. Inspirado en Pure XS — Paco Rabanne. Familia olfativa: Oriental gourmand. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Jengibre","Cardamomo","Bergamota"],
@@ -1480,7 +1480,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-pure-yd-night-10ml-3486.webp",
+    image: "/imagenes/redyves/probador/probador-pure-yd-night-10ml-3486.webp",
     description: "Probador de Pure YD Night. La noche del puro. Más oscuro, más profundo, para los que el puro de día les queda chico. Inspirado en Pure XS Night — Paco Rabanne. Familia olfativa: Oriental amaderado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Jengibre negro","Aceite de orégano"],
@@ -1495,7 +1495,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-quantium-black-illicit-green-10ml-3317.webp",
+    image: "/imagenes/redyves/probador/probador-quantium-black-illicit-green-10ml-3317.webp",
     description: "Probador de Quantium Black Illicit Green. Black Opium se escapa al bosque. Más fresco, más salvaje, igual de irresistible. Inspirado en Black Opium Illicit Green — Yves Saint Laurent. Familia olfativa: Oriental verde. Temporada ideal: Primavera — Otoño.",
     notes: {
       top: ["Violeta","Bergamota","Hojas verdes"],
@@ -1510,7 +1510,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-shapiro-10ml-3490.webp",
+    image: "/imagenes/redyves/probador/probador-shapiro-10ml-3490.webp",
     description: "Probador de Shapiro. Misterioso como el Medio Oriente. Oud saphir para los que buscan algo que nadie más va a tener. Inspirado en Oud Saphir — Atelier Cologne. Familia olfativa: Oriental amaderado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Bergamota","Violeta","Incienso"],
@@ -1525,7 +1525,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-skate-fem-10ml-3360.webp",
+    image: "/imagenes/redyves/probador/probador-skate-fem-10ml-3360.webp",
     description: "Probador de Skate Fem 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -1540,7 +1540,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental especiado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-spells-night-10ml-3398.webp",
+    image: "/imagenes/redyves/probador/probador-spells-night-10ml-3398.webp",
     description: "Probador de Spells Night. Oscuro, especiado, dramático. Para cuando querés que te sientan antes de verte. Inspirado en Halloween — Jesús del Pozo. Familia olfativa: Oriental especiado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Naranja","Ciruela","Pachulí"],
@@ -1555,7 +1555,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-sweet-girl-prive-10ml-3356.webp",
+    image: "/imagenes/redyves/probador/probador-sweet-girl-prive-10ml-3356.webp",
     description: "Probador de Sweet Girl Prive 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -1570,7 +1570,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-the-night-s-beast-intense-10ml-3378.webp",
+    image: "/imagenes/redyves/probador/probador-the-night-s-beast-intense-10ml-3378.webp",
     description: "Probador de The Night's Beast Intense. Humo, cuero y bosque nocturno. Uno de los orientales más populares del mundo en versión accesible — sin renunciar al impacto. Inspirado en Club de Nuit Intense Man — Armaf. Familia olfativa: Ahumado amaderado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Piña","Grosella negra","Bergamota"],
@@ -1585,7 +1585,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "aromático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-turin-21-10ml-3375.webp",
+    image: "/imagenes/redyves/probador/probador-turin-21-10ml-3375.webp",
     description: "Probador de Turin 21. Turín sin el ticket de avión. Amaderado aromático de nicho que mezcla elegancia italiana con frescura sin esfuerzo. Inspirado en Torino 21 — Xerjoff. Familia olfativa: Amaderado aromático. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Limón","Pimienta"],
@@ -1600,7 +1600,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "acuático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-victorious-10ml-3359.webp",
+    image: "/imagenes/redyves/probador/probador-victorious-10ml-3359.webp",
     description: "Probador de Victorious. El campeón de los perfumes masculinos. Fresco, deportivo, ganador — siempre. Inspirado en Invictus — Paco Rabanne. Familia olfativa: Acuático amaderado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Pomelo","Laurel","Mandarina"],
@@ -1615,7 +1615,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "acuático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-victorious-aqua-10ml-3357.webp",
+    image: "/imagenes/redyves/probador/probador-victorious-aqua-10ml-3357.webp",
     description: "Probador de Victorious Aqua. Invictus en el agua. El más fresco de la familia — para el verano que no termina. Inspirado en Invictus Aqua — Paco Rabanne. Familia olfativa: Acuático amaderado. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Pomelo","Menta de agua","Mandarina"],
@@ -1630,7 +1630,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-victorious-elixir-10ml-3387.webp",
+    image: "/imagenes/redyves/probador/probador-victorious-elixir-10ml-3387.webp",
     description: "Probador de Victorious Elixir 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -1645,7 +1645,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "aromático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-victorious-intense-10ml-3385.webp",
+    image: "/imagenes/redyves/probador/probador-victorious-intense-10ml-3385.webp",
     description: "Probador de Victorious Intense. Invictus más intenso. Para los que el original es solo el calentamiento. Inspirado en Invictus Intense — Paco Rabanne. Familia olfativa: Amaderado aromático. Temporada ideal: Otoño — Primavera.",
     notes: {
       top: ["Pomelo","Pimienta blanca"],
@@ -1660,7 +1660,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "aromático amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-victorious-v-10ml-3386.webp",
+    image: "/imagenes/redyves/probador/probador-victorious-v-10ml-3386.webp",
     description: "Probador de Victorious V. La victoria final. Invictus Victory para los que saben que ganar no es un accidente. Inspirado en Invictus Victory — Paco Rabanne. Familia olfativa: Amaderado aromático. Temporada ideal: Todo el año.",
     notes: {
       top: ["Pomelo","Notas verdes","Laurel"],
@@ -1675,7 +1675,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "aromático",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-wildest-10ml-3249.webp",
+    image: "/imagenes/redyves/probador/probador-wildest-10ml-3249.webp",
     description: "Probador de Wildest. El más salvaje de todos. Sauvage en su versión Yves — fresco, potente, masculino sin rodeos. Inspirado en Sauvage — Christian Dior. Familia olfativa: Aromático fougère. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Pimienta"],
@@ -1690,7 +1690,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "amaderado especiado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-wildest-elixir-10ml-3479.webp",
+    image: "/imagenes/redyves/probador/probador-wildest-elixir-10ml-3479.webp",
     description: "Probador de Wildest Elixir. Sauvage en su versión más profunda. Para los que quieren el salvaje pero con más noche. Inspirado en Sauvage Elixir — Christian Dior. Familia olfativa: Especiado amaderado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Pomelo","Canela","Cardamomo"],
@@ -1705,7 +1705,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "amaderado especiado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-xavier-rouge-10ml-3248.webp",
+    image: "/imagenes/redyves/probador/probador-xavier-rouge-10ml-3248.webp",
     description: "Probador de Xavier Rouge. Rojo, especiado, vibrante. Para el hombre que no pasa desapercibido. Inspirado en Xeryus Rouge — Givenchy. Familia olfativa: Especiado amaderado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Pomelo","Anís"],
@@ -1720,7 +1720,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental gourmand",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd-ange-fem-10ml-3424.webp",
+    image: "/imagenes/redyves/probador/probador-yd-ange-fem-10ml-3424.webp",
     description: "Probador de YD Ange Fem. Un clásico absoluto. Dulce, intenso, de los que se reconocen a metros. Amor o hate — indiferente no te deja. Inspirado en Angel — Thierry Mugler. Familia olfativa: Oriental gourmand. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Frutos rojos","Melón","Bergamota"],
@@ -1735,7 +1735,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental gourmand",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd-ange-men-10ml-3487.webp",
+    image: "/imagenes/redyves/probador/probador-yd-ange-men-10ml-3487.webp",
     description: "Probador de YD Ange Men. Angel para él. El gourmand más famoso de la historia en versión masculina — divisivo, adictivo. Inspirado en Angel Men — Thierry Mugler. Familia olfativa: Oriental gourmand. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Menta","Cacao","Café"],
@@ -1750,7 +1750,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd-black-l-elixir-fem-10ml-3287.webp",
+    image: "/imagenes/redyves/probador/probador-yd-black-l-elixir-fem-10ml-3287.webp",
     description: "Probador de YD Black L'elixir Fem. Oscuro, provocador, peligrosamente adictivo. No es para todas — y eso es exactamente el punto. Inspirado en Black XS L'Excès — Paco Rabanne. Familia olfativa: Oriental floral. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Bergamota","Litchi","Frambuesa"],
@@ -1765,7 +1765,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd-erba-pura-extracto-10ml-3282.webp",
+    image: "/imagenes/redyves/probador/probador-yd-erba-pura-extracto-10ml-3282.webp",
     description: "Probador de YD Erba Pura Extracto 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -1780,7 +1780,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd-irresistible-10ml-3416.webp",
+    image: "/imagenes/redyves/probador/probador-yd-irresistible-10ml-3416.webp",
     description: "Probador de YD Irresistible. Rosa moderna, ni aburrida ni exagerada. De esas que te acompañan todo el día sin que te canses. Inspirado en Very Irrésistible — Givenchy. Familia olfativa: Floral frutal. Temporada ideal: Todo el año.",
     notes: {
       top: ["Fresa","Naranja","Anís estrellado"],
@@ -1795,7 +1795,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "cítrico",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd-one-10ml-3257.webp",
+    image: "/imagenes/redyves/probador/probador-yd-one-10ml-3257.webp",
     description: "Probador de YD One. Fresco y universal. CK One para todos — el que usás cuando querés oler bien sin que nadie lo discuta. Inspirado en CK One — Calvin Klein. Familia olfativa: Cítrico aromático. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Mandarina","Cardamomo","Piña"],
@@ -1810,7 +1810,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "unisex",
     category: "cítrico",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd-one-for-all-10ml-3258.webp",
+    image: "/imagenes/redyves/probador/probador-yd-one-for-all-10ml-3258.webp",
     description: "Probador de YD One For All. CK One para todos, literalmente. El unisex más inclusivo que existe. Inspirado en CK One Everyone — Calvin Klein. Familia olfativa: Cítrico aromático. Temporada ideal: Todo el año.",
     notes: {
       top: ["Limón","Bergamota","Mandarina"],
@@ -1825,7 +1825,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "perfumería",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd-licious-fresh-pink-10ml-3408.webp",
+    image: "/imagenes/redyves/probador/probador-yd-licious-fresh-pink-10ml-3408.webp",
     description: "Probador de Yd´licious Fresh Pink 10ml. Ideal para probar la fragancia antes de llevarte el frasco completo.",
     notes: {
       top: [],
@@ -1840,7 +1840,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral frutal",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd-licious-10ml-3407.webp",
+    image: "/imagenes/redyves/probador/probador-yd-licious-10ml-3407.webp",
     description: "Probador de Yd'licious. La manzana verde más reconocible de la perfumería. Fresca, femenina, con ese toque urbano que no pasa de moda. Inspirado en Be Delicious — Donna Karan (DKNY). Familia olfativa: Floral frutal. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Pepino","Manzana verde","Toronja"],
@@ -1855,7 +1855,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd-dg-10ml-3400.webp",
+    image: "/imagenes/redyves/probador/probador-yd-dg-10ml-3400.webp",
     description: "Probador de Yd&dg. Femenino de verdad. De esos que no necesitan explicación — solo ponértelo y listo. Inspirado en Dolce & Gabbana pour Femme — Dolce & Gabbana. Familia olfativa: Floral oriental. Temporada ideal: Todo el año.",
     notes: {
       top: ["Neroli","Bergamota","Mandarina"],
@@ -1870,7 +1870,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd12-fem-10ml-3334.webp",
+    image: "/imagenes/redyves/probador/probador-yd12-fem-10ml-3334.webp",
     description: "Probador de YD12 Fem. El clásico urbano de Carolina Herrera. Fresco, femenino, reconocible en cualquier lugar del mundo. Inspirado en 212 — Carolina Herrera. Familia olfativa: Floral. Temporada ideal: Primavera — Verano.",
     notes: {
       top: ["Bergamota","Magnolia","Camellia"],
@@ -1885,7 +1885,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd12-sexy-fem-10ml-3338.webp",
+    image: "/imagenes/redyves/probador/probador-yd12-sexy-fem-10ml-3338.webp",
     description: "Probador de YD12 Sexy Fem. 212 sube la temperatura. Floral sensual, para el día que quiere convertirse en noche sin aviso. Inspirado en 212 Sexy — Carolina Herrera. Familia olfativa: Floral oriental. Temporada ideal: Otoño — Primavera.",
     notes: {
       top: ["Bergamota","Mandarina","Magnolia"],
@@ -1900,7 +1900,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd12-sexy-men-10ml-3292.webp",
+    image: "/imagenes/redyves/probador/probador-yd12-sexy-men-10ml-3292.webp",
     description: "Probador de YD12 Sexy Men. 212 Sexy — cuando el clásico se pone de noche y sube la temperatura. Inspirado en 212 Sexy Men — Carolina Herrera. Familia olfativa: Oriental amaderado. Temporada ideal: Otoño — Primavera.",
     notes: {
       top: ["Bergamota","Pimienta blanca","Cilantro"],
@@ -1915,7 +1915,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd12-vip-black-men-10ml-3322.webp",
+    image: "/imagenes/redyves/probador/probador-yd12-vip-black-men-10ml-3322.webp",
     description: "Probador de YD12 Vip Black Men. 212 en negro. La versión más oscura y poderosa de la familia VIP. Inspirado en 212 VIP Black Men — Carolina Herrera. Familia olfativa: Oriental amaderado. Temporada ideal: Otoño — Invierno.",
     notes: {
       top: ["Pimienta negra","Bergamota"],
@@ -1930,7 +1930,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd12-vip-fem-10ml-3335.webp",
+    image: "/imagenes/redyves/probador/probador-yd12-vip-fem-10ml-3335.webp",
     description: "Probador de YD12 Vip Fem. La VIP del 212. Golosa, floral, con ese glamour neoyorquino que no necesita explicación. Inspirado en 212 VIP — Carolina Herrera. Familia olfativa: Floral oriental. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Limón","Mandarina"],
@@ -1945,7 +1945,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental especiado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd12-vip-men-10ml-3318.webp",
+    image: "/imagenes/redyves/probador/probador-yd12-vip-men-10ml-3318.webp",
     description: "Probador de YD12 Vip Men. 212 VIP para él. El más festivo de todos — para los que llegan y saben que llegaron. Inspirado en 212 VIP Men — Carolina Herrera. Familia olfativa: Oriental especiado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Mandarina","Pimienta"],
@@ -1960,7 +1960,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "femenino",
     category: "oriental floral",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd12-vip-night-club-fem-10ml-3333.webp",
+    image: "/imagenes/redyves/probador/probador-yd12-vip-night-club-fem-10ml-3333.webp",
     description: "Probador de YD12 Vip Night Club Fem. 212 de noche, sin límites. Para cuando la fiesta recién empieza y querés que se note. Inspirado en 212 VIP Club Edition — Carolina Herrera. Familia olfativa: Floral oriental. Temporada ideal: Todo el año.",
     notes: {
       top: ["Limón","Bergamota","Mandarina"],
@@ -1975,7 +1975,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental especiado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-yd12-vip-night-club-men-10ml-3320.webp",
+    image: "/imagenes/redyves/probador/probador-yd12-vip-night-club-men-10ml-3320.webp",
     description: "Probador de YD12 Vip Night Club Men. La versión del club. 212 VIP de fiesta — para los que el después de medianoche empieza a las 9. Inspirado en 212 VIP Club Men — Carolina Herrera. Familia olfativa: Oriental especiado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Bergamota","Mandarina","Patchouli"],
@@ -1990,7 +1990,7 @@ export const yvesProbadores: PerfumeInput[] = [
     gender: "masculino",
     category: "oriental amaderado",
     size: "10ml",
-    image: "/imagenes/redyves/mini/probador-adan-le-parfum-10ml-3323.webp",
+    image: "/imagenes/redyves/probador/probador-adan-le-parfum-10ml-3323.webp",
     description: "Probador de Adan Le Parfum. Bello, perfumado, con esa extravagancia de Gaultier que convierte cualquier cosa en arte. Inspirado en Le Beau Le Parfum — Jean Paul Gaultier. Familia olfativa: Oriental amaderado. Temporada ideal: Todo el año.",
     notes: {
       top: ["Piña","Iris","Jengibre","Ciprés"],

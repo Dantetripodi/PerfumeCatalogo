@@ -47,7 +47,7 @@ interface SupplierProduct {
 }
 
 type Gender = "masculino" | "femenino" | "unisex";
-type Target = "regular" | "mini" | "arabic" | "home" | "skip";
+type Target = "regular" | "probador" | "jacques" | "arabic" | "home" | "skip";
 
 interface Draft {
   name: string;
@@ -267,15 +267,19 @@ function toTarget(product: SupplierProduct): Target {
   const subs = product.subcategorias.map(sub => sub.nombre);
 
   if (category === "Packaging") return "skip";
-  if (category === "Probador" || /probador/i.test(product.nombre)) return "mini";
+  if (category === "Probador" || /probador/i.test(product.nombre)) return "probador";
   if (subs.includes("Arabic Collection")) return "arabic";
   if (category === "Yves Home" || category === "Yves beauty and home") return "home";
+  if (category === "Jacques") return "jacques";
   return "regular";
 }
 
+/** The Jacques Ryon 50ml line is priced as a flat tier, like the minis. */
+const JACQUES_PRICE = 18_000;
+
 function toBrand(product: SupplierProduct, target: Target): string {
   if (target === "home") return "Yves Home";
-  if (product.categoriaNombre === "Jacques") return "Jacques Ryon";
+  if (target === "jacques") return "Jacques Ryon";
   if (product.categoriaNombre === "Importados") return "Importados";
   return "Yves Dorgeval";
 }
@@ -290,7 +294,7 @@ function buildDescription(product: SupplierProduct, parsed: ParsedDescription, t
 
   if (parts.length === 0) {
     const name = toDisplayName(product.nombre);
-    if (target === "mini") parts.push(`Probador de ${name.replace(/^Probador\s+/i, "")}. Ideal para probar la fragancia antes de llevarte el frasco completo.`);
+    if (target === "probador") parts.push(`Probador de ${name.replace(/^Probador\s+/i, "")}. Ideal para probar la fragancia antes de llevarte el frasco completo.`);
     else if (target === "home") parts.push(`${name}. Línea Yves Home para perfumar y decorar tu casa.`);
     else parts.push(`${name}. Consultanos por notas y disponibilidad.`);
   }
@@ -313,7 +317,7 @@ function enrichProbadores(drafts: Draft[]): number {
 
   let enriched = 0;
   for (const draft of drafts) {
-    if (draft.target !== "mini" || draft.notes.top.length > 0) continue;
+    if (draft.target !== "probador" || draft.notes.top.length > 0) continue;
 
     const key = dedupeKey(draft.name);
     // "Probador Charm In Black" is the tester for "Charm In Black Vintage", so
@@ -515,7 +519,7 @@ async function main() {
     drafts.push({
       name,
       brand: toBrand(product, target),
-      price: toSalePrice(product.precioFinal),
+      price: target === "jacques" ? JACQUES_PRICE : toSalePrice(product.precioFinal),
       gender: toGender(product),
       category,
       size: toSize(product),
@@ -534,8 +538,8 @@ async function main() {
   console.log(`  skipped: ${skippedOwned} already in the catalog, ${skippedSoldOut} sold out`);
   console.log(`  ${enriched} probadores inherited notes from their full-size counterpart`);
   console.log(
-    `  routed: regular ${byTarget("regular").length}, mini ${byTarget("mini").length}, ` +
-    `arabic ${byTarget("arabic").length}, home ${byTarget("home").length}`
+    `  routed: regular ${byTarget("regular").length}, probador ${byTarget("probador").length}, ` +
+    `jacques ${byTarget("jacques").length}, arabic ${byTarget("arabic").length}, home ${byTarget("home").length}`
   );
 
   console.log("Downloading images...");
@@ -544,8 +548,9 @@ async function main() {
   writeFileSync(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`);
 
   const files: Array<[string, string, Draft[], string]> = [
-    ["yvesRegulares.ts", "yvesRegulares", byTarget("regular"), "RED YVES — perfumes (Yves D'orgeval, Jacques Ryon, importados)"],
-    ["yvesProbadores.ts", "yvesProbadores", byTarget("mini"), "RED YVES — probadores 10ml"],
+    ["yvesRegulares.ts", "yvesRegulares", byTarget("regular"), "RED YVES — perfumes Yves D'orgeval e importados"],
+    ["yvesProbadores.ts", "yvesProbadores", byTarget("probador"), "RED YVES — probadores 10ml"],
+    ["yvesJacques.ts", "yvesJacques", byTarget("jacques"), "RED YVES — línea Jacques Ryon 50ml"],
     ["yvesArabic.ts", "yvesArabic", byTarget("arabic"), "RED YVES — Arabic Collection"],
     ["yvesHome.ts", "yvesHome", byTarget("home"), "RED YVES — Yves Home (difusores, home spray, velas, jabones)"],
   ];

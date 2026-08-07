@@ -48,13 +48,23 @@ export type PerfumeCategory =
   | "acuático amaderado"
   | "oriental gourmand";
 
-export type PerfumeCollection = "regular" | "mini" | "accesorio" | "arabe" | "arabic" | "home";
+export type PerfumeCollection =
+  | "regular"
+  | "mini"
+  | "accesorio"
+  | "arabe"
+  | "arabic"
+  | "home"
+  | "jacques"
+  | "probador";
 
 export const COLLECTION_LABELS: Record<PerfumeCollection, string> = {
   regular: "Yves",
   arabe: "Árabes",
   arabic: "Arabic",
+  jacques: "Jacques Ryon",
   mini: "Minis",
+  probador: "Probadores",
   home: "Home",
   accesorio: "Accesorios",
 };

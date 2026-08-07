@@ -14,7 +14,7 @@ create table if not exists public.perfumes (
   image_url    text        not null,
   description  text        not null,
   notes        jsonb       not null default '{"top":[],"middle":[],"base":[]}'::jsonb,
-  collection   text        not null check (collection in ('regular', 'mini', 'accesorio', 'arabe', 'arabic', 'home')),
+  collection   text        not null check (collection in ('regular', 'mini', 'accesorio', 'arabe', 'arabic', 'home', 'jacques', 'probador')),
   is_featured  boolean     not null default false,        -- owner-controlled "Destacar"
   created_at   timestamptz not null default now(),
   updated_at   timestamptz not null default now()
@@ -23,7 +23,7 @@ create table if not exists public.perfumes (
 -- Run this if the table already exists (adds 'arabic' to the allowed collections):
 alter table public.perfumes drop constraint if exists perfumes_collection_check;
 alter table public.perfumes add constraint perfumes_collection_check
-  check (collection in ('regular', 'mini', 'accesorio', 'arabe', 'arabic', 'home'));
+  check (collection in ('regular', 'mini', 'accesorio', 'arabe', 'arabic', 'home', 'jacques', 'probador'));
 
 -- 2) Row Level Security: everyone can read, only logged-in admin can write
 alter table public.perfumes enable row level security;
