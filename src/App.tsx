@@ -37,6 +37,9 @@ function App() {
   const {
     allPerfumes,
     filteredPerfumes,
+    visiblePerfumes,
+    hasMore,
+    loadMore,
     filters,
     searchQuery,
     selectedPerfume,
@@ -316,8 +319,8 @@ function App() {
                   <div className="mb-4 flex flex-col gap-3 rounded-lg border border-white/70 bg-white/80 p-3 shadow-sm backdrop-blur sm:flex-row sm:items-center sm:justify-between">
                     <div className="text-sm text-gray-600">
                       Mostrando{" "}
-                      <strong className="text-[#1A2238]">{filteredPerfumes.length}</strong>{" "}
-                      de {allPerfumes.length} perfumes
+                      <strong className="text-[#1A2238]">{visiblePerfumes.length}</strong>{" "}
+                      de {filteredPerfumes.length} perfumes
                     </div>
                     <div className="flex w-fit gap-1 rounded-lg bg-[#EEF0F4] p-1">
                       <button
@@ -360,30 +363,48 @@ function App() {
                         Limpiar búsqueda
                       </button>
                     </div>
-                  ) : viewMode === "grid" ? (
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                      {filteredPerfumes.map((perfume, index) => (
-                        <PerfumeCard
-                          key={perfume.id}
-                          perfume={perfume}
-                          priority={index < 6}
-                          onShowDetails={openDetails}
-                          onAddToCart={handleAddToCart}
-                        />
-                      ))}
-                    </div>
                   ) : (
-                    <div className="flex flex-col gap-2.5">
-                      {filteredPerfumes.map((perfume, index) => (
-                        <PerfumeListItem
-                          key={perfume.id}
-                          perfume={perfume}
-                          priority={index < 6}
-                          onShowDetails={openDetails}
-                          onAddToCart={handleAddToCart}
-                        />
-                      ))}
-                    </div>
+                    <>
+                      {viewMode === "grid" ? (
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                          {visiblePerfumes.map((perfume, index) => (
+                            <PerfumeCard
+                              key={perfume.id}
+                              perfume={perfume}
+                              priority={index < 6}
+                              onShowDetails={openDetails}
+                              onAddToCart={handleAddToCart}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="flex flex-col gap-2.5">
+                          {visiblePerfumes.map((perfume, index) => (
+                            <PerfumeListItem
+                              key={perfume.id}
+                              perfume={perfume}
+                              priority={index < 6}
+                              onShowDetails={openDetails}
+                              onAddToCart={handleAddToCart}
+                            />
+                          ))}
+                        </div>
+                      )}
+
+                      {hasMore && (
+                        <div className="mt-8 flex flex-col items-center gap-2">
+                          <button
+                            onClick={loadMore}
+                            className="w-full rounded-md bg-[#1A2238] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#25304F] sm:w-auto sm:px-10"
+                          >
+                            Ver más perfumes
+                          </button>
+                          <span className="text-xs text-gray-500">
+                            Quedan {filteredPerfumes.length - visiblePerfumes.length}
+                          </span>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               </div>

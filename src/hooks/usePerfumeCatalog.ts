@@ -3,6 +3,9 @@ import { Perfume } from "../types";
 import { useDebounce } from "./useDebounce";
 import { useRemotePerfumes } from "./useRemotePerfumes";
 
+/** Divisible by the 2, 3 and 4 column grids so a batch never leaves a ragged row. */
+const PAGE_SIZE = 24;
+
 interface FiltersState {
   collection: string;
   line: string;
@@ -102,6 +105,21 @@ export function usePerfumeCatalog() {
     return sorted;
   }, [all, debouncedSearchQuery, filters]);
 
+  // Rendering all 450 cards at once buries the footer and costs a lot of DOM on
+  // a mid-range phone, so the grid grows a batch at a time instead.
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [debouncedSearchQuery, filters]);
+
+  const visiblePerfumes = useMemo(
+    () => filteredPerfumes.slice(0, visibleCount),
+    [filteredPerfumes, visibleCount]
+  );
+  const hasMore = visibleCount < filteredPerfumes.length;
+  const loadMore = () => setVisibleCount(count => count + PAGE_SIZE);
+
   const handleFilterChange = (name: keyof FiltersState, value: string) => {
     setFilters(prev => ({ ...prev, [name]: value }));
   };
@@ -137,6 +155,9 @@ export function usePerfumeCatalog() {
   return {
     allPerfumes: all,
     filteredPerfumes,
+    visiblePerfumes,
+    hasMore,
+    loadMore,
     filters,
     searchQuery,
     selectedPerfume,
