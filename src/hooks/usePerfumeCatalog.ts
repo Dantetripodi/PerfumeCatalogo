@@ -107,11 +107,9 @@ export function usePerfumeCatalog() {
 
   // Rendering all 450 cards at once buries the footer and costs a lot of DOM on
   // a mid-range phone, so the grid grows a batch at a time instead.
+  // Reset happens in the handlers that narrow the list, not in an effect: an
+  // effect would render the long list once before trimming it back.
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [debouncedSearchQuery, filters]);
 
   const visiblePerfumes = useMemo(
     () => filteredPerfumes.slice(0, visibleCount),
@@ -122,6 +120,7 @@ export function usePerfumeCatalog() {
 
   const handleFilterChange = (name: keyof FiltersState, value: string) => {
     setFilters(prev => ({ ...prev, [name]: value }));
+    setVisibleCount(PAGE_SIZE);
   };
 
   const resetFilters = () => {
@@ -136,9 +135,13 @@ export function usePerfumeCatalog() {
       sort: "featured",
     });
     setSearchQuery("");
+    setVisibleCount(PAGE_SIZE);
   };
 
-  const handleSearch = (q: string) => setSearchQuery(q);
+  const handleSearch = (q: string) => {
+    setSearchQuery(q);
+    setVisibleCount(PAGE_SIZE);
+  };
 
   const toggleCart = () => setIsCartOpen(v => !v);
   const openDetails = (p: Perfume) => {
