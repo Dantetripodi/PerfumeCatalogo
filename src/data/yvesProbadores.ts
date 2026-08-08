@@ -319,6 +319,21 @@ export const yvesProbadores: PerfumeInput[] = [
     },
   },
   {
+    name: "Probador Clayton 10ml",
+    brand: "Yves Dorgeval",
+    price: 10000,
+    gender: "masculino",
+    category: "amaderado especiado",
+    size: "10ml",
+    image: "/imagenes/redyves/probador/probador-clayton-10ml-3376.webp",
+    description: "Probador de Clayton. Para los días que merecen lo mejor. Amaderado especiado gourmand que deja a todos preguntando. Inspirado en Layton — Parfums de Marly. Familia olfativa: Amaderado especiado. Temporada ideal: Todo el año.",
+    notes: {
+      top: ["Manzana","Lavanda","Bergamota","Mandarina"],
+      middle: ["Geranio","Violeta","Jazmín"],
+      base: ["Vainilla","Cardamomo","Sándalo","Pimienta","Madera de gaiac","Pachulí","Ambermax™","Cumarina"],
+    },
+  },
+  {
     name: "Probador Code Fem 10ml",
     brand: "Yves Dorgeval",
     price: 10000,
@@ -1456,6 +1471,21 @@ export const yvesProbadores: PerfumeInput[] = [
       top: ["Naranja","Pomelo","Bergamota"],
       middle: ["Amapola","Rosa","Peonía"],
       base: ["Almizcle blanco","Cedro"],
+    },
+  },
+  {
+    name: "Probador Pure Herbal 10ml",
+    brand: "Yves Dorgeval",
+    price: 10000,
+    gender: "unisex",
+    category: "floral amaderado",
+    size: "10ml",
+    image: "/imagenes/redyves/probador/probador-pure-herbal-10ml-3374.webp",
+    description: "Probador de Pure Herbal. Solar, almizcle y luz mediterránea. Erba Pura sin necesidad de vuelo. Inspirado en Erba Pura — Xerjoff. Familia olfativa: Floral almizcle solar. Temporada ideal: Primavera — Verano.",
+    notes: {
+      top: ["Naranja siciliana","Bergamota","Sandía"],
+      middle: ["Jazmín","Ylang ylang","Almizcle solar"],
+      base: ["Ámbar blanco","Sándalo","Almizcle"],
     },
   },
   {

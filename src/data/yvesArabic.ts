@@ -49,6 +49,21 @@ export const yvesArabic: PerfumeInput[] = [
     },
   },
   {
+    name: "Clayton 120ml",
+    brand: "Yves Dorgeval",
+    price: 50000,
+    gender: "masculino",
+    category: "amaderado especiado",
+    size: "120ml",
+    image: "/imagenes/redyves/arabic/clayton-120ml-1338.webp",
+    description: "Para los días que merecen lo mejor. Amaderado especiado gourmand que deja a todos preguntando. Inspirado en Layton — Parfums de Marly. Familia olfativa: Amaderado especiado. Temporada ideal: Todo el año.",
+    notes: {
+      top: ["Manzana","Lavanda","Bergamota","Mandarina"],
+      middle: ["Geranio","Violeta","Jazmín"],
+      base: ["Vainilla","Cardamomo","Sándalo","Pimienta","Madera de gaiac","Pachulí","Ambermax™","Cumarina"],
+    },
+  },
+  {
     name: "Cribagge Rouge 540 100ml",
     brand: "Yves Dorgeval",
     price: 50000,
@@ -166,6 +181,21 @@ export const yvesArabic: PerfumeInput[] = [
       top: ["Bergamota","Limón siciliano","Lavanda"],
       middle: ["Hoja de tabaco","Jazmín","Miel"],
       base: ["Vainilla","Haba tonka","Madera de ámbar"],
+    },
+  },
+  {
+    name: "Pure Herbal 100ml",
+    brand: "Yves Dorgeval",
+    price: 55000,
+    gender: "unisex",
+    category: "floral amaderado",
+    size: "100ml",
+    image: "/imagenes/redyves/arabic/pure-herbal-100ml-1340.webp",
+    description: "Solar, almizcle y luz mediterránea. Erba Pura sin necesidad de vuelo. Inspirado en Erba Pura — Xerjoff. Familia olfativa: Floral almizcle solar. Temporada ideal: Primavera — Verano.",
+    notes: {
+      top: ["Naranja siciliana","Bergamota","Sandía"],
+      middle: ["Jazmín","Ylang ylang","Almizcle solar"],
+      base: ["Ámbar blanco","Sándalo","Almizcle"],
     },
   },
   {

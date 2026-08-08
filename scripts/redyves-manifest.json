@@ -651,9 +651,17 @@
     "sourceUrl": "/productos/reproc-1333-1782424358358.webp",
     "localPath": "/imagenes/redyves/arabic/dalilah-100ml-1337.webp"
   },
+  "1338": {
+    "sourceUrl": "/productos/reproc-1326-1782424356482.webp",
+    "localPath": "/imagenes/redyves/arabic/clayton-120ml-1338.webp"
+  },
   "1339": {
     "sourceUrl": "/productos/reproc-1441-1782424383424.webp",
     "localPath": "/imagenes/redyves/arabic/naxus-100ml-1339.webp"
+  },
+  "1340": {
+    "sourceUrl": "/productos-mayorista/reproc-158-1782424174981.webp",
+    "localPath": "/imagenes/redyves/arabic/pure-herbal-100ml-1340.webp"
   },
   "1341": {
     "sourceUrl": "/productos/reproc-1449-1782424385162.webp",
@@ -1323,9 +1331,17 @@
     "sourceUrl": "/productos/producto-3371-1783531895758.webp",
     "localPath": "/imagenes/redyves/probador/probador-dalilah-10ml-3371.webp"
   },
+  "3374": {
+    "sourceUrl": "/productos/producto-3374-1783533693351.webp",
+    "localPath": "/imagenes/redyves/probador/probador-pure-herbal-10ml-3374.webp"
+  },
   "3375": {
     "sourceUrl": "/productos/producto-3375-1783533882316.webp",
     "localPath": "/imagenes/redyves/probador/probador-turin-21-10ml-3375.webp"
+  },
+  "3376": {
+    "sourceUrl": "/productos/producto-3376-1783533777639.webp",
+    "localPath": "/imagenes/redyves/probador/probador-clayton-10ml-3376.webp"
   },
   "3378": {
     "sourceUrl": "/productos/producto-3378-1783534495156.webp",
