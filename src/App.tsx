@@ -181,6 +181,9 @@ function App() {
     );
   }
 
+  // "all", "featured" and "consult" are not collections, so they always show.
+  // The rest only appear while that line actually has products in the catalog.
+  const presentCollections = new Set(allPerfumes.map(perfume => perfume.collection));
   const quickFilters = [
     { label: "Todos", value: "all" },
     { label: "Destacados", value: "featured" },
@@ -192,7 +195,10 @@ function App() {
     { label: "Probadores", value: "probador" },
     { label: "Home", value: "home" },
     { label: "Consultar precio", value: "consult" },
-  ];
+  ].filter(
+    filter =>
+      ["all", "featured", "consult"].includes(filter.value) || presentCollections.has(filter.value as never)
+  );
 
   return (
     <CartProvider>
