@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase, USE_LOCAL_CATALOG } from "../lib/supabase";
-import { normalizePerfume, rowToInput, perfumes as localPerfumes } from "../data";
+import { normalizePerfume, rowToInput } from "../data/normalize";
 import { Perfume, PerfumeRow } from "../types";
 
 export interface UseRemotePerfumesResult {
@@ -20,7 +20,10 @@ export function useRemotePerfumes(): UseRemotePerfumesResult {
     setError(null);
 
     // Preview what src/data holds before pushing it live with `npm run sync-catalog`.
+    // Imported dynamically so the ~250KB static catalog is fetched only in this
+    // mode and never lands in the bundle customers download.
     if (USE_LOCAL_CATALOG) {
+      const { perfumes: localPerfumes } = await import("../data");
       setPerfumes(localPerfumes);
       setLoading(false);
       return;
