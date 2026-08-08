@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { CartProvider } from "./context/CartContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import Header from "./components/Header";
@@ -10,14 +10,29 @@ import Cart from "./components/Cart";
 import Footer from "./components/Footer";
 import Notice from "./components/Notice";
 import Toast from "./components/Toast";
-import AdminPanel from "./components/AdminPanel";
-import ContentStudio from "./content-studio/ContentStudio";
-import { CarouselGenerator } from "./content-studio/Carousel";
-import PinModal, { isStudioUnlocked } from "./content-studio/PinModal";
+import { isStudioUnlocked } from "./content-studio/studioAccess";
 import { Grid, List, Sparkles } from "lucide-react";
 import { usePerfumeCatalog } from "./hooks/usePerfumeCatalog";
 import { useAdminAuth } from "./hooks/useAdminAuth";
 import { Perfume } from "./types";
+
+// The studio, the carousel generator and the admin panel are internal tools
+// behind a PIN. Loading them lazily keeps roughly 1.500 lines of tooling out of
+// the bundle every customer downloads to browse the catalog.
+const ContentStudio = lazy(() => import("./content-studio/ContentStudio"));
+const CarouselGenerator = lazy(() =>
+  import("./content-studio/Carousel").then(m => ({ default: m.CarouselGenerator }))
+);
+const AdminPanel = lazy(() => import("./components/AdminPanel"));
+const PinModal = lazy(() => import("./content-studio/PinModal"));
+
+function ToolLoading() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[#F8F0E3]">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E8DDBF] border-t-[#D4AF37]" />
+    </div>
+  );
+}
 
 type ViewMode = "grid" | "list";
 type AppView = "catalog" | "content-studio" | "carousel";
@@ -147,16 +162,18 @@ function App() {
     return (
       <CartProvider>
         <FavoritesProvider>
-          <ContentStudio
-            perfumes={allPerfumes}
-            onBack={() => {
-              setAppView("catalog");
-              // Limpia el hash si vino de #/studio
-              if (window.location.hash === "#/studio") {
-                window.history.replaceState(null, "", window.location.pathname);
-              }
-            }}
-          />
+          <Suspense fallback={<ToolLoading />}>
+            <ContentStudio
+              perfumes={allPerfumes}
+              onBack={() => {
+                setAppView("catalog");
+                // Limpia el hash si vino de #/studio
+                if (window.location.hash === "#/studio") {
+                  window.history.replaceState(null, "", window.location.pathname);
+                }
+              }}
+            />
+          </Suspense>
         </FavoritesProvider>
       </CartProvider>
     );
@@ -167,15 +184,17 @@ function App() {
     return (
       <CartProvider>
         <FavoritesProvider>
-          <CarouselGenerator
-            perfumes={allPerfumes}
-            onBack={() => {
-              setAppView("catalog");
-              if (window.location.hash === "#/carousel") {
-                window.history.replaceState(null, "", window.location.pathname);
-              }
-            }}
-          />
+          <Suspense fallback={<ToolLoading />}>
+            <CarouselGenerator
+              perfumes={allPerfumes}
+              onBack={() => {
+                setAppView("catalog");
+                if (window.location.hash === "#/carousel") {
+                  window.history.replaceState(null, "", window.location.pathname);
+                }
+              }}
+            />
+          </Suspense>
         </FavoritesProvider>
       </CartProvider>
     );
@@ -429,39 +448,49 @@ function App() {
             isVisible={showToast}
             onClose={() => setShowToast(false)}
           />
-          <AdminPanel
-            isOpen={isAdminOpen}
-            onClose={() => {
-              setIsAdminOpen(false);
-              if (window.location.hash === "#/admin") {
-                window.history.replaceState(null, "", window.location.pathname);
-              }
-            }}
-            onSaved={() => {
-              void refetchCatalog();
-              setToastMessage("Catálogo actualizado");
-              setShowToast(true);
-            }}
-            onOpenContentStudio={handleTryOpenStudio}
-            onOpenCarousel={handleTryOpenCarousel}
-          />
+          {/* Mounted only while open so the lazy chunk is fetched on demand;
+              both panels already render null when closed, so nothing changes. */}
+          {isAdminOpen && (
+            <Suspense fallback={null}>
+              <AdminPanel
+                isOpen={isAdminOpen}
+                onClose={() => {
+                  setIsAdminOpen(false);
+                  if (window.location.hash === "#/admin") {
+                    window.history.replaceState(null, "", window.location.pathname);
+                  }
+                }}
+                onSaved={() => {
+                  void refetchCatalog();
+                  setToastMessage("Catálogo actualizado");
+                  setShowToast(true);
+                }}
+                onOpenContentStudio={handleTryOpenStudio}
+                onOpenCarousel={handleTryOpenCarousel}
+              />
+            </Suspense>
+          )}
 
           <Footer />
 
           {/* PIN modal — solo aparece cuando se intenta acceder sin sesión activa */}
-          <PinModal
-            isOpen={isPinModalOpen}
-            onClose={() => {
-              setIsPinModalOpen(false);
-              if (
-                window.location.hash === "#/studio" ||
-                window.location.hash === "#/carousel"
-              ) {
-                window.history.replaceState(null, "", window.location.pathname);
-              }
-            }}
-            onSuccess={handlePinSuccess}
-          />
+          {isPinModalOpen && (
+            <Suspense fallback={null}>
+              <PinModal
+                isOpen={isPinModalOpen}
+                onClose={() => {
+                  setIsPinModalOpen(false);
+                  if (
+                    window.location.hash === "#/studio" ||
+                    window.location.hash === "#/carousel"
+                  ) {
+                    window.history.replaceState(null, "", window.location.pathname);
+                  }
+                }}
+                onSuccess={handlePinSuccess}
+              />
+            </Suspense>
+          )}
         </div>
       </FavoritesProvider>
     </CartProvider>
