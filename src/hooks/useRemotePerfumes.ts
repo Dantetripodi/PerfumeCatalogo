@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase, USE_LOCAL_CATALOG } from "../lib/supabase";
-import { normalizePerfume, rowToInput } from "../data/normalize";
-import { Perfume, PerfumeRow } from "../types";
+import { USE_LOCAL_CATALOG } from "../lib/supabase";
+import { fetchPerfumes as fetchFromRepository } from "../data/perfumesRepository";
+import { Perfume } from "../types";
 
 export interface UseRemotePerfumesResult {
   perfumes: Perfume[];
@@ -15,7 +15,7 @@ export function useRemotePerfumes(): UseRemotePerfumesResult {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchPerfumes = useCallback(async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -29,30 +29,16 @@ export function useRemotePerfumes(): UseRemotePerfumesResult {
       return;
     }
 
-    const { data, error: fetchError } = await supabase
-      .from("perfumes")
-      .select("*")
-      .order("created_at", { ascending: true });
+    const result = await fetchFromRepository();
+    if (result.ok) setPerfumes(result.data);
+    else setError(result.error);
 
-    if (fetchError) {
-      setError("No se pudo cargar el catálogo. Verificá tu conexión e intentá de nuevo.");
-      setLoading(false);
-      return;
-    }
-
-    const rows = data as PerfumeRow[];
-    const mapped = rows.map((row) => {
-      const { input, id, collection, isFeatured } = rowToInput(row);
-      return normalizePerfume(input, id, collection, isFeatured);
-    });
-
-    setPerfumes(mapped);
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    void fetchPerfumes();
-  }, [fetchPerfumes]);
+    void load();
+  }, [load]);
 
-  return { perfumes, loading, error, refetch: fetchPerfumes };
+  return { perfumes, loading, error, refetch: load };
 }

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ImageIcon, Save, X } from "lucide-react";
-import { supabase } from "../../lib/supabase";
+import { createPerfume, updatePerfume, uploadPerfumeImage } from "../../data/perfumesRepository";
 import { Perfume, PerfumeCategory, PerfumeCollection, PerfumeInput, COLLECTION_LABELS } from "../../types";
 import { buildSlug } from "../../data/normalize";
 
@@ -240,23 +240,17 @@ const PerfumeForm: React.FC<PerfumeFormProps> = ({
       const { blob: optimizedBlob, ext, contentType } = await resizeImage(file);
       const storageKey = makeSafeSlug(form.name || "perfume", form.collection, ext);
 
-      const { error: uploadError } = await supabase.storage
-        .from("perfume-images")
-        .upload(storageKey, optimizedBlob, { contentType, upsert: true });
+      const upload = await uploadPerfumeImage(storageKey, optimizedBlob, contentType);
 
-      if (uploadError) {
-        onError(`Error al subir la imagen: ${uploadError.message}`);
+      if (!upload.ok) {
+        onError(upload.error);
         setPreviewUrl(isEditing ? editingPerfume.image : null);
         setUploadingImage(false);
         return;
       }
 
-      const { data } = supabase.storage
-        .from("perfume-images")
-        .getPublicUrl(storageKey);
-
-      setNewImageUrl(data.publicUrl);
-      setField("imageUrl", data.publicUrl);
+      setNewImageUrl(upload.data);
+      setField("imageUrl", upload.data);
     } catch {
       onError("Error inesperado al subir la imagen.");
     } finally {
@@ -371,28 +365,17 @@ const PerfumeForm: React.FC<PerfumeFormProps> = ({
       is_featured: form.isFeatured,
     };
 
-    if (isEditing) {
-      const { error } = await supabase
-        .from("perfumes")
-        .update({ ...payload, updated_at: new Date().toISOString() })
-        .eq("id", editingPerfume.id);
+    const result = isEditing
+      ? await updatePerfume(editingPerfume.id, payload)
+      : await createPerfume(payload);
 
-      if (error) {
-        onError(`Error al actualizar: ${error.message}`);
-        setSaving(false);
-        return;
-      }
-      onSaved("updated");
-    } else {
-      const { error } = await supabase.from("perfumes").insert(payload);
-
-      if (error) {
-        onError(`Error al crear: ${error.message}`);
-        setSaving(false);
-        return;
-      }
-      onSaved("created");
+    if (!result.ok) {
+      onError(result.error);
+      setSaving(false);
+      return;
     }
+
+    onSaved(isEditing ? "updated" : "created");
 
     setSaving(false);
   };
