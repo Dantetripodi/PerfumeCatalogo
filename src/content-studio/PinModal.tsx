@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FlaskConical, X, Lock } from "lucide-react";
+import { isStudioPin, unlockStudio } from "./studioAccess";
 
 interface PinModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-}
-
-const STUDIO_PIN = import.meta.env.VITE_STUDIO_PIN ?? "dt2025";
-const SESSION_KEY = "dtfragancias_studio_unlocked";
-
-/** Verifica si ya fue desbloqueado en esta sesión */
-export function isStudioUnlocked(): boolean {
-  return sessionStorage.getItem(SESSION_KEY) === "1";
 }
 
 const PinModal: React.FC<PinModalProps> = ({ isOpen, onClose, onSuccess }) => {
@@ -31,8 +24,8 @@ const PinModal: React.FC<PinModalProps> = ({ isOpen, onClose, onSuccess }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pin === STUDIO_PIN) {
-      sessionStorage.setItem(SESSION_KEY, "1");
+    if (isStudioPin(pin)) {
+      unlockStudio();
       setPin("");
       setError(false);
       onSuccess();

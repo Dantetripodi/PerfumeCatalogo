@@ -18,22 +18,6 @@ export const perfumesArabes: PerfumeInput[] = [
     },
   },
   {
-    name: "Asad Lattafa",
-    brand: "Yves Dorgeval",
-    price: "Consultar",
-    gender: "masculino",
-    category: "oriental",
-    size: "100ML",
-    image: "/imagenes/arabes/Asad-Lattafa.jpg",
-    description:
-      "Asad de Lattafa Perfumes es una fragancia de la familia olfativa Oriental para Hombre",
-    notes: {
-      top: ["Pimienta ngera", "Tabaco", "piña"],
-      middle: ["Pachuli", "Cafe", "Iris"],
-      base: ["Vainilla", "Madera seca", "Ambar"],
-    },
-  },
-  {
     name: "Bharara King",
     brand: "Yves Dorgeval",
     price: "Consultar",
@@ -95,22 +79,6 @@ export const perfumesArabes: PerfumeInput[] = [
       top: ["Orquídea", "Heliotropo", "Naranja tangerina"],
       middle: ["Acuerdo goloso", "Frutas tropicales"],
       base: ["Vainilla", "Almizcle", "Sándalo"],
-    },
-  },
-  {
-    name: "Yara Tous Lattafa ",
-    brand: "Yves Dorgeval",
-    price: "Consultar",
-    gender: "femenino",
-    category: "oriental",
-    size: "100ml",
-    image: "/imagenes/arabes/Yara-Amarrillo-Lattafa.jpg",
-    description:
-      "Yara Tous de Lattafa es una fragancia cautivadora y exótica gracias a una armoniosa combinación de notas olfativas",
-    notes: {
-      top: ["Mango", "Coco", "Maracuyá (fruta de la pasión)"],
-      middle: ["Jazmín", "Flor de azahar del naranjo", "Heliotropo"],
-      base: ["Vainilla", "Almizcle", "Cachemira"],
     },
   },
   {
@@ -190,22 +158,6 @@ export const perfumesArabes: PerfumeInput[] = [
       top: ["Piña", "Créme bruléea"],
       middle: ["canela", "cúrcuma ", "pimienta negra", "Benjuí"],
       base: ["vainilla", "sándalo", "cachemira ", "musgo"],
-    },
-  },
-  {
-    name: "Khamrah Qahwa Lattafa",
-    brand: "Yves Dorgeval",
-    price: "Consultar",
-    gender: "masculino",
-    category: "amaderada dulce",
-    size: "100ml",
-    image: "/imagenes/arabes/Khamrah-Qahwa.jpg",
-    description:
-      "Khamrah Qahwa de Lattafa Perfumes es una fragancia de la familia olfativa Oriental Vainilla para Hombres y Mujeres. Esta fragrancia es nueva. Khamrah Qahwa se lanzó en 2022",
-    notes: {
-      top: ["canela", "Cardamomo", "jengibre"],
-      middle: ["praliné", "Frutas confitadas", "flores blancas"],
-      base: ["vainilla", "Cafe", "Haba tonka", "benjuí", "almizcle"],
     },
   },
 ];

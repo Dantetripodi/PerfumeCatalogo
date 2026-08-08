@@ -148,12 +148,12 @@ function findLocalFile(row: PerfumeRow): string | null {
 /**
  * Resize image to max MAX_SIDE on the longest side and convert to WebP.
  */
-async function optimizeImage(localPath: string): Promise<Buffer> {
-  const metadata = await sharp(localPath).metadata();
+async function optimizeImage(input: string | Buffer): Promise<Buffer> {
+  const metadata = await sharp(input).metadata();
   const { width = 0, height = 0 } = metadata;
   const longestSide = Math.max(width, height);
 
-  const pipeline = sharp(localPath);
+  const pipeline = sharp(input);
 
   if (longestSide > MAX_SIDE) {
     pipeline.resize(
@@ -188,6 +188,7 @@ async function main() {
   console.log(`Found ${perfumes.length} rows.\n`);
 
   let skipped = 0;
+  let alreadyOptimized = 0;
   let optimized = 0;
   let errors = 0;
   let totalOldBytes = 0;
@@ -196,18 +197,43 @@ async function main() {
   for (const row of perfumes) {
     const localFile = findLocalFile(row);
 
-    if (!localFile) {
-      console.warn(`  [skip] ${row.name} — local source file not found (URL: ${row.image_url})`);
-      skipped++;
-      continue;
+    // Determine the source image: a local file, or (for admin-uploaded /
+    // storage-only images) download the current image straight from Storage.
+    let sourceInput: string | Buffer;
+    let oldSize: number;
+
+    if (localFile) {
+      sourceInput = localFile;
+      oldSize = fs.statSync(localFile).size;
+    } else {
+      const existingKey = extractStorageKey(row.image_url);
+      if (!existingKey) {
+        console.warn(`  [skip] ${row.name} — not a Supabase Storage URL: ${row.image_url}`);
+        skipped++;
+        continue;
+      }
+      if (existingKey.toLowerCase().endsWith(".webp")) {
+        console.log(`  [skip] ${row.name} — already WebP`);
+        alreadyOptimized++;
+        continue;
+      }
+      try {
+        const res = await fetch(row.image_url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        sourceInput = Buffer.from(await res.arrayBuffer());
+        oldSize = sourceInput.length;
+      } catch (err) {
+        console.error(`  [error] ${row.name} — download from Storage failed: ${String(err)}`);
+        errors++;
+        continue;
+      }
     }
 
-    const oldSize = fs.statSync(localFile).size;
     totalOldBytes += oldSize;
 
     let optimizedBuffer: Buffer;
     try {
-      optimizedBuffer = await optimizeImage(localFile);
+      optimizedBuffer = await optimizeImage(sourceInput);
     } catch (err) {
       console.error(`  [error] ${row.name} — resize failed: ${String(err)}`);
       errors++;
@@ -220,7 +246,7 @@ async function main() {
     const existingKey = extractStorageKey(row.image_url);
     const baseKey = existingKey
       ? existingKey.replace(/\.[^.]+$/, ".webp")
-      : `perfumes/${row.collection}/${path.basename(localFile).replace(/\.[^.]+$/, ".webp")}`;
+      : `perfumes/${row.collection}/${(localFile ? path.basename(localFile) : String(row.id)).replace(/\.[^.]+$/, ".webp")}`;
 
     const { error: uploadError } = await supabase.storage
       .from(BUCKET)
@@ -262,16 +288,17 @@ async function main() {
     : 0;
 
   console.log("\n=== Summary ===");
-  console.log(`  Optimized : ${optimized}`);
-  console.log(`  Skipped   : ${skipped}`);
-  console.log(`  Errors    : ${errors}`);
-  console.log(`  Size      : ${totalOldMB} MB → ${totalNewMB} MB  (${savedPct}% reduction)`);
+  console.log(`  Optimized    : ${optimized}`);
+  console.log(`  Already WebP : ${alreadyOptimized}`);
+  console.log(`  Skipped      : ${skipped}`);
+  console.log(`  Errors       : ${errors}`);
+  console.log(`  Size         : ${totalOldMB} MB → ${totalNewMB} MB  (${savedPct}% reduction)`);
 
   if (errors > 0 || skipped > 0) {
     console.log("\n⚠️  Finished with issues — review output above.\n");
     process.exit(1);
   } else {
-    console.log("\n✅  All images optimized and rows updated.\n");
+    console.log("\n✅  All images optimized (already-WebP images left untouched).\n");
   }
 }
 

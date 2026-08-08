@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, FlaskConical, Images, LogOut, AlertCircle } from "lucide-react";
-import { supabase } from "../lib/supabase";
+import { deletePerfume } from "../data/perfumesRepository";
 import { useAdminAuth } from "../hooks/useAdminAuth";
 import { useRemotePerfumes } from "../hooks/useRemotePerfumes";
 import { Perfume } from "../types";
@@ -93,20 +93,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
   const handleDelete = async (perfume: Perfume) => {
     setErrorMessage(null);
-    const { error } = await supabase.from("perfumes").delete().eq("id", perfume.id);
+    const result = await deletePerfume(perfume);
 
-    if (error) {
-      setErrorMessage(`Error al borrar: ${error.message}`);
+    if (!result.ok) {
+      setErrorMessage(result.error);
       return;
-    }
-
-    // Best-effort: try to remove the storage object if it's a Supabase-hosted URL
-    if (perfume.image.includes("/storage/v1/object/public/perfume-images/")) {
-      const storageKey = perfume.image.split("/storage/v1/object/public/perfume-images/")[1];
-      if (storageKey) {
-        // Fire and forget — don't block on this
-        void supabase.storage.from("perfume-images").remove([storageKey]);
-      }
     }
 
     setToastMessage(`"${perfume.name}" borrado del catálogo.`);

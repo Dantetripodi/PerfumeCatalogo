@@ -3,7 +3,10 @@ import { ChevronDown, Filter, SlidersHorizontal, X } from 'lucide-react';
 import { Perfume, COLLECTION_LABELS, PerfumeCollection } from '../types';
 import { formatPrice } from '../utils/price';
 
-const LINE_COLLECTIONS: PerfumeCollection[] = ["regular", "arabe", "arabic", "mini"];
+/** Display order; a line only appears once it actually has products. */
+const LINE_ORDER: PerfumeCollection[] = [
+  "regular", "arabe", "arabic", "jacques", "mini", "probador", "home", "accesorio",
+];
 
 interface FilterProps {
   filters: {
@@ -26,6 +29,8 @@ const Filters: React.FC<FilterProps> = ({ filters, onFilterChange, onResetFilter
   const brands = Array.from(new Set(perfumes.map(perfume => perfume.brand))).sort((a, b) => a.localeCompare(b, "es"));
   const categories = Array.from(new Set(perfumes.map(perfume => perfume.category))).sort((a, b) => a.localeCompare(b, "es"));
   const genders = Array.from(new Set(perfumes.map(perfume => perfume.gender)));
+  const presentLines = new Set(perfumes.map(perfume => perfume.collection));
+  const lineCollections = LINE_ORDER.filter(collection => presentLines.has(collection));
   const numericPrices = perfumes
     .map(perfume => perfume.price)
     .filter((price): price is number => typeof price === "number");
@@ -81,7 +86,7 @@ const Filters: React.FC<FilterProps> = ({ filters, onFilterChange, onResetFilter
             className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
           >
             <option value="">Todas las líneas</option>
-            {LINE_COLLECTIONS.map((col) => (
+            {lineCollections.map((col) => (
               <option key={col} value={col}>
                 {COLLECTION_LABELS[col]}
               </option>

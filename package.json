@@ -9,7 +9,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "migrate": "tsx scripts/migrate-to-supabase.ts",
-    "optimize-images": "tsx scripts/optimize-images.ts"
+    "sync-catalog": "tsx scripts/sync-catalog-to-supabase.ts",
+    "optimize-images": "tsx scripts/optimize-images.ts",
+    "import-redyves": "tsx scripts/import-redyves.ts",
+    "sync-redyves-images": "tsx scripts/sync-redyves-images.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.0",

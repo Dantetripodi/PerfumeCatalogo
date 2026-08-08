@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "../lib/supabase";
-import { normalizePerfume, rowToInput } from "../data";
-import { Perfume, PerfumeRow } from "../types";
+import { USE_LOCAL_CATALOG } from "../lib/supabase";
+import { fetchPerfumes as fetchFromRepository } from "../data/perfumesRepository";
+import { Perfume } from "../types";
 
 export interface UseRemotePerfumesResult {
   perfumes: Perfume[];
@@ -15,34 +15,30 @@ export function useRemotePerfumes(): UseRemotePerfumesResult {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchPerfumes = useCallback(async () => {
+  const load = useCallback(async () => {
     setLoading(true);
     setError(null);
 
-    const { data, error: fetchError } = await supabase
-      .from("perfumes")
-      .select("*")
-      .order("created_at", { ascending: true });
-
-    if (fetchError) {
-      setError("No se pudo cargar el catálogo. Verificá tu conexión e intentá de nuevo.");
+    // Preview what src/data holds before pushing it live with `npm run sync-catalog`.
+    // Imported dynamically so the ~250KB static catalog is fetched only in this
+    // mode and never lands in the bundle customers download.
+    if (USE_LOCAL_CATALOG) {
+      const { perfumes: localPerfumes } = await import("../data");
+      setPerfumes(localPerfumes);
       setLoading(false);
       return;
     }
 
-    const rows = data as PerfumeRow[];
-    const mapped = rows.map((row) => {
-      const { input, id, collection, isFeatured } = rowToInput(row);
-      return normalizePerfume(input, id, collection, isFeatured);
-    });
+    const result = await fetchFromRepository();
+    if (result.ok) setPerfumes(result.data);
+    else setError(result.error);
 
-    setPerfumes(mapped);
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    void fetchPerfumes();
-  }, [fetchPerfumes]);
+    void load();
+  }, [load]);
 
-  return { perfumes, loading, error, refetch: fetchPerfumes };
+  return { perfumes, loading, error, refetch: load };
 }

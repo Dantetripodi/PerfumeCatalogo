@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { CartProvider } from "./context/CartContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import Header from "./components/Header";
@@ -10,33 +10,41 @@ import Cart from "./components/Cart";
 import Footer from "./components/Footer";
 import Notice from "./components/Notice";
 import Toast from "./components/Toast";
-import AdminPanel from "./components/AdminPanel";
-import ContentStudio from "./content-studio/ContentStudio";
-import { CarouselGenerator } from "./content-studio/Carousel";
-import PinModal, { isStudioUnlocked } from "./content-studio/PinModal";
+import { useInternalTools } from "./hooks/useInternalTools";
 import { Grid, List, Sparkles } from "lucide-react";
 import { usePerfumeCatalog } from "./hooks/usePerfumeCatalog";
 import { useAdminAuth } from "./hooks/useAdminAuth";
 import { Perfume } from "./types";
 
-type ViewMode = "grid" | "list";
-type AppView = "catalog" | "content-studio" | "carousel";
+// The studio, the carousel generator and the admin panel are internal tools
+// behind a PIN. Loading them lazily keeps roughly 1.500 lines of tooling out of
+// the bundle every customer downloads to browse the catalog.
+const ContentStudio = lazy(() => import("./content-studio/ContentStudio"));
+const CarouselGenerator = lazy(() =>
+  import("./content-studio/Carousel").then(m => ({ default: m.CarouselGenerator }))
+);
+const AdminPanel = lazy(() => import("./components/AdminPanel"));
+const PinModal = lazy(() => import("./content-studio/PinModal"));
 
-/** Destino al que va el flujo de PIN una vez desbloqueado */
-type PinTarget = "content-studio" | "carousel";
-const VIEW_MODE_STORAGE_KEY = "dtfragancias_view_mode";
-
-// Declared at module scope so it can be called before the hook result is available;
-// the hook result is passed in as the second argument.
-function canAccessStudio(hasAdminSession: boolean): boolean {
-  return isStudioUnlocked() || hasAdminSession;
+function ToolLoading() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[#F8F0E3]">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E8DDBF] border-t-[#D4AF37]" />
+    </div>
+  );
 }
+
+type ViewMode = "grid" | "list";
+const VIEW_MODE_STORAGE_KEY = "dtfragancias_view_mode";
 
 function App() {
   const { session } = useAdminAuth();
   const {
     allPerfumes,
     filteredPerfumes,
+    visiblePerfumes,
+    hasMore,
+    loadMore,
     filters,
     searchQuery,
     selectedPerfume,
@@ -52,12 +60,21 @@ function App() {
     closeDetails,
   } = usePerfumeCatalog();
 
+  const {
+    appView,
+    isAdminOpen,
+    isPinModalOpen,
+    openAdmin,
+    openStudio,
+    openCarousel,
+    closeTool,
+    closeAdmin,
+    closePin,
+    confirmPin,
+  } = useInternalTools(session !== null);
+
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
-  const [isAdminOpen, setIsAdminOpen] = useState(false);
-  const [appView, setAppView] = useState<AppView>("catalog");
-  const [isPinModalOpen, setIsPinModalOpen] = useState(false);
-  const [pinTarget, setPinTarget] = useState<PinTarget>("content-studio");
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     const saved = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
     if (saved === "grid" || saved === "list") return saved;
@@ -71,69 +88,6 @@ function App() {
     localStorage.setItem(VIEW_MODE_STORAGE_KEY, viewMode);
   }, [viewMode]);
 
-  // Rutas hash: #/admin, #/studio, #/carousel
-  useEffect(() => {
-    const syncHashRoute = () => {
-      if (window.location.hash === "#/admin") {
-        setIsAdminOpen(true);
-      } else if (window.location.hash === "#/studio") {
-        handleTryOpenStudio();
-      } else if (window.location.hash === "#/carousel") {
-        handleTryOpenCarousel();
-      }
-    };
-
-    syncHashRoute();
-    window.addEventListener("hashchange", syncHashRoute);
-    return () => window.removeEventListener("hashchange", syncHashRoute);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Atajos de teclado:
-  //   Ctrl/Cmd+Shift+S → Content Studio
-  //   Ctrl/Cmd+Shift+C → Carrusel
-  useEffect(() => {
-    const handleKeydown = (e: KeyboardEvent) => {
-      if (!(e.ctrlKey || e.metaKey) || !e.shiftKey) return;
-      const k = e.key.toLowerCase();
-      if (k === "s") {
-        e.preventDefault();
-        handleTryOpenStudio();
-      } else if (k === "c") {
-        e.preventDefault();
-        handleTryOpenCarousel();
-      }
-    };
-    window.addEventListener("keydown", handleKeydown);
-    return () => window.removeEventListener("keydown", handleKeydown);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Intenta abrir el Content Studio — si ya tiene acceso va directo, si no pide PIN
-  const handleTryOpenStudio = () => {
-    if (canAccessStudio(session !== null)) {
-      setAppView("content-studio");
-    } else {
-      setPinTarget("content-studio");
-      setIsPinModalOpen(true);
-    }
-  };
-
-  // Mismo flujo para el generador de carruseles (mismo PIN, mismo gate)
-  const handleTryOpenCarousel = () => {
-    if (canAccessStudio(session !== null)) {
-      setAppView("carousel");
-    } else {
-      setPinTarget("carousel");
-      setIsPinModalOpen(true);
-    }
-  };
-
-  const handlePinSuccess = () => {
-    setIsPinModalOpen(false);
-    setAppView(pinTarget);
-  };
-
   const handleAddToCart = (perfume: Perfume) => {
     setToastMessage(`${perfume.name} agregado al carrito`);
     setShowToast(true);
@@ -144,16 +98,9 @@ function App() {
     return (
       <CartProvider>
         <FavoritesProvider>
-          <ContentStudio
-            perfumes={allPerfumes}
-            onBack={() => {
-              setAppView("catalog");
-              // Limpia el hash si vino de #/studio
-              if (window.location.hash === "#/studio") {
-                window.history.replaceState(null, "", window.location.pathname);
-              }
-            }}
-          />
+          <Suspense fallback={<ToolLoading />}>
+            <ContentStudio perfumes={allPerfumes} onBack={closeTool} />
+          </Suspense>
         </FavoritesProvider>
       </CartProvider>
     );
@@ -164,29 +111,32 @@ function App() {
     return (
       <CartProvider>
         <FavoritesProvider>
-          <CarouselGenerator
-            perfumes={allPerfumes}
-            onBack={() => {
-              setAppView("catalog");
-              if (window.location.hash === "#/carousel") {
-                window.history.replaceState(null, "", window.location.pathname);
-              }
-            }}
-          />
+          <Suspense fallback={<ToolLoading />}>
+            <CarouselGenerator perfumes={allPerfumes} onBack={closeTool} />
+          </Suspense>
         </FavoritesProvider>
       </CartProvider>
     );
   }
 
+  // "all", "featured" and "consult" are not collections, so they always show.
+  // The rest only appear while that line actually has products in the catalog.
+  const presentCollections = new Set(allPerfumes.map(perfume => perfume.collection));
   const quickFilters = [
     { label: "Todos", value: "all" },
     { label: "Destacados", value: "featured" },
     { label: "Yves", value: "regular" },
     { label: "Arabes", value: "arabe" },
     { label: "Arabic", value: "arabic" },
+    { label: "Jacques Ryon", value: "jacques" },
     { label: "Mini perfumes", value: "mini" },
+    { label: "Probadores", value: "probador" },
+    { label: "Home", value: "home" },
     { label: "Consultar precio", value: "consult" },
-  ];
+  ].filter(
+    filter =>
+      ["all", "featured", "consult"].includes(filter.value) || presentCollections.has(filter.value as never)
+  );
 
   return (
     <CartProvider>
@@ -196,7 +146,7 @@ function App() {
             searchQuery={searchQuery}
             onSearch={handleSearch}
             toggleCart={toggleCart}
-            onOpenAdmin={() => setIsAdminOpen(true)}
+            onOpenAdmin={openAdmin}
           />
 
           <main>
@@ -313,8 +263,8 @@ function App() {
                   <div className="mb-4 flex flex-col gap-3 rounded-lg border border-white/70 bg-white/80 p-3 shadow-sm backdrop-blur sm:flex-row sm:items-center sm:justify-between">
                     <div className="text-sm text-gray-600">
                       Mostrando{" "}
-                      <strong className="text-[#1A2238]">{filteredPerfumes.length}</strong>{" "}
-                      de {allPerfumes.length} perfumes
+                      <strong className="text-[#1A2238]">{visiblePerfumes.length}</strong>{" "}
+                      de {filteredPerfumes.length} perfumes
                     </div>
                     <div className="flex w-fit gap-1 rounded-lg bg-[#EEF0F4] p-1">
                       <button
@@ -357,30 +307,48 @@ function App() {
                         Limpiar búsqueda
                       </button>
                     </div>
-                  ) : viewMode === "grid" ? (
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                      {filteredPerfumes.map((perfume, index) => (
-                        <PerfumeCard
-                          key={perfume.id}
-                          perfume={perfume}
-                          priority={index < 6}
-                          onShowDetails={openDetails}
-                          onAddToCart={handleAddToCart}
-                        />
-                      ))}
-                    </div>
                   ) : (
-                    <div className="flex flex-col gap-2.5">
-                      {filteredPerfumes.map((perfume, index) => (
-                        <PerfumeListItem
-                          key={perfume.id}
-                          perfume={perfume}
-                          priority={index < 6}
-                          onShowDetails={openDetails}
-                          onAddToCart={handleAddToCart}
-                        />
-                      ))}
-                    </div>
+                    <>
+                      {viewMode === "grid" ? (
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                          {visiblePerfumes.map((perfume, index) => (
+                            <PerfumeCard
+                              key={perfume.id}
+                              perfume={perfume}
+                              priority={index < 6}
+                              onShowDetails={openDetails}
+                              onAddToCart={handleAddToCart}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="flex flex-col gap-2.5">
+                          {visiblePerfumes.map((perfume, index) => (
+                            <PerfumeListItem
+                              key={perfume.id}
+                              perfume={perfume}
+                              priority={index < 6}
+                              onShowDetails={openDetails}
+                              onAddToCart={handleAddToCart}
+                            />
+                          ))}
+                        </div>
+                      )}
+
+                      {hasMore && (
+                        <div className="mt-8 flex flex-col items-center gap-2">
+                          <button
+                            onClick={loadMore}
+                            className="w-full rounded-md bg-[#1A2238] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#25304F] sm:w-auto sm:px-10"
+                          >
+                            Ver más perfumes
+                          </button>
+                          <span className="text-xs text-gray-500">
+                            Quedan {filteredPerfumes.length - visiblePerfumes.length}
+                          </span>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
@@ -399,39 +367,32 @@ function App() {
             isVisible={showToast}
             onClose={() => setShowToast(false)}
           />
-          <AdminPanel
-            isOpen={isAdminOpen}
-            onClose={() => {
-              setIsAdminOpen(false);
-              if (window.location.hash === "#/admin") {
-                window.history.replaceState(null, "", window.location.pathname);
-              }
-            }}
-            onSaved={() => {
-              void refetchCatalog();
-              setToastMessage("Catálogo actualizado");
-              setShowToast(true);
-            }}
-            onOpenContentStudio={handleTryOpenStudio}
-            onOpenCarousel={handleTryOpenCarousel}
-          />
+          {/* Mounted only while open so the lazy chunk is fetched on demand;
+              both panels already render null when closed, so nothing changes. */}
+          {isAdminOpen && (
+            <Suspense fallback={null}>
+              <AdminPanel
+                isOpen={isAdminOpen}
+                onClose={closeAdmin}
+                onSaved={() => {
+                  void refetchCatalog();
+                  setToastMessage("Catálogo actualizado");
+                  setShowToast(true);
+                }}
+                onOpenContentStudio={openStudio}
+                onOpenCarousel={openCarousel}
+              />
+            </Suspense>
+          )}
 
           <Footer />
 
           {/* PIN modal — solo aparece cuando se intenta acceder sin sesión activa */}
-          <PinModal
-            isOpen={isPinModalOpen}
-            onClose={() => {
-              setIsPinModalOpen(false);
-              if (
-                window.location.hash === "#/studio" ||
-                window.location.hash === "#/carousel"
-              ) {
-                window.history.replaceState(null, "", window.location.pathname);
-              }
-            }}
-            onSuccess={handlePinSuccess}
-          />
+          {isPinModalOpen && (
+            <Suspense fallback={null}>
+              <PinModal isOpen={isPinModalOpen} onClose={closePin} onSuccess={confirmPin} />
+            </Suspense>
+          )}
         </div>
       </FavoritesProvider>
     </CartProvider>
