@@ -44,6 +44,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   // Error banner (for CRUD errors surfaced by child forms)
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [savingFeaturedIds, setSavingFeaturedIds] = useState<number[]>([]);
+  /** Set by edits that only need to reach the public catalog once, on close. */
+  const [catalogNeedsRefresh, setCatalogNeedsRefresh] = useState(false);
 
   // Toast
   const [toastMessage, setToastMessage] = useState("");
@@ -52,7 +54,16 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   const isAuthenticated = session !== null;
 
   // Remote data — only fetch when panel is open and user is authenticated
-  const { perfumes, loading: perfumesLoading, refetch } = useRemotePerfumes();
+  const { perfumes, loading: perfumesLoading, refetch, patchPerfume } = useRemotePerfumes();
+
+  /** Propagates pending changes to the public catalog exactly once, on close. */
+  const handleClose = () => {
+    if (catalogNeedsRefresh) {
+      setCatalogNeedsRefresh(false);
+      onSaved();
+    }
+    onClose();
+  };
 
   if (!isOpen) return null;
 
@@ -112,19 +123,25 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     setErrorMessage(null);
     setSavingFeaturedIds(ids => [...ids, perfume.id]);
 
+    // The star flips right away and stays flipped: re-reading all 428 rows to
+    // learn about the one we just wrote made the list blink out to a spinner
+    // on every click.
+    patchPerfume(perfume.id, { isFeatured: next });
+
     const result = await setPerfumeFeatured(perfume.id, next);
+    setSavingFeaturedIds(ids => ids.filter(id => id !== perfume.id));
 
     if (!result.ok) {
+      patchPerfume(perfume.id, { isFeatured: perfume.isFeatured });
       setErrorMessage(result.error);
-      setSavingFeaturedIds(ids => ids.filter(id => id !== perfume.id));
       return;
     }
 
     setToastMessage(`"${perfume.name}" ${next ? "destacado" : "quitado de destacados"}.`);
     setShowToast(true);
-    await refetch();
-    setSavingFeaturedIds(ids => ids.filter(id => id !== perfume.id));
-    onSaved();
+    // The public catalog is refreshed once, when the panel closes, rather than
+    // on every star.
+    setCatalogNeedsRefresh(true);
   };
 
   // ── Form callbacks ────────────────────────────────────────────────────────────
@@ -174,7 +191,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
           <div className="flex items-center gap-2">
             {isAuthenticated && onOpenCarousel && (
               <button
-                onClick={() => { onClose(); onOpenCarousel(); }}
+                onClick={() => { handleClose(); onOpenCarousel(); }}
                 className="flex items-center gap-1.5 rounded-md border border-[#E8DDBF] px-3 py-2 text-sm font-medium text-[#1A2238] transition-colors hover:border-[#D4AF37] hover:text-[#D4AF37]"
                 title="Generador de carruseles para Instagram"
               >
@@ -184,7 +201,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             )}
             {isAuthenticated && onOpenContentStudio && (
               <button
-                onClick={() => { onClose(); onOpenContentStudio(); }}
+                onClick={() => { handleClose(); onOpenContentStudio(); }}
                 className="flex items-center gap-1.5 rounded-md border border-[#E8DDBF] px-3 py-2 text-sm font-medium text-[#1A2238] transition-colors hover:border-[#D4AF37] hover:text-[#D4AF37]"
                 title="Ir al Content Studio"
               >
@@ -203,7 +220,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               </button>
             )}
             <button
-              onClick={onClose}
+              onClick={handleClose}
               className="rounded-md p-2 text-gray-500 hover:bg-gray-100"
               aria-label="Cerrar admin"
             >
