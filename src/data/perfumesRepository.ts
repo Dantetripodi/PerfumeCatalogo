@@ -66,6 +66,20 @@ export async function updatePerfume(id: number, draft: PerfumeDraft): Promise<Re
   return error ? { ok: false, error: `Error al actualizar: ${error.message}` } : { ok: true, data: undefined };
 }
 
+/**
+ * Flips just the "Destacado" flag. Featuring a product used to mean opening the
+ * full 15-field form and saving the whole record back, which risks rewriting
+ * fields nobody meant to touch.
+ */
+export async function setPerfumeFeatured(id: number, isFeatured: boolean): Promise<RepositoryResult> {
+  const { error } = await supabase
+    .from(TABLE)
+    .update({ is_featured: isFeatured, updated_at: new Date().toISOString() })
+    .eq("id", id);
+
+  return error ? { ok: false, error: `No se pudo destacar: ${error.message}` } : { ok: true, data: undefined };
+}
+
 export async function deletePerfume(perfume: Perfume): Promise<RepositoryResult> {
   const { error } = await supabase.from(TABLE).delete().eq("id", perfume.id);
   if (error) return { ok: false, error: `Error al borrar: ${error.message}` };

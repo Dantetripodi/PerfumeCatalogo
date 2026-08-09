@@ -171,15 +171,21 @@ function buildCommercialMetadata(
     category.includes("oriental") || category.includes("ámbar") || text.includes("intensa") || text.includes("seductor");
   // When an explicit DB flag is provided (remote path), it is authoritative.
   // When called from the static pipeline (no override), fall back to the heuristic so local data still works.
+  //
+  // Probadores are 10ml samples: they are never a shop window, and the text
+  // rules below match them through the "Inspirado en …" line their full-size
+  // counterpart lends them, which is how three of them reached the home page.
+  const canBeFeatured = collection !== "probador";
   const isFeatured =
     isFeaturedOverride !== undefined
       ? isFeaturedOverride
-      : collection === "arabe" ||
-        collection === "arabic" ||
-        id < 8 ||
-        text.includes("sauvage") ||
-        text.includes("good girl") ||
-        text.includes("one million");
+      : canBeFeatured &&
+        (collection === "arabe" ||
+          collection === "arabic" ||
+          id < 8 ||
+          text.includes("sauvage") ||
+          text.includes("good girl") ||
+          text.includes("one million"));
 
   return {
     isFeatured,

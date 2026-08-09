@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, FlaskConical, Images, LogOut, AlertCircle } from "lucide-react";
-import { deletePerfume } from "../data/perfumesRepository";
+import { deletePerfume, setPerfumeFeatured } from "../data/perfumesRepository";
 import { useAdminAuth } from "../hooks/useAdminAuth";
 import { useRemotePerfumes } from "../hooks/useRemotePerfumes";
 import { Perfume } from "../types";
@@ -43,6 +43,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
 
   // Error banner (for CRUD errors surfaced by child forms)
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [savingFeaturedIds, setSavingFeaturedIds] = useState<number[]>([]);
 
   // Toast
   const [toastMessage, setToastMessage] = useState("");
@@ -103,6 +104,26 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     setToastMessage(`"${perfume.name}" borrado del catálogo.`);
     setShowToast(true);
     await refetch();
+    onSaved();
+  };
+
+  const handleToggleFeatured = async (perfume: Perfume) => {
+    const next = !perfume.isFeatured;
+    setErrorMessage(null);
+    setSavingFeaturedIds(ids => [...ids, perfume.id]);
+
+    const result = await setPerfumeFeatured(perfume.id, next);
+
+    if (!result.ok) {
+      setErrorMessage(result.error);
+      setSavingFeaturedIds(ids => ids.filter(id => id !== perfume.id));
+      return;
+    }
+
+    setToastMessage(`"${perfume.name}" ${next ? "destacado" : "quitado de destacados"}.`);
+    setShowToast(true);
+    await refetch();
+    setSavingFeaturedIds(ids => ids.filter(id => id !== perfume.id));
     onSaved();
   };
 
@@ -253,6 +274,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             onNew={handleNew}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onToggleFeatured={handleToggleFeatured}
+            savingFeaturedIds={savingFeaturedIds}
           />
         ) : (
           /* ── Create / Edit form ──────────────────────────────────────────── */

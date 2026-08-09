@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Pencil, Trash2, Star, PlusCircle } from "lucide-react";
+import React, { useMemo, useState } from "react";
+import { Pencil, Trash2, Star, PlusCircle, Search, X } from "lucide-react";
 import { Perfume } from "../../types";
 import { formatPrice } from "../../utils/price";
 
@@ -9,7 +9,13 @@ interface PerfumeListProps {
   onNew: () => void;
   onEdit: (perfume: Perfume) => void;
   onDelete: (perfume: Perfume) => void;
+  onToggleFeatured: (perfume: Perfume) => void;
+  /** Ids currently being saved, so their star can show it is in flight. */
+  savingFeaturedIds: number[];
 }
+
+/** Scrolling 448 rows to find one product is not a way to work. */
+const MAX_ROWS = 60;
 
 const PerfumeList: React.FC<PerfumeListProps> = ({
   perfumes,
@@ -17,8 +23,29 @@ const PerfumeList: React.FC<PerfumeListProps> = ({
   onNew,
   onEdit,
   onDelete,
+  onToggleFeatured,
+  savingFeaturedIds,
 }) => {
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
+  const [query, setQuery] = useState("");
+  const [onlyFeatured, setOnlyFeatured] = useState(false);
+
+  const featuredCount = perfumes.filter(perfume => perfume.isFeatured).length;
+
+  const matches = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return perfumes.filter(perfume => {
+      if (onlyFeatured && !perfume.isFeatured) return false;
+      if (!q) return true;
+      return (
+        perfume.name.toLowerCase().includes(q) ||
+        perfume.brand.toLowerCase().includes(q) ||
+        perfume.collection.toLowerCase().includes(q)
+      );
+    });
+  }, [perfumes, query, onlyFeatured]);
+
+  const visible = matches.slice(0, MAX_ROWS);
 
   const handleDeleteClick = (perfume: Perfume) => {
     setConfirmDeleteId(perfume.id);
@@ -44,16 +71,50 @@ const PerfumeList: React.FC<PerfumeListProps> = ({
 
   return (
     <div className="p-5">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-3 flex items-center justify-between gap-3">
         <p className="text-sm text-gray-500">
-          {perfumes.length} {perfumes.length === 1 ? "perfume" : "perfumes"} en el catálogo
+          {perfumes.length} {perfumes.length === 1 ? "perfume" : "perfumes"} ·{" "}
+          <span className="font-medium text-[#9A7A1F]">{featuredCount} destacados</span>
         </p>
         <button
           onClick={onNew}
-          className="flex items-center gap-2 rounded-md bg-[#1A2238] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#25304F]"
+          className="flex shrink-0 items-center gap-2 rounded-md bg-[#1A2238] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#25304F]"
         >
           <PlusCircle size={16} />
           Nuevo perfume
+        </button>
+      </div>
+
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="search"
+            value={query}
+            onChange={event => setQuery(event.target.value)}
+            placeholder="Buscar por nombre, marca o línea…"
+            className="w-full rounded-md border border-[#E8DDBF] bg-[#FBF8F1] py-2 pl-9 pr-8 text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
+          />
+          {query && (
+            <button
+              onClick={() => setQuery("")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-gray-400 hover:text-gray-600"
+              aria-label="Limpiar búsqueda"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+        <button
+          onClick={() => setOnlyFeatured(value => !value)}
+          className={`flex shrink-0 items-center gap-1.5 rounded-md border px-3 py-2 text-sm font-medium transition-colors ${
+            onlyFeatured
+              ? "border-[#D4AF37] bg-[#D4AF37]/15 text-[#9A7A1F]"
+              : "border-[#E8DDBF] text-gray-600 hover:bg-[#F8F0E3]"
+          }`}
+        >
+          <Star size={14} className={onlyFeatured ? "fill-[#D4AF37] text-[#D4AF37]" : ""} />
+          Solo destacados
         </button>
       </div>
 
@@ -69,7 +130,7 @@ const PerfumeList: React.FC<PerfumeListProps> = ({
         </div>
       ) : (
         <ul className="divide-y divide-[#E8DDBF]">
-          {perfumes.map((perfume) => (
+          {visible.map((perfume) => (
             <li key={perfume.id} className="flex items-center gap-3 py-3">
               {/* Thumbnail */}
               <img
@@ -119,6 +180,20 @@ const PerfumeList: React.FC<PerfumeListProps> = ({
               ) : (
                 <div className="flex shrink-0 items-center gap-1">
                   <button
+                    onClick={() => onToggleFeatured(perfume)}
+                    disabled={savingFeaturedIds.includes(perfume.id)}
+                    className={`rounded p-1.5 transition-colors disabled:opacity-40 ${
+                      perfume.isFeatured
+                        ? "text-[#D4AF37] hover:bg-[#D4AF37]/10"
+                        : "text-gray-300 hover:bg-[#F8F0E3] hover:text-[#D4AF37]"
+                    }`}
+                    title={perfume.isFeatured ? "Quitar de destacados" : "Destacar en el catálogo"}
+                    aria-label={`${perfume.isFeatured ? "Quitar de" : "Agregar a"} destacados: ${perfume.name}`}
+                    aria-pressed={perfume.isFeatured}
+                  >
+                    <Star size={15} className={perfume.isFeatured ? "fill-[#D4AF37]" : ""} />
+                  </button>
+                  <button
                     onClick={() => onEdit(perfume)}
                     className="rounded p-1.5 text-[#1A2238] transition-colors hover:bg-[#F8F0E3]"
                     title="Editar"
@@ -139,6 +214,18 @@ const PerfumeList: React.FC<PerfumeListProps> = ({
             </li>
           ))}
         </ul>
+      )}
+
+      {matches.length === 0 && perfumes.length > 0 && (
+        <div className="rounded-lg border border-dashed border-[#E8DDBF] py-10 text-center">
+          <p className="text-sm text-gray-500">Ningún perfume coincide con la búsqueda.</p>
+        </div>
+      )}
+
+      {matches.length > MAX_ROWS && (
+        <p className="pt-4 text-center text-xs text-gray-500">
+          Mostrando {MAX_ROWS} de {matches.length}. Afiná la búsqueda para ver el resto.
+        </p>
       )}
     </div>
   );
