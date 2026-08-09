@@ -99,6 +99,17 @@ function App() {
     localStorage.setItem(FILTERS_LAYOUT_STORAGE_KEY, filtersLayout);
   }, [filtersLayout]);
 
+  /**
+   * El logo devuelve el catálogo a como estaba al entrar: sin filtros, sin
+   * búsqueda, sin modal abierto y arriba de todo. Es la salida que la gente
+   * busca instintivamente cuando se perdió entre filtros.
+   */
+  const goHome = () => {
+    resetFilters();
+    closeDetails();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const handleAddToCart = (perfume: Perfume) => {
     setToastMessage(`${perfume.name} agregado al carrito`);
     setShowToast(true);
@@ -158,6 +169,7 @@ function App() {
             onSearch={handleSearch}
             toggleCart={toggleCart}
             onOpenAdmin={openAdmin}
+            onGoHome={goHome}
           />
 
           <main>

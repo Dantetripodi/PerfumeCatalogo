@@ -8,9 +8,11 @@ interface HeaderProps {
   toggleCart: () => void;
   /** Abre el AdminPanel (que tiene su propio gate con contraseña). Opcional. */
   onOpenAdmin?: () => void;
+  /** Vuelve el catálogo a su estado inicial. El logo es la salida de emergencia. */
+  onGoHome?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ searchQuery, onSearch, toggleCart, onOpenAdmin }) => {
+const Header: React.FC<HeaderProps> = ({ searchQuery, onSearch, toggleCart, onOpenAdmin, onGoHome }) => {
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
 
@@ -20,7 +22,20 @@ const Header: React.FC<HeaderProps> = ({ searchQuery, onSearch, toggleCart, onOp
         <div className="flex flex-col sm:flex-row items-center gap-4">
           <div className="flex items-center justify-between w-full sm:w-auto">
             <h1 className="whitespace-nowrap font-serif text-2xl font-bold text-[#1A2238] sm:text-3xl">
-              <span className="text-[#D4AF37]">DT</span>Fragancias
+              {onGoHome ? (
+                <button
+                  onClick={onGoHome}
+                  className="rounded transition-opacity hover:opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+                  title="Volver al inicio y limpiar la búsqueda"
+                  aria-label="DTFragancias — volver al inicio"
+                >
+                  <span className="text-[#D4AF37]">DT</span>Fragancias
+                </button>
+              ) : (
+                <>
+                  <span className="text-[#D4AF37]">DT</span>Fragancias
+                </>
+              )}
             </h1>
 
             <div className="sm:hidden flex items-center gap-1">
