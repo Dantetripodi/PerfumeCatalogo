@@ -2,7 +2,7 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { CartProvider } from "./context/CartContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import Header from "./components/Header";
-import Filters from "./components/Filters";
+import Filters, { FiltersLayout } from "./components/Filters";
 import PerfumeCard from "./components/PerfumeCard";
 import PerfumeListItem from "./components/PerfumeListItem";
 import PerfumeDetails from "./components/PerfumeDetails";
@@ -36,6 +36,7 @@ function ToolLoading() {
 
 type ViewMode = "grid" | "list";
 const VIEW_MODE_STORAGE_KEY = "dtfragancias_view_mode";
+const FILTERS_LAYOUT_STORAGE_KEY = "dtfragancias_filters_layout";
 
 function App() {
   const { session } = useAdminAuth();
@@ -75,6 +76,12 @@ function App() {
 
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
+  // Filters across the top by default: the side panel costs a quarter of the
+  // width, which on a large screen is a whole column of products.
+  const [filtersLayout, setFiltersLayout] = useState<FiltersLayout>(() => {
+    const saved = localStorage.getItem(FILTERS_LAYOUT_STORAGE_KEY);
+    return saved === "panel" || saved === "bar" ? saved : "bar";
+  });
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     const saved = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
     if (saved === "grid" || saved === "list") return saved;
@@ -83,10 +90,25 @@ function App() {
     return "grid";
   });
 
-  // Persiste preferencia de vista
+  // Persiste preferencias de vista
   useEffect(() => {
     localStorage.setItem(VIEW_MODE_STORAGE_KEY, viewMode);
   }, [viewMode]);
+
+  useEffect(() => {
+    localStorage.setItem(FILTERS_LAYOUT_STORAGE_KEY, filtersLayout);
+  }, [filtersLayout]);
+
+  /**
+   * El logo devuelve el catálogo a como estaba al entrar: sin filtros, sin
+   * búsqueda, sin modal abierto y arriba de todo. Es la salida que la gente
+   * busca instintivamente cuando se perdió entre filtros.
+   */
+  const goHome = () => {
+    resetFilters();
+    closeDetails();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const handleAddToCart = (perfume: Perfume) => {
     setToastMessage(`${perfume.name} agregado al carrito`);
@@ -147,6 +169,7 @@ function App() {
             onSearch={handleSearch}
             toggleCart={toggleCart}
             onOpenAdmin={openAdmin}
+            onGoHome={goHome}
           />
 
           <main>
@@ -199,8 +222,8 @@ function App() {
                   </h2>
                 </div>
                 <p className="max-w-xl text-sm leading-6 text-gray-600">
-                  Usá filtros para encontrar una fragancia por marca, perfil, género o
-                  presupuesto.
+                  Usá los filtros para encontrar una fragancia por línea, género o
+                  presupuesto, o buscá por nombre desde arriba.
                 </p>
               </div>
 
@@ -249,22 +272,52 @@ function App() {
               )}
 
               {!catalogLoading && !catalogError && (
-              <div className="flex flex-col gap-8 lg:flex-row">
-                <div className="lg:w-1/4">
+              <div className={filtersLayout === "bar" ? "flex flex-col gap-4" : "flex flex-col gap-8 lg:flex-row"}>
+                <div className={filtersLayout === "bar" ? "" : "lg:w-1/4"}>
                   <Filters
                     filters={filters}
                     onFilterChange={handleFilterChange}
                     onResetFilters={resetFilters}
                     perfumes={allPerfumes}
+                    layout={filtersLayout}
                   />
                 </div>
 
-                <div className="lg:w-3/4">
+                <div className={filtersLayout === "bar" ? "" : "lg:w-3/4"}>
                   <div className="mb-4 flex flex-col gap-3 rounded-lg border border-white/70 bg-white/80 p-3 shadow-sm backdrop-blur sm:flex-row sm:items-center sm:justify-between">
                     <div className="text-sm text-gray-600">
                       Mostrando{" "}
                       <strong className="text-[#1A2238]">{visiblePerfumes.length}</strong>{" "}
                       de {filteredPerfumes.length} perfumes
+                    </div>
+                    <div className="flex items-center gap-2">
+                    {/* Filtros arriba libera el cuarto de ancho del panel: la
+                        grilla pasa de 3 a 4 columnas en pantallas grandes. */}
+                    <div className="hidden w-fit gap-1 rounded-lg bg-[#EEF0F4] p-1 lg:flex">
+                      <button
+                        onClick={() => setFiltersLayout("bar")}
+                        className={`rounded px-3 py-1.5 text-xs font-medium transition-colors duration-200 ${
+                          filtersLayout === "bar"
+                            ? "bg-[#1A2238] text-white"
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                        aria-pressed={filtersLayout === "bar"}
+                        title="Filtros en barra — más ancho para la grilla"
+                      >
+                        Barra
+                      </button>
+                      <button
+                        onClick={() => setFiltersLayout("panel")}
+                        className={`rounded px-3 py-1.5 text-xs font-medium transition-colors duration-200 ${
+                          filtersLayout === "panel"
+                            ? "bg-[#1A2238] text-white"
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                        aria-pressed={filtersLayout === "panel"}
+                        title="Filtros en panel lateral"
+                      >
+                        Panel
+                      </button>
                     </div>
                     <div className="flex w-fit gap-1 rounded-lg bg-[#EEF0F4] p-1">
                       <button
@@ -292,6 +345,7 @@ function App() {
                         <List size={20} />
                       </button>
                     </div>
+                    </div>
                   </div>
 
                   {filteredPerfumes.length === 0 ? (
@@ -310,7 +364,11 @@ function App() {
                   ) : (
                     <>
                       {viewMode === "grid" ? (
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        <div
+                          className={`grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 ${
+                            filtersLayout === "bar" ? "xl:grid-cols-4" : ""
+                          }`}
+                        >
                           {visiblePerfumes.map((perfume, index) => (
                             <PerfumeCard
                               key={perfume.id}
