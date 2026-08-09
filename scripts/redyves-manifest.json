@@ -99,6 +99,10 @@
     "sourceUrl": "/productos-mayorista/reproc-42-1782424153836.webp",
     "localPath": "/imagenes/redyves/regular/miss-millionaire-prive-90ml-1184.webp"
   },
+  "1185": {
+    "sourceUrl": "/productos-mayorista/reproc-43-1782424154015.webp",
+    "localPath": "/imagenes/redyves/regular/miss-millionaire-fabulous-100ml-1185.webp"
+  },
   "1186": {
     "sourceUrl": "/productos/reproc-1451-1782424385636.webp",
     "localPath": "/imagenes/redyves/regular/yd-ange-fem-80ml-1186.webp"
@@ -375,6 +379,10 @@
     "sourceUrl": "/productos-mayorista/reproc-98-1782424163644.webp",
     "localPath": "/imagenes/redyves/regular/oud-good-100ml-1262.webp"
   },
+  "1263": {
+    "sourceUrl": "/productos/reproc-1458-1782424388050.webp",
+    "localPath": "/imagenes/redyves/regular/yd12-men-100ml-1263.webp"
+  },
   "1264": {
     "sourceUrl": "/productos/reproc-1459-1782424388369.webp",
     "localPath": "/imagenes/redyves/regular/yd12-sexy-men-100ml-1264.webp"
@@ -446,6 +454,10 @@
   "1281": {
     "sourceUrl": "/productos-mayorista/reproc-114-1782424166871.webp",
     "localPath": "/imagenes/redyves/regular/victorious-v-100ml-1281.webp"
+  },
+  "1282": {
+    "sourceUrl": "/productos-mayorista/reproc-115-1782424167109.webp",
+    "localPath": "/imagenes/redyves/regular/victorious-onyx-100ml-1282.webp"
   },
   "1283": {
     "sourceUrl": "/productos-mayorista/reproc-116-1782424167292.webp",
@@ -939,6 +951,10 @@
     "sourceUrl": "/productos/producto-3088-1783089998852.webp",
     "localPath": "/imagenes/redyves/regular/bella-75ml-3088.webp"
   },
+  "3092": {
+    "sourceUrl": "/productos/producto-3092-1783096960505.webp",
+    "localPath": "/imagenes/redyves/regular/bella-leclat-100ml-3092.webp"
+  },
   "3094": {
     "sourceUrl": "/productos/producto-3094-1783097342537.webp",
     "localPath": "/imagenes/redyves/arabic/yd-erba-pura-exctracto-120ml-3094.webp"
@@ -1083,6 +1099,10 @@
     "sourceUrl": "/productos/producto-3267-1783215234232.webp",
     "localPath": "/imagenes/redyves/probador/probador-horse-black-10ml-3267.webp"
   },
+  "3268": {
+    "sourceUrl": "/productos/producto-3268-1783215280720.webp",
+    "localPath": "/imagenes/redyves/probador/probador-victorious-onyx-10ml-3268.webp"
+  },
   "3269": {
     "sourceUrl": "/productos/producto-3269-1783215319744.webp",
     "localPath": "/imagenes/redyves/probador/probador-haltair-10ml-3269.webp"
@@ -1155,6 +1175,10 @@
     "sourceUrl": "/productos/producto-3290-1783722713000.webp",
     "localPath": "/imagenes/redyves/probador/probador-costa-azul-10ml-3290.webp"
   },
+  "3291": {
+    "sourceUrl": "/productos/producto-3291-1783721882185.webp",
+    "localPath": "/imagenes/redyves/probador/probador-yd12-men-10ml-3291.webp"
+  },
   "3292": {
     "sourceUrl": "/productos/producto-3292-1783721901447.webp",
     "localPath": "/imagenes/redyves/probador/probador-yd12-sexy-men-10ml-3292.webp"
@@ -1177,7 +1201,7 @@
   },
   "3298": {
     "sourceUrl": "/productos/producto-3298-1783722058446.webp",
-    "localPath": "/imagenes/redyves/mini/probador-bella-l-eclat-10ml-3298.webp"
+    "localPath": "/imagenes/redyves/probador/probador-bella-l-eclat-10ml-3298.webp"
   },
   "3299": {
     "sourceUrl": "/productos/producto-3299-1783722103968.webp",
