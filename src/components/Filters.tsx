@@ -13,9 +13,7 @@ export type FiltersLayout = "panel" | "bar";
 interface FiltersState {
   collection: string;
   line: string;
-  brand: string;
   gender: string;
-  category: string;
   minPrice: string;
   maxPrice: string;
   sort: string;
@@ -42,8 +40,6 @@ const Filters: React.FC<FilterProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const brands = Array.from(new Set(perfumes.map(perfume => perfume.brand))).sort((a, b) => a.localeCompare(b, "es"));
-  const categories = Array.from(new Set(perfumes.map(perfume => perfume.category))).sort((a, b) => a.localeCompare(b, "es"));
   const genders = Array.from(new Set(perfumes.map(perfume => perfume.gender)));
   const presentLines = new Set(perfumes.map(perfume => perfume.collection));
   const lineCollections = LINE_ORDER.filter(collection => presentLines.has(collection));
@@ -55,9 +51,7 @@ const Filters: React.FC<FilterProps> = ({
   const lineLabel = filters.line ? COLLECTION_LABELS[filters.line as PerfumeCollection] : "";
   const activeFilters = [
     lineLabel,
-    filters.brand,
     filters.gender,
-    filters.category,
     filters.minPrice && `Desde ${formatPrice(Number(filters.minPrice))}`,
     filters.maxPrice && `Hasta ${formatPrice(Number(filters.maxPrice))}`,
   ].filter(Boolean);
@@ -79,19 +73,6 @@ const Filters: React.FC<FilterProps> = ({
     </select>
   );
 
-  const brandSelect = (
-    <select
-      id="brand-filter"
-      aria-label="Marca"
-      value={filters.brand}
-      onChange={(e) => onFilterChange('brand', e.target.value)}
-      className={SELECT_CLASS}
-    >
-      <option value="">Todas las marcas</option>
-      {brands.map((brand) => <option key={brand} value={brand}>{brand}</option>)}
-    </select>
-  );
-
   const genderSelect = (
     <select
       id="gender-filter"
@@ -103,21 +84,6 @@ const Filters: React.FC<FilterProps> = ({
       <option value="">Todos los géneros</option>
       {genders.map((gender) => (
         <option key={gender} value={gender}>{gender.charAt(0).toUpperCase() + gender.slice(1)}</option>
-      ))}
-    </select>
-  );
-
-  const categorySelect = (
-    <select
-      id="category-filter"
-      aria-label="Categoría"
-      value={filters.category}
-      onChange={(e) => onFilterChange('category', e.target.value)}
-      className={SELECT_CLASS}
-    >
-      <option value="">Todas las categorías</option>
-      {categories.map((category) => (
-        <option key={category} value={category}>{category.charAt(0).toUpperCase() + category.slice(1)}</option>
       ))}
     </select>
   );
@@ -208,13 +174,11 @@ const Filters: React.FC<FilterProps> = ({
         </button>
 
         <div className={`${isOpen ? 'mt-3 block' : 'hidden'} lg:mt-0 lg:block`}>
-          {/* Seven columns so the price range — two inputs sharing a cell —
-              gets double the width of a single select and stops clipping. */}
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-7 lg:items-center">
+          {/* Five columns so the price range — two inputs sharing a cell — gets
+              double the width of a single select and stops clipping. */}
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-5 lg:items-center">
             {lineSelect}
-            {brandSelect}
             {genderSelect}
-            {categorySelect}
             {sortSelect}
             <div className="sm:col-span-2 lg:col-span-2">{priceInputs}</div>
           </div>
@@ -267,18 +231,8 @@ const Filters: React.FC<FilterProps> = ({
         </div>
 
         <div className="mb-4">
-          <label htmlFor="brand-filter" className="mb-2 block font-medium text-[#1A2238]">Marca</label>
-          {brandSelect}
-        </div>
-
-        <div className="mb-4">
           <label htmlFor="gender-filter" className="mb-2 block font-medium text-[#1A2238]">Género</label>
           {genderSelect}
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="category-filter" className="mb-2 block font-medium text-[#1A2238]">Categoría</label>
-          {categorySelect}
         </div>
 
         <div className="mb-4">

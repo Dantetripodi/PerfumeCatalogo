@@ -11,9 +11,7 @@ import { Perfume } from "../types";
 export interface CatalogFilters {
   collection: string;
   line: string;
-  brand: string;
   gender: string;
-  category: string;
   minPrice: string;
   maxPrice: string;
   sort: string;
@@ -22,9 +20,7 @@ export interface CatalogFilters {
 export const EMPTY_FILTERS: CatalogFilters = {
   collection: "featured",
   line: "",
-  brand: "",
   gender: "",
-  category: "",
   minPrice: "",
   maxPrice: "",
   sort: "featured",
@@ -71,9 +67,7 @@ export function filterPerfumes(perfumes: Perfume[], filters: CatalogFilters, sea
   return perfumes.filter(perfume => {
     if (search && !matchesSearch(perfume, search)) return false;
     if (filters.line && perfume.collection !== filters.line) return false;
-    if (filters.brand && perfume.brand !== filters.brand) return false;
     if (filters.gender && perfume.gender !== filters.gender) return false;
-    if (filters.category && perfume.category !== filters.category) return false;
     if (!matchesCollectionChip(perfume, filters.collection)) return false;
     if (hasMin && !(typeof perfume.price === "number" && perfume.price >= minPrice)) return false;
     if (hasMax && !(typeof perfume.price === "number" && perfume.price <= maxPrice)) return false;

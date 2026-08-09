@@ -210,8 +210,8 @@ function App() {
                   </h2>
                 </div>
                 <p className="max-w-xl text-sm leading-6 text-gray-600">
-                  Usá filtros para encontrar una fragancia por marca, perfil, género o
-                  presupuesto.
+                  Usá los filtros para encontrar una fragancia por línea, género o
+                  presupuesto, o buscá por nombre desde arriba.
                 </p>
               </div>
 
