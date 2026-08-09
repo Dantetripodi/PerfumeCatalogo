@@ -30,19 +30,28 @@ export const EMPTY_FILTERS: CatalogFilters = {
   sort: "featured",
 };
 
+/**
+ * Lowercases and drops diacritics. Nobody types "Acqua di Giò" with the accent,
+ * and half the catalog's searchable text carries one — the fragrance it is
+ * inspired by, the olfactory family, the notes.
+ */
+function foldAccents(value: string): string {
+  return value.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+}
+
 /** Matches a query against every field a customer might plausibly type. */
 export function matchesSearch(perfume: Perfume, query: string): boolean {
-  const q = query.toLowerCase();
+  const q = foldAccents(query);
 
   return (
-    perfume.name.toLowerCase().includes(q) ||
-    perfume.brand.toLowerCase().includes(q) ||
-    perfume.description.toLowerCase().includes(q) ||
-    perfume.category.toLowerCase().includes(q) ||
-    perfume.notes.top.some(note => note.toLowerCase().includes(q)) ||
-    perfume.notes.middle.some(note => note.toLowerCase().includes(q)) ||
-    perfume.notes.base.some(note => note.toLowerCase().includes(q)) ||
-    perfume.tags.some(tag => tag.toLowerCase().includes(q))
+    foldAccents(perfume.name).includes(q) ||
+    foldAccents(perfume.brand).includes(q) ||
+    foldAccents(perfume.description).includes(q) ||
+    foldAccents(perfume.category).includes(q) ||
+    perfume.notes.top.some(note => foldAccents(note).includes(q)) ||
+    perfume.notes.middle.some(note => foldAccents(note).includes(q)) ||
+    perfume.notes.base.some(note => foldAccents(note).includes(q)) ||
+    perfume.tags.some(tag => foldAccents(tag).includes(q))
   );
 }
 
