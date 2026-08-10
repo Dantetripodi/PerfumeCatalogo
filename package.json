@@ -13,6 +13,7 @@
     "optimize-images": "tsx scripts/optimize-images.ts",
     "optimize-local-images": "tsx scripts/optimize-local-images.ts",
     "import-redyves": "tsx scripts/import-redyves.ts",
+    "fetch-redyves-variants": "tsx scripts/fetch-redyves-variants.ts",
     "sync-redyves-images": "tsx scripts/sync-redyves-images.ts"
   },
   "dependencies": {

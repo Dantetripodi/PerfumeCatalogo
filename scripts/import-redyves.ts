@@ -28,7 +28,26 @@ const API = "https://redyveshome.com/api/productos";
 const ORIGIN = "https://redyveshome.com";
 const IMAGE_DIR = join(ROOT, "public", "imagenes", "redyves");
 const MANIFEST = join(ROOT, "scripts", "redyves-manifest.json");
+const VARIANTS_FILE = join(ROOT, "scripts", "redyves-variants.json");
 const SKIP_IMAGES = process.argv.includes("--skip-images");
+
+interface ScrapedVariant {
+  code: string;
+  name: string;
+  price: number | null;
+  inStock: boolean;
+}
+
+interface ScrapedVariantGroup {
+  label: string | null;
+  variants: ScrapedVariant[];
+}
+
+/** Written by scripts/fetch-redyves-variants.ts; absent on a first run. */
+function loadVariants(): Record<string, ScrapedVariantGroup> {
+  if (!existsSync(VARIANTS_FILE)) return {};
+  return JSON.parse(readFileSync(VARIANTS_FILE, "utf8")) as Record<string, ScrapedVariantGroup>;
+}
 
 type Subcategoria = { id: number; nombre: string };
 
@@ -59,6 +78,8 @@ interface Draft {
   image: string;
   description: string;
   notes: { top: string[]; middle: string[]; base: string[] };
+  variants?: Array<{ code: string; name: string; inStock: boolean }>;
+  variantLabel?: string;
   target: Target;
   sourceId: number;
   sourceImage: string | null;
@@ -470,7 +491,9 @@ function emitDataFile(exportName: string, drafts: Draft[], banner: string): stri
       top: ${JSON.stringify(draft.notes.top)},
       middle: ${JSON.stringify(draft.notes.middle)},
       base: ${JSON.stringify(draft.notes.base)},
-    },
+    },${draft.variants ? `
+    variantLabel: ${JSON.stringify(draft.variantLabel ?? "Opciones")},
+    variants: ${JSON.stringify(draft.variants)},` : ""}
   },`);
 
   return `// ${banner}
@@ -491,7 +514,10 @@ async function main() {
   console.log(`  ${catalog.length} products`);
 
   const drafts: Draft[] = [];
+  const variantGroups = loadVariants();
   const owned = existingKeys();
+  let withVariants = 0;
+  const priceMismatches: string[] = [];
   let skippedOwned = 0;
   let skippedSoldOut = 0;
 
@@ -529,6 +555,22 @@ async function main() {
       target,
       sourceId: product.id,
       sourceImage: product.imagenUrl,
+      ...(() => {
+        const group = variantGroups[String(product.id)];
+        if (!group || group.variants.length < 2) return {};
+
+        // The catalog charges one price per product; if the supplier ever starts
+        // pricing variants apart, the sale price stops being right and we say so
+        // instead of quietly billing the wrong number.
+        const prices = new Set(group.variants.map(v => v.price).filter(p => p !== null));
+        if (prices.size > 1) priceMismatches.push(product.nombre);
+
+        withVariants += 1;
+        return {
+          variantLabel: group.label ?? "Opciones",
+          variants: group.variants.map(v => ({ code: v.code, name: v.name, inStock: v.inStock })),
+        };
+      })(),
     });
   }
 
@@ -537,6 +579,11 @@ async function main() {
   const byTarget = (target: Target) => drafts.filter(draft => draft.target === target);
   console.log(`  skipped: ${skippedOwned} already in the catalog, ${skippedSoldOut} sold out`);
   console.log(`  ${enriched} probadores inherited notes from their full-size counterpart`);
+  console.log(`  ${withVariants} products carry variants`);
+  if (priceMismatches.length > 0) {
+    console.warn(`  ! ${priceMismatches.length} product(s) price their variants differently — the sale price no longer covers every option:`);
+    for (const name of priceMismatches) console.warn(`      ${name}`);
+  }
   console.log(
     `  routed: regular ${byTarget("regular").length}, probador ${byTarget("probador").length}, ` +
     `jacques ${byTarget("jacques").length}, arabic ${byTarget("arabic").length}, home ${byTarget("home").length}`

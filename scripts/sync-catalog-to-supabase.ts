@@ -61,6 +61,8 @@ interface PerfumeRowInsert {
   notes: Perfume["notes"];
   collection: string;
   is_featured: boolean;
+  variants: Perfume["variants"] | null;
+  variant_label: string | null;
 }
 
 function toRow(perfume: Perfume): PerfumeRowInsert {
@@ -76,6 +78,8 @@ function toRow(perfume: Perfume): PerfumeRowInsert {
     notes: perfume.notes,
     collection: perfume.collection,
     is_featured: Boolean(perfume.isFeatured),
+    variants: perfume.variants?.length ? perfume.variants : null,
+    variant_label: perfume.variants?.length ? perfume.variantLabel ?? "Opciones" : null,
   };
 }
 

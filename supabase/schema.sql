@@ -16,6 +16,8 @@ create table if not exists public.perfumes (
   notes        jsonb       not null default '{"top":[],"middle":[],"base":[]}'::jsonb,
   collection   text        not null check (collection in ('regular', 'mini', 'accesorio', 'arabe', 'arabic', 'home', 'jacques', 'probador')),
   is_featured  boolean     not null default false,        -- owner-controlled "Destacar"
+  variants     jsonb,                                     -- [{code,name,inStock}] cuando el producto se vende en varias opciones
+  variant_label text,                                     -- cómo llama el proveedor a la elección: "Difusores", "Jabones"…
   created_at   timestamptz not null default now(),
   updated_at   timestamptz not null default now()
 );
@@ -83,3 +85,7 @@ create policy "admin delete images"
   on storage.objects for delete
   to authenticated
   using (bucket_id = 'perfume-images');
+
+-- Run this if the table already exists (adds the variant columns):
+alter table public.perfumes add column if not exists variants jsonb;
+alter table public.perfumes add column if not exists variant_label text;

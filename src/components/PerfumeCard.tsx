@@ -19,8 +19,19 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAdd
   const badges = getPerfumeBadges(perfume);
   const favorite = isFavorite(perfume.id);
 
+  const variantCount = perfume.variants?.length ?? 0;
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    // A product sold in ten scents cannot be added from the grid: the card has
+    // no way to say which one, and a cart line without it is an order you have
+    // to chase down over WhatsApp.
+    if (variantCount > 0) {
+      onShowDetails(perfume);
+      return;
+    }
+
     addToCart(perfume);
     if (onAddToCart) {
       onAddToCart(perfume);
@@ -92,7 +103,7 @@ const PerfumeCard: React.FC<PerfumeCardProps> = ({ perfume, onShowDetails, onAdd
             className="flex flex-1 items-center justify-center rounded-md bg-[#1A2238] py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-[#25304F]"
           >
             <Plus size={16} className="mr-1" />
-            Agregar
+            {variantCount > 0 ? "Elegir" : "Agregar"}
           </button>
           
           <button
@@ -124,6 +135,7 @@ function getPerfumeBadges(perfume: Perfume) {
   if (perfume.collection === "probador") badges.push("Probador");
   if (perfume.collection === "jacques") badges.push("Jacques");
   if (perfume.collection === "home") badges.push("Home");
+  if (perfume.variants?.length) badges.push(`${perfume.variants.length} opciones`);
   if (perfume.isBestSeller) badges.push("Mas vendido");
   if (perfume.isNew) badges.push("Nuevo");
   if (badges.length === 0 && perfume.isFeatured) badges.push("Destacado");
