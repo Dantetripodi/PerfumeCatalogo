@@ -52,6 +52,9 @@ export function rowToInput(row: PerfumeRow): {
     image: row.image_url,
     description: row.description,
     notes: row.notes,
+    ...(row.variants?.length
+      ? { variants: row.variants, variantLabel: row.variant_label ?? "Opciones" }
+      : {}),
   };
   return { input, id: row.id, collection: row.collection, isFeatured: row.is_featured };
 }

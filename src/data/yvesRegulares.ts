@@ -332,6 +332,8 @@ export const yvesRegulares: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Variante",
+    variants: [{"code":"AUTO-1403-1783102684176","name":"Bella","inStock":true},{"code":"AUTO-1403-1783102689940","name":"Flow","inStock":true},{"code":"AUTO-1403-1783102693828","name":"Ggirl","inStock":true},{"code":"AUTO-1403-1783102703877","name":"Olimp","inStock":true},{"code":"AUTO-1403-1783102707109","name":"Vip men","inStock":true},{"code":"AUTO-1403-1783102711649","name":"Sauvage","inStock":true},{"code":"AUTO-1403-1783102731746","name":"Million","inStock":true},{"code":"AUTO-1403-1783102735421","name":"Lexcess","inStock":true},{"code":"AUTO-1403-1783102740403","name":"Kzo","inStock":true},{"code":"AUTO-1403-1783102749171","name":"Skater","inStock":true},{"code":"AUTO-1403-1783102699418","name":"Lady Way","inStock":false},{"code":"AUTO-1403-1783102743664","name":"Invic","inStock":false}],
   },
   {
     name: "Celsius 100ml",

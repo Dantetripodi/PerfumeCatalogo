@@ -13,7 +13,10 @@ export function buildWhatsappMessage(cart: CartItem[]): string {
     const unit = formatPrice(item.perfume.price);
     const total = lineItemTotal(item.perfume.price, item.quantity);
     const stockNote = item.perfume.stock === "consult" ? " - precio/stock a confirmar" : " - por pedido";
-    return `- ${item.quantity} x ${item.perfume.name} (${item.perfume.brand}) | ${item.perfume.size} | ${unit} = ${total}${stockNote}`;
+    // The chosen option goes right after the name: it is what has to be ordered
+    // from the supplier, and asking for it afterwards costs a round trip.
+    const variant = item.variant ? ` · ${item.variant.name}` : "";
+    return `- ${item.quantity} x ${item.perfume.name}${variant} (${item.perfume.brand}) | ${item.perfume.size} | ${unit} = ${total}${stockNote}`;
   });
 
   const total = computeNumericTotal(

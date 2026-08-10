@@ -17,6 +17,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HA006","name":"Happy","inStock":true},{"code":"HA008","name":"Energy","inStock":true},{"code":"HA005","name":"Calm","inStock":false},{"code":"HA007","name":"Relax","inStock":false}],
   },
   {
     name: "Aromaterapia — Esencia Hornito 10ml",
@@ -32,6 +34,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Esencia para hornito",
+    variants: [{"code":"HA001","name":"Calm","inStock":true},{"code":"HA002","name":"Happy","inStock":true},{"code":"HA003","name":"Relax","inStock":true},{"code":"HA004","name":"Energy","inStock":true}],
   },
   {
     name: "Aromaterapia — Home Spray 150ml",
@@ -47,6 +51,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HA009","name":"Calm","inStock":true},{"code":"HA010","name":"Happy","inStock":true},{"code":"HA011","name":"Relax","inStock":true},{"code":"HA012","name":"Energy","inStock":true}],
   },
   {
     name: "Bandeja Recibidora",
@@ -77,6 +83,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Body Splash",
+    variants: [{"code":"HB011","name":"Pistacho","inStock":true},{"code":"HB012","name":"Bergamota","inStock":true},{"code":"HB014","name":"Blanca calma","inStock":true},{"code":"HB015","name":"Raíz sagrada","inStock":true},{"code":"HB016","name":"Pomelo rosado","inStock":true},{"code":"HB017","name":"Azahar y jazmín","inStock":true},{"code":"HB018","name":"Sandía y pepino","inStock":true},{"code":"HB020","name":"Pera y flores blancas","inStock":true},{"code":"HB013","name":"Moka cacao","inStock":false},{"code":"HB019","name":"Frambuesas y rosas","inStock":false}],
   },
   {
     name: "Black — Difusor 125ml",
@@ -92,6 +100,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HB031","name":"Pistacho","inStock":true},{"code":"HB032","name":"Bergamota","inStock":true},{"code":"HB033","name":"Moka cacao","inStock":true},{"code":"HB034","name":"Blanca calma","inStock":true},{"code":"HB035","name":"Raíz sagrada","inStock":true},{"code":"HB036","name":"Pomelo rosado","inStock":true},{"code":"HB037","name":"Azahar y jazmín","inStock":true},{"code":"HB038","name":"Sandía y pepino","inStock":true},{"code":"HB039","name":"Frambuesas y rosas","inStock":true},{"code":"HB040","name":"Pera y flores blancas","inStock":true}],
   },
   {
     name: "Black — Difusor 250ml",
@@ -107,6 +117,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HB051","name":"Pistacho","inStock":true},{"code":"HB052","name":"Bergamota","inStock":true},{"code":"HB053","name":"Moka cacao","inStock":true},{"code":"HB054","name":"Blanca calma","inStock":true},{"code":"HB055","name":"Raíz sagrada","inStock":true},{"code":"HB056","name":"Pomelo rosado","inStock":true},{"code":"HB057","name":"Azahar y jazmín","inStock":true},{"code":"HB058","name":"Sandía y pepino","inStock":true},{"code":"HB059","name":"Frambuesas y rosas","inStock":true},{"code":"HB060","name":"Pera y flores blancas","inStock":true}],
   },
   {
     name: "Black — Esencia Hornito 10ml",
@@ -122,6 +134,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Esencia para hornito",
+    variants: [{"code":"HB022","name":"Bergamota","inStock":true},{"code":"HB024","name":"Blanca calma","inStock":true},{"code":"HB025","name":"Raíz sagrada","inStock":true},{"code":"HB026","name":"Pomelo rosado","inStock":true},{"code":"HB027","name":"Azahar y jazmín","inStock":true},{"code":"HB021","name":"Pistacho","inStock":false},{"code":"HB023","name":"Moka cacao","inStock":false},{"code":"HB028","name":"Sandía y pepino","inStock":false},{"code":"HB029","name":"Frambuesas y rosas","inStock":false},{"code":"HB030","name":"Pera y flores blancas","inStock":false}],
   },
   {
     name: "Black — Home Spray 125ml",
@@ -137,6 +151,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HB061","name":"Pistacho","inStock":true},{"code":"HB062","name":"Bergamota","inStock":true},{"code":"HB063","name":"Moka cacao","inStock":true},{"code":"HB064","name":"Blanca calma","inStock":true},{"code":"HB065","name":"Raíz sagrada","inStock":true},{"code":"HB066","name":"Pomelo rosado","inStock":true},{"code":"HB067","name":"Azahar y jazmín","inStock":true},{"code":"HB068","name":"Sandía y pepino","inStock":true},{"code":"HB069","name":"Frambuesas y rosas","inStock":true},{"code":"HB070","name":"Pera y flores blancas","inStock":true}],
   },
   {
     name: "Black — Home Spray 250ml",
@@ -152,6 +168,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HB071","name":"Pistacho","inStock":true},{"code":"HB072","name":"Bergamota","inStock":true},{"code":"HB073","name":"Moka cacao","inStock":true},{"code":"HB074","name":"Blanca calma","inStock":true},{"code":"HB075","name":"Raíz sagrada","inStock":true},{"code":"HB076","name":"Pomelo rosado","inStock":true},{"code":"HB077","name":"Azahar y jazmín","inStock":true},{"code":"HB078","name":"Sandía y pepino","inStock":true},{"code":"HB079","name":"Frambuesas y rosas","inStock":true},{"code":"HB080","name":"Pera y flores blancas","inStock":true}],
   },
   {
     name: "Black — Home Spray 400ml",
@@ -167,6 +185,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HB041","name":"Pistacho","inStock":true},{"code":"HB042","name":"Bergamota","inStock":true},{"code":"HB044","name":"Blanca calma","inStock":true},{"code":"HB046","name":"Pomelo rosado","inStock":true},{"code":"HB048","name":"Sandía y pepino","inStock":true},{"code":"HB049","name":"Frambuesas y rosas","inStock":true},{"code":"HB050","name":"Pera y flores blancas","inStock":true},{"code":"HB043","name":"Moka cacao","inStock":false},{"code":"HB045","name":"Raíz sagrada","inStock":false},{"code":"HB047","name":"Azahar y jazmín","inStock":false}],
   },
   {
     name: "Black — Sahumerio X5 Unidades",
@@ -182,6 +202,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Sahumerios",
+    variants: [{"code":"HB002","name":"Bergamota","inStock":true},{"code":"HB003","name":"Moka cacao","inStock":true},{"code":"HB004","name":"Blanca calma","inStock":true},{"code":"HB005","name":"Raíz sagrada","inStock":true},{"code":"HB006","name":"Pomelo rosado","inStock":true},{"code":"HB007","name":"Azahar y jazmín","inStock":true},{"code":"HB008","name":"Sandía y pepino","inStock":true},{"code":"HB009","name":"Frambuesas y rosas","inStock":true},{"code":"HB010","name":"Pera y flores blancas","inStock":true},{"code":"HB001","name":"Pistacho","inStock":false}],
   },
   {
     name: "Bombones Aromáticos",
@@ -197,6 +219,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Variante",
+    variants: [{"code":"AUTO-1446-1783427497534","name":"Naranja, Limon y Pera","inStock":true},{"code":"AUTO-1446-1783427510118","name":"Lavanda, Jazmin y Gardenia","inStock":true},{"code":"AUTO-1446-1783427522978","name":"Frutos Rojos, Manzana y Coco","inStock":true},{"code":"AUTO-1446-1783427533028","name":"Coco, Cafe y Manzana","inStock":true}],
   },
   {
     name: "Box Black Collection",
@@ -212,6 +236,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Variante",
+    variants: [{"code":"AUTO-1436-1783426979065","name":"Pistacho","inStock":true},{"code":"AUTO-1436-1783427008289","name":"Fambruesas y Rosas","inStock":true},{"code":"AUTO-1436-1783427014638","name":"Pomelo Rosado","inStock":true},{"code":"AUTO-1436-1783426986449","name":"Moka Cacao","inStock":false}],
   },
   {
     name: "Box Deluxe",
@@ -227,6 +253,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Variante",
+    variants: [{"code":"AUTO-1437-1783426360035","name":"Jengibre y Limon","inStock":true},{"code":"AUTO-1437-1783426369136","name":"Arandanos y Madera","inStock":true},{"code":"AUTO-1437-1783426399039","name":"Lirio de los Valles","inStock":true},{"code":"AUTO-1437-1783426382290","name":"Neroli y Bergamota","inStock":false}],
   },
   {
     name: "Box Difusor 70cc + Home Spray 60cc",
@@ -242,6 +270,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Variante",
+    variants: [{"code":"AUTO-1434-1783427212710","name":"Buena Suerte","inStock":true},{"code":"AUTO-1434-1783427219677","name":"Neroli y Bergamota","inStock":true},{"code":"AUTO-1434-1783427240077","name":"Papaya y Melon","inStock":true},{"code":"AUTO-1434-1783427252350","name":"Azahar y Jazmin","inStock":true},{"code":"AUTO-1434-1783427264613","name":"Arandanos y Madera","inStock":true},{"code":"AUTO-1434-1783427274256","name":"Jengibre y Limon","inStock":true},{"code":"AUTO-1434-1783427288289","name":"Bamboo y Tilo","inStock":true},{"code":"AUTO-1434-1783427294796","name":"Hawaii","inStock":true}],
   },
   {
     name: "Box Fortaleza",
@@ -257,6 +287,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Variante",
+    variants: [{"code":"AUTO-1431-1783426598335","name":"Equilibrio","inStock":true},{"code":"AUTO-1431-1783426612131","name":"Energia","inStock":true},{"code":"AUTO-1431-1783426620551","name":"Elevacion","inStock":true},{"code":"AUTO-1431-1783426640762","name":"Armonia","inStock":true},{"code":"AUTO-1431-1783426646571","name":"Calma","inStock":true},{"code":"AUTO-1431-1783426578308","name":"Sanacion","inStock":false}],
   },
   {
     name: "Box Isabella",
@@ -272,6 +304,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Box",
+    variants: [{"code":"","name":"Tropical coconut","inStock":true},{"code":"AUTO-1435-1783426203316","name":"Mandarina y Te Verde","inStock":true},{"code":"AUTO-1435-1783426222577","name":"Bergamota y Neroli","inStock":true},{"code":"AUTO-1435-1783426233408","name":"Orquideas y Lima","inStock":true}],
   },
   {
     name: "Box Mundialista",
@@ -302,6 +336,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Variante",
+    variants: [{"code":"AUTO-1433-1783427132578","name":"Papaya y Limon","inStock":true},{"code":"AUTO-1433-1783427111441","name":"Jengibre y Limon","inStock":false},{"code":"AUTO-1433-1783427118211","name":"Neroli y Bergamota","inStock":false}],
   },
   {
     name: "Box Primavera",
@@ -317,6 +353,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Variante",
+    variants: [{"code":"AUTO-1432-1783426886104","name":"Neroli y Bergamota","inStock":true},{"code":"AUTO-1432-1783426893138","name":"Orquideas","inStock":true},{"code":"AUTO-1432-1783426873587","name":"Wanama","inStock":false}],
   },
   {
     name: "Cuba — Combo Difusor De Auto + Refill 30ml",
@@ -332,6 +370,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusor de auto",
+    variants: [{"code":"AUTO-1444-1783425245593","name":"Naranja y Pimienta","inStock":true},{"code":"AUTO-1444-1783425256127","name":"Mango y Maracuya","inStock":true},{"code":"AUTO-1444-1783425271191","name":"Coco y Vainilla","inStock":true},{"code":"AUTO-1444-1783425277062","name":"Cher","inStock":true},{"code":"AUTO-1444-1783425308256","name":"Coni","inStock":true},{"code":"AUTO-1444-1783425316462","name":"Tropical","inStock":true},{"code":"AUTO-1444-1783425330801","name":"Bombshell","inStock":true},{"code":"AUTO-1444-1783425340525","name":"Menta, Limon y Jengibre","inStock":true}],
   },
   {
     name: "Cuba — Difusor 125ml",
@@ -347,6 +387,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HC018","name":"Coni","inStock":true},{"code":"HC019","name":"Cher 40","inStock":true},{"code":"HC020","name":"Pitanga","inStock":true},{"code":"HC021","name":"Tropical","inStock":true},{"code":"HC022","name":"Vainilla","inStock":true},{"code":"HC023","name":"Baby boom","inStock":true},{"code":"HC024","name":"Santal 33","inStock":true},{"code":"HC025","name":"Flynn paff","inStock":true},{"code":"HC026","name":"Oud oriental","inStock":true},{"code":"HC027","name":"Coco vainilla","inStock":true},{"code":"HC028","name":"Patio bulrich","inStock":true},{"code":"HC029","name":"Mango y maracuyá","inStock":true},{"code":"HC030","name":"Naranja y pimienta","inStock":true},{"code":"HC031","name":"Flores blancas","inStock":true},{"code":"HC032","name":"Menta, limón y jengibre","inStock":true},{"code":"HC033","name":"Roble y grosellas negras","inStock":true},{"code":"HC034","name":"Pomelo rosado y tamarindo","inStock":true},{"code":"F169","name":"Bombshell","inStock":true}],
   },
   {
     name: "Cuba — Difusor 250ml",
@@ -362,6 +404,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HC035","name":"Coni","inStock":true},{"code":"HC036","name":"Cher 40","inStock":true},{"code":"HC037","name":"Pitanga","inStock":true},{"code":"HC038","name":"Tropical","inStock":true},{"code":"HC039","name":"Vainilla","inStock":true},{"code":"HC040","name":"Baby boom","inStock":true},{"code":"HC041","name":"Santal 33","inStock":true},{"code":"HC042","name":"Flynn paff","inStock":true},{"code":"HC043","name":"Oud oriental","inStock":true},{"code":"HC044","name":"Coco vainilla","inStock":true},{"code":"HC045","name":"Patio bulrich","inStock":true},{"code":"HC046","name":"Mango y maracuyá","inStock":true},{"code":"HC047","name":"Naranja y pimienta","inStock":true},{"code":"HC048","name":"Flores blancas","inStock":true},{"code":"HC049","name":"Menta, limón y jengibre","inStock":true},{"code":"HC050","name":"Roble y grosellas negras","inStock":true},{"code":"HC051","name":"Pomelo rosado y tamarindo","inStock":true},{"code":"AUTO-489-1786045963756","name":"Bombshell","inStock":true}],
   },
   {
     name: "Cuba — Home Spray 125ml",
@@ -377,6 +421,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HC052","name":"Coni","inStock":true},{"code":"HC053","name":"Cher 40","inStock":true},{"code":"HC054","name":"Pitanga","inStock":true},{"code":"HC055","name":"Tropical","inStock":true},{"code":"HC056","name":"Vainilla","inStock":true},{"code":"HC057","name":"Baby boom","inStock":true},{"code":"HC058","name":"Santal 33","inStock":true},{"code":"HC059","name":"Flynn paff","inStock":true},{"code":"HC060","name":"Oud oriental","inStock":true},{"code":"HC061","name":"Coco vainilla","inStock":true},{"code":"HC062","name":"Patio bulrich","inStock":true},{"code":"HC063","name":"Mango y maracuyá","inStock":true},{"code":"HC064","name":"Naranja y pimienta","inStock":true},{"code":"HC065","name":"Flores blancas","inStock":true},{"code":"HC066","name":"Menta, limón y jengibre","inStock":true},{"code":"HC067","name":"Roble y grosellas negras","inStock":true},{"code":"HC068","name":"Pomelo rosado y tamarindo","inStock":true},{"code":"AUTO-506-1786111967710","name":"Bombshell","inStock":true}],
   },
   {
     name: "Cuba — Home Spray 250ml",
@@ -392,6 +438,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HC069","name":"Coni","inStock":true},{"code":"HC071","name":"Pitanga","inStock":true},{"code":"HC072","name":"Tropical","inStock":true},{"code":"HC073","name":"Vainilla","inStock":true},{"code":"HC074","name":"Baby boom","inStock":true},{"code":"HC075","name":"Santal 33","inStock":true},{"code":"HC076","name":"Flynn paff","inStock":true},{"code":"HC078","name":"Coco vainilla","inStock":true},{"code":"HC079","name":"Patio bulrich","inStock":true},{"code":"HC080","name":"Mango y maracuyá","inStock":true},{"code":"HC081","name":"Naranja y pimienta","inStock":true},{"code":"HC082","name":"Flores blancas","inStock":true},{"code":"HC083","name":"Menta, limón y jengibre","inStock":true},{"code":"HC084","name":"Roble y grosellas negras","inStock":true},{"code":"HC085","name":"Pomelo rosado y tamarindo","inStock":true},{"code":"AUTO-523-1786111899082","name":"Bombshell","inStock":true},{"code":"HC070","name":"Cher 40","inStock":false},{"code":"HC077","name":"Oud oriental","inStock":false}],
   },
   {
     name: "Cuba — Home Spray 60ml",
@@ -407,6 +455,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"AUTO-1443-1783352734229","name":"Naranja Pimienta","inStock":true},{"code":"AUTO-1443-1783353470859","name":"Mango y Maracuyá","inStock":true},{"code":"AUTO-1443-1783353485861","name":"Pitanga","inStock":true},{"code":"AUTO-1443-1783353490236","name":"Coco y Vainilla","inStock":true},{"code":"AUTO-1443-1783353496365","name":"Flores Blancas","inStock":true},{"code":"AUTO-1443-1783353503369","name":"Cher","inStock":true},{"code":"AUTO-1443-1783353506714","name":"Coni","inStock":true},{"code":"AUTO-1443-1783353513558","name":"Baby Boom","inStock":true},{"code":"AUTO-1443-1783353516872","name":"Tropical","inStock":true},{"code":"AUTO-1443-1783353524173","name":"Patio Bullrich","inStock":true},{"code":"AUTO-1443-1783353537451","name":"Vainilla","inStock":true},{"code":"AUTO-1443-1783353550622","name":"Menta, Limón y Jengibre","inStock":true},{"code":"AUTO-1443-1783353557628","name":"Sental 33","inStock":true},{"code":"AUTO-1443-1783353563613","name":"Oud Oriental","inStock":true},{"code":"AUTO-1443-1783353573450","name":"Pomelo Rosado y Tamarindo","inStock":true},{"code":"AUTO-1443-1783353578506","name":"Roble y Rosellas Negras","inStock":true},{"code":"AUTO-1443-1783353542952","name":"Bombshell","inStock":false}],
   },
   {
     name: "Cuba — Jabón Líquido 250ml",
@@ -422,6 +472,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Jabón Liquido",
+    variants: [{"code":"HC002","name":"Cher 40","inStock":true},{"code":"HC010","name":"Coco vainilla","inStock":true},{"code":"HC013","name":"Naranja y pimienta","inStock":true},{"code":"HC015","name":"Menta, limón y jengibre","inStock":true}],
   },
   {
     name: "Cuba — Vela De Soja En Lata",
@@ -437,6 +489,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Vela de soja",
+    variants: [{"code":"AUTO-1445-1783425543515","name":"Frutos Rojos","inStock":true},{"code":"AUTO-1445-1783425554613","name":"Lavanda","inStock":true},{"code":"AUTO-1445-1783425559102","name":"Jazmin","inStock":true},{"code":"AUTO-1445-1783425580669","name":"Cafe y Chocolate","inStock":true},{"code":"AUTO-1445-1783425602908","name":"Lemon Cookies","inStock":true},{"code":"AUTO-1445-1783425623615","name":"Gardenia","inStock":true},{"code":"AUTO-1445-1783425535449","name":"Naranja y Pimienta","inStock":false},{"code":"AUTO-1445-1783425574222","name":"Manzana","inStock":false},{"code":"AUTO-1445-1783425590563","name":"Pera","inStock":false},{"code":"AUTO-1445-1783425629405","name":"Mango","inStock":false}],
   },
   {
     name: "Cuba — Home Spray 400ml",
@@ -452,6 +506,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"AUTO-1404-1783103115070","name":"Naranja Pimienta","inStock":true},{"code":"AUTO-1404-1783103133682","name":"Pitanga","inStock":true},{"code":"AUTO-1404-1783103140316","name":"Coco y Vainilla","inStock":true},{"code":"AUTO-1404-1783103151692","name":"Flores Blancas","inStock":true},{"code":"AUTO-1404-1783103160090","name":"Cher","inStock":true},{"code":"AUTO-1404-1783103164502","name":"Baby Boom","inStock":true},{"code":"AUTO-1404-1783103177334","name":"Tropical","inStock":true},{"code":"AUTO-1404-1783103183885","name":"Patio Bullrich","inStock":true},{"code":"AUTO-1404-1783103204915","name":"Vainilla","inStock":true},{"code":"AUTO-1404-1783103214904","name":"Bombshell","inStock":true},{"code":"AUTO-1404-1783103227602","name":"Menta, Limón y Jengibre","inStock":true},{"code":"AUTO-1404-1783103236563","name":"Sental 33","inStock":true},{"code":"AUTO-1404-1783103245343","name":"Oud Oriental","inStock":true},{"code":"AUTO-1404-1783103268266","name":"Pomelo Rosado y Tamarindo","inStock":true},{"code":"AUTO-1404-1783103282205","name":"Roble y Rosellas Negras","inStock":true},{"code":"AUTO-1404-1783103123340","name":"Mango y Maracuyá","inStock":false}],
   },
   {
     name: "Deluxe — Body Splash 125ml",
@@ -467,6 +523,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Body Splash",
+    variants: [{"code":"HD011","name":"Citric pump","inStock":true},{"code":"HD012","name":"Piña y jazmín","inStock":true},{"code":"HD013","name":"Ananá y durazno","inStock":true},{"code":"HD014","name":"Flor de naranjo","inStock":true},{"code":"HD015","name":"Jengibre y limón","inStock":true},{"code":"HD016","name":"Mango y maracuyá","inStock":true},{"code":"HD017","name":"Verbena y fresias","inStock":true},{"code":"HD018","name":"Neroli y bergamota","inStock":true},{"code":"HD019","name":"Arándanos y maderas","inStock":true},{"code":"HD020","name":"Lirio de los valles","inStock":true}],
   },
   {
     name: "Deluxe — Difusor 125ml",
@@ -482,6 +540,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HD071","name":"Citric pump","inStock":true},{"code":"HD072","name":"Piña y jazmín","inStock":true},{"code":"HD073","name":"Ananá y durazno","inStock":true},{"code":"HD074","name":"Flor de naranjo","inStock":true},{"code":"HD075","name":"Jengibre y limón","inStock":true},{"code":"HD076","name":"Mango y maracuyá","inStock":true},{"code":"HD077","name":"Verbena y fresias","inStock":true},{"code":"HD079","name":"Arándanos y maderas","inStock":true},{"code":"HD080","name":"Lirio de los valles","inStock":true},{"code":"HD078","name":"Neroli y bergamota","inStock":false}],
   },
   {
     name: "Deluxe — Difusor 250ml",
@@ -497,6 +557,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HD081","name":"Citric pump","inStock":true},{"code":"HD082","name":"Piña y jazmín","inStock":true},{"code":"HD083","name":"Ananá y durazno","inStock":true},{"code":"HD084","name":"Flor de naranjo","inStock":true},{"code":"HD085","name":"Jengibre y limón","inStock":true},{"code":"HD086","name":"Mango y maracuyá","inStock":true},{"code":"HD087","name":"Verbena y fresias","inStock":true},{"code":"HD088","name":"Neroli y bergamota","inStock":true},{"code":"HD089","name":"Arándanos y maderas","inStock":true},{"code":"HD090","name":"Lirio de los valles","inStock":true}],
   },
   {
     name: "Deluxe — Esencia Hornito 10ml",
@@ -512,6 +574,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Esencia para hornito",
+    variants: [{"code":"HD091","name":"Citric pump","inStock":true},{"code":"HD092","name":"Piña y jazmín","inStock":true},{"code":"HD093","name":"Ananá y durazno","inStock":true},{"code":"HD094","name":"Flor de naranjo","inStock":true},{"code":"HD095","name":"Jengibre y limón","inStock":true},{"code":"HD097","name":"Verbena y fresias","inStock":true},{"code":"HD098","name":"Neroli y bergamota","inStock":true},{"code":"HD099","name":"Arándanos y maderas","inStock":true},{"code":"HD100","name":"Lirio de los valles","inStock":true},{"code":"HD096","name":"Mango y maracuyá","inStock":false}],
   },
   {
     name: "Deluxe — Home Spray 125ml",
@@ -527,6 +591,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HD031","name":"Citric pump","inStock":true},{"code":"HD032","name":"Piña y jazmín","inStock":true},{"code":"HD033","name":"Ananá y durazno","inStock":true},{"code":"HD034","name":"Flor de naranjo","inStock":true},{"code":"HD035","name":"Jengibre y limón","inStock":true},{"code":"HD036","name":"Mango y maracuyá","inStock":true},{"code":"HD037","name":"Verbena y fresias","inStock":true},{"code":"HD038","name":"Neroli y bergamota","inStock":true},{"code":"HD039","name":"Arándanos y maderas","inStock":true},{"code":"HD040","name":"Lirio de los valles","inStock":true}],
   },
   {
     name: "Deluxe — Home Spray 250ml",
@@ -542,6 +608,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HD041","name":"Citric pump","inStock":true},{"code":"HD042","name":"Piña y jazmín","inStock":true},{"code":"HD043","name":"Ananá y durazno","inStock":true},{"code":"HD044","name":"Flor de naranjo","inStock":true},{"code":"HD045","name":"Jengibre y limón","inStock":true},{"code":"HD046","name":"Mango y maracuyá","inStock":true},{"code":"HD047","name":"Verbena y fresias","inStock":true},{"code":"HD048","name":"Neroli y bergamota","inStock":true},{"code":"HD049","name":"Arándanos y maderas","inStock":true},{"code":"HD050","name":"Lirio de los valles","inStock":true}],
   },
   {
     name: "Deluxe — Home Spray 400ml",
@@ -557,6 +625,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HD051","name":"Citric pump","inStock":true},{"code":"HD052","name":"Piña y jazmín","inStock":true},{"code":"HD053","name":"Ananá y durazno","inStock":true},{"code":"HD054","name":"Flor de naranjo","inStock":true},{"code":"HD055","name":"Jengibre y limón","inStock":true},{"code":"HD056","name":"Mango y maracuyá","inStock":true},{"code":"HD057","name":"Verbena y fresias","inStock":true},{"code":"HD058","name":"Neroli y bergamota","inStock":true},{"code":"HD059","name":"Arándanos y maderas","inStock":true},{"code":"HD060","name":"Lirio de los valles","inStock":true}],
   },
   {
     name: "Deluxe — Sahumerio X5 Unidades",
@@ -572,6 +642,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Sahumerios",
+    variants: [{"code":"HD002","name":"Piña y jazmín","inStock":true},{"code":"HD004","name":"Flor de naranjo","inStock":true},{"code":"HD006","name":"Mango y maracuyá","inStock":true},{"code":"HD007","name":"Verbena y fresias","inStock":true},{"code":"HD009","name":"Arándanos y maderas","inStock":true},{"code":"HD010","name":"Lirio de los valles","inStock":true},{"code":"HD001","name":"Citric pump","inStock":false},{"code":"HD003","name":"Ananá y durazno","inStock":false},{"code":"HD005","name":"Jengibre y limón","inStock":false},{"code":"HD008","name":"Neroli y bergamota","inStock":false}],
   },
   {
     name: "Deluxe — Vela De Soja",
@@ -587,6 +659,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Vela de soja",
+    variants: [{"code":"HD066","name":"Mango y maracuyá","inStock":true},{"code":"HD067","name":"Verbena y fresias","inStock":true},{"code":"HD062","name":"Piña y jazmín","inStock":false},{"code":"HD064","name":"Flor de naranjo","inStock":false},{"code":"HD068","name":"Neroli y bergamota","inStock":false},{"code":"HD069","name":"Arándanos y maderas","inStock":false},{"code":"HD070","name":"Lirio de los valles","inStock":false}],
   },
   {
     name: "Essential — Body Splash 125ml",
@@ -602,6 +676,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Body Splash",
+    variants: [{"code":"HE011","name":"Costa rica","inStock":true},{"code":"HE012","name":"Lima y coco","inStock":true},{"code":"HE013","name":"Bamboo y tilo","inStock":true},{"code":"HE014","name":"Flores blancas","inStock":true},{"code":"HE015","name":"Jengibre y limón","inStock":true},{"code":"HE016","name":"Papaya y melón","inStock":true},{"code":"HE017","name":"Azahar y frutas","inStock":true},{"code":"HE019","name":"Té verde y peonías","inStock":true},{"code":"HE018","name":"Lavanda y vainilla","inStock":false},{"code":"HE020","name":"Jengibre y vainilla","inStock":false}],
   },
   {
     name: "Essential — Crema 125ml",
@@ -617,6 +693,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Cremas",
+    variants: [{"code":"HE047","name":"Azahar y frutas","inStock":true},{"code":"HE041","name":"Costa rica","inStock":false},{"code":"HE042","name":"Lima y coco","inStock":false},{"code":"HE043","name":"Bamboo y tilo","inStock":false},{"code":"HE044","name":"Flores blancas","inStock":false},{"code":"HE045","name":"Jengibre y limón","inStock":false},{"code":"HE046","name":"Papaya y melón","inStock":false},{"code":"HE048","name":"Lavanda y vainilla","inStock":false},{"code":"HE049","name":"Té verde y peonías","inStock":false},{"code":"HE050","name":"Jengibre y vainilla","inStock":false}],
   },
   {
     name: "Essential — Difusor 125ml",
@@ -632,6 +710,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HE061","name":"Costa rica","inStock":true},{"code":"HE062","name":"Lima y coco","inStock":true},{"code":"HE063","name":"Bamboo y tilo","inStock":true},{"code":"HE064","name":"Flores blancas","inStock":true},{"code":"HE065","name":"Jengibre y limón","inStock":true},{"code":"HE066","name":"Papaya y melón","inStock":true},{"code":"HE067","name":"Azahar y frutas","inStock":true},{"code":"HE068","name":"Lavanda y vainilla","inStock":true},{"code":"HE069","name":"Té verde y peonías","inStock":true},{"code":"HE070","name":"Jengibre y vainilla","inStock":true}],
   },
   {
     name: "Essential — Difusor 250ml",
@@ -647,6 +727,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HE091","name":"Costa rica","inStock":true},{"code":"HE092","name":"Lima y coco","inStock":true},{"code":"HE093","name":"Bamboo y tilo","inStock":true},{"code":"HE094","name":"Flores blancas","inStock":true},{"code":"HE095","name":"Jengibre y limón","inStock":true},{"code":"HE096","name":"Papaya y melón","inStock":true},{"code":"HE097","name":"Azahar y frutas","inStock":true},{"code":"HE098","name":"Lavanda y vainilla","inStock":true},{"code":"HE099","name":"Té verde y peonías","inStock":true},{"code":"HE100","name":"Jengibre y vainilla","inStock":true}],
   },
   {
     name: "Essential — Esencia Hornito 10ml",
@@ -662,6 +744,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Esencia para hornito",
+    variants: [{"code":"HE021","name":"Costa rica","inStock":true},{"code":"HE022","name":"Lima y coco","inStock":true},{"code":"HE023","name":"Bamboo y tilo","inStock":true},{"code":"HE024","name":"Flores blancas","inStock":true},{"code":"HE027","name":"Azahar y frutas","inStock":true},{"code":"HE029","name":"Té verde y peonías","inStock":true},{"code":"HE025","name":"Jengibre y limón","inStock":false},{"code":"HE026","name":"Papaya y melón","inStock":false},{"code":"HE028","name":"Lavanda y vainilla","inStock":false},{"code":"HE030","name":"Jengibre y vainilla","inStock":false}],
   },
   {
     name: "Essential — Home Spray 125ml",
@@ -677,6 +761,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HE031","name":"Costa rica","inStock":true},{"code":"HE032","name":"Lima y coco","inStock":true},{"code":"HE033","name":"Bamboo y tilo","inStock":true},{"code":"HE034","name":"Flores blancas","inStock":true},{"code":"HE035","name":"Jengibre y limón","inStock":true},{"code":"HE036","name":"Papaya y melón","inStock":true},{"code":"HE037","name":"Azahar y frutas","inStock":true},{"code":"HE038","name":"Lavanda y vainilla","inStock":true},{"code":"HE039","name":"Té verde y peonías","inStock":true},{"code":"HE040","name":"Jengibre y vainilla","inStock":true}],
   },
   {
     name: "Essential — Home Spray 250ml",
@@ -692,6 +778,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HE081","name":"Costa rica","inStock":true},{"code":"HE082","name":"Lima y coco","inStock":true},{"code":"HE083","name":"Bamboo y tilo","inStock":true},{"code":"HE084","name":"Flores blancas","inStock":true},{"code":"HE085","name":"Jengibre y limón","inStock":true},{"code":"HE086","name":"Papaya y melón","inStock":true},{"code":"HE087","name":"Azahar y frutas","inStock":true},{"code":"HE089","name":"Té verde y peonías","inStock":true},{"code":"HE090","name":"Jengibre y vainilla","inStock":true},{"code":"HE088","name":"Lavanda y vainilla","inStock":false}],
   },
   {
     name: "Essential — Home Spray 500ml",
@@ -707,6 +795,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HE071","name":"Costa rica","inStock":true},{"code":"HE072","name":"Lima y coco","inStock":true},{"code":"HE073","name":"Bamboo y tilo","inStock":true},{"code":"HE074","name":"Flores blancas","inStock":true},{"code":"HE075","name":"Jengibre y limón","inStock":true},{"code":"HE076","name":"Papaya y melón","inStock":true},{"code":"HE077","name":"Azahar y frutas","inStock":true},{"code":"HE078","name":"Lavanda y vainilla","inStock":true},{"code":"HE079","name":"Té verde y peonías","inStock":true},{"code":"HE080","name":"Jengibre y vainilla","inStock":true}],
   },
   {
     name: "Essential — Sahumerio X5 Unidades",
@@ -722,6 +812,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Sahumerios",
+    variants: [{"code":"HE001","name":"Costa rica","inStock":true},{"code":"HE002","name":"Lima y coco","inStock":true},{"code":"HE003","name":"Bamboo y tilo","inStock":true},{"code":"HE004","name":"Flores blancas","inStock":true},{"code":"HE005","name":"Jengibre y limón","inStock":true},{"code":"HE006","name":"Papaya y melón","inStock":true},{"code":"HE007","name":"Azahar y frutas","inStock":true},{"code":"HE008","name":"Lavanda y vainilla","inStock":true},{"code":"HE009","name":"Té verde y peonías","inStock":true},{"code":"HE010","name":"Jengibre y vainilla","inStock":true}],
   },
   {
     name: "Essential — Vela De Soja",
@@ -737,6 +829,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Vela de soja",
+    variants: [{"code":"HE053","name":"Bamboo y tilo","inStock":true},{"code":"HE055","name":"Jengibre y limón","inStock":true},{"code":"HE059","name":"Té verde y peonías","inStock":true},{"code":"HE052","name":"Lima y coco","inStock":false},{"code":"HE056","name":"Papaya y melón","inStock":false}],
   },
   {
     name: "Fortaleza — Difusor 125ml",
@@ -752,6 +846,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HF013","name":"Calma","inStock":true},{"code":"HF015","name":"Energía","inStock":true},{"code":"HF016","name":"Sanación","inStock":true},{"code":"HF017","name":"Elevación","inStock":true},{"code":"HF018","name":"Equilibrio","inStock":true},{"code":"HF014","name":"Armonía","inStock":false}],
   },
   {
     name: "Fortaleza — Home Spray 125ml",
@@ -767,6 +863,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HF007","name":"Calma","inStock":true},{"code":"HF008","name":"Armonía","inStock":true},{"code":"HF009","name":"Energía","inStock":true},{"code":"HF010","name":"Sanación","inStock":true},{"code":"HF011","name":"Elevación","inStock":true},{"code":"HF012","name":"Equilibrio","inStock":true}],
   },
   {
     name: "Fortaleza — Home Spray 60ml",
@@ -782,6 +880,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HF001","name":"Calma","inStock":true},{"code":"HF002","name":"Armonía","inStock":true},{"code":"HF003","name":"Energía","inStock":true},{"code":"HF004","name":"Sanación","inStock":true},{"code":"HF005","name":"Elevación","inStock":true},{"code":"HF006","name":"Equilibrio","inStock":true}],
   },
   {
     name: "Isabella — Body Splash 100ml",
@@ -797,6 +897,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Body Splash",
+    variants: [{"code":"HI021","name":"Sweet peace","inStock":true},{"code":"HI022","name":"Pomelo y melón","inStock":true},{"code":"HI023","name":"María Antonieta","inStock":true},{"code":"HI024","name":"Tropical coconut","inStock":true},{"code":"HI025","name":"Orquídeas y lima","inStock":true},{"code":"HI026","name":"Bergamota y neroli","inStock":true},{"code":"HI027","name":"Sándalo y verbena","inStock":true},{"code":"HI028","name":"Mandarina y té verde","inStock":true},{"code":"HI029","name":"Mora, rosas y pitanga","inStock":true},{"code":"HI030","name":"Flores blancas y vainilla","inStock":true}],
   },
   {
     name: "Isabella — Difusor 125ml",
@@ -812,6 +914,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HI061","name":"Sweet peace","inStock":true},{"code":"HI062","name":"Pomelo y melón","inStock":true},{"code":"HI063","name":"María Antonieta","inStock":true},{"code":"HI064","name":"Tropical coconut","inStock":true},{"code":"HI065","name":"Orquídeas y lima","inStock":true},{"code":"HI066","name":"Bergamota y neroli","inStock":true},{"code":"HI067","name":"Sándalo y verbena","inStock":true},{"code":"HI068","name":"Mandarina y té verde","inStock":true},{"code":"HI069","name":"Mora, rosas y pitanga","inStock":true},{"code":"HI070","name":"Flores blancas y vainilla","inStock":true}],
   },
   {
     name: "Isabella — Difusor 250ml",
@@ -827,6 +931,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HI071","name":"Sweet peace","inStock":true},{"code":"HI072","name":"Pomelo y melón","inStock":true},{"code":"HI073","name":"María Antonieta","inStock":true},{"code":"HI074","name":"Tropical coconut","inStock":true},{"code":"HI075","name":"Orquídeas y lima","inStock":true},{"code":"HI076","name":"Bergamota y neroli","inStock":true},{"code":"HI077","name":"Sándalo y verbena","inStock":true},{"code":"HI078","name":"Mandarina y té verde","inStock":true},{"code":"HI079","name":"Mora, rosas y pitanga","inStock":true},{"code":"HI080","name":"Flores blancas y vainilla","inStock":true}],
   },
   {
     name: "Isabella — Esencia Hornito 10ml",
@@ -842,6 +948,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Esencia para hornito",
+    variants: [{"code":"HI091","name":"Sweet peace","inStock":true},{"code":"HI093","name":"María Antonieta","inStock":true},{"code":"HI094","name":"Tropical coconut","inStock":true},{"code":"HI097","name":"Sándalo y verbena","inStock":true},{"code":"HI099","name":"Mora, rosas y pitanga","inStock":true},{"code":"HI100","name":"Flores blancas y vainilla","inStock":true},{"code":"HI092","name":"Pomelo y melón","inStock":false},{"code":"HI095","name":"Orquídeas y lima","inStock":false},{"code":"HI096","name":"Bergamota y neroli","inStock":false},{"code":"HI098","name":"Mandarina y té verde","inStock":false}],
   },
   {
     name: "Isabella — Home Spray 125ml",
@@ -857,6 +965,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HI031","name":"Sweet peace","inStock":true},{"code":"HI032","name":"Pomelo y melón","inStock":true},{"code":"HI033","name":"María Antonieta","inStock":true},{"code":"HI034","name":"Tropical coconut","inStock":true},{"code":"HI035","name":"Orquídeas y lima","inStock":true},{"code":"HI036","name":"Bergamota y neroli","inStock":true},{"code":"HI037","name":"Sándalo y verbena","inStock":true},{"code":"HI038","name":"Mandarina y té verde","inStock":true},{"code":"HI039","name":"Mora, rosas y pitanga","inStock":true},{"code":"HI040","name":"Flores blancas y vainilla","inStock":true}],
   },
   {
     name: "Isabella — Home Spray 250ml",
@@ -872,6 +982,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HI041","name":"Sweet peace","inStock":true},{"code":"HI042","name":"Pomelo y melón","inStock":true},{"code":"HI043","name":"María Antonieta","inStock":true},{"code":"HI044","name":"Tropical coconut","inStock":true},{"code":"HI045","name":"Orquídeas y lima","inStock":true},{"code":"HI046","name":"Bergamota y neroli","inStock":true},{"code":"HI047","name":"Sándalo y verbena","inStock":true},{"code":"HI048","name":"Mandarina y té verde","inStock":true},{"code":"HI049","name":"Mora, rosas y pitanga","inStock":true},{"code":"HI050","name":"Flores blancas y vainilla","inStock":true}],
   },
   {
     name: "Isabella — Home Spray 500ml",
@@ -887,6 +999,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HI054","name":"Tropical coconut","inStock":true},{"code":"HI055","name":"Orquídeas y lima","inStock":true},{"code":"HI056","name":"Bergamota y neroli","inStock":true},{"code":"HI057","name":"Sándalo y verbena","inStock":true},{"code":"HI060","name":"Flores blancas y vainilla","inStock":true},{"code":"HI051","name":"Sweet peace","inStock":false},{"code":"HI052","name":"Pomelo y melón","inStock":false},{"code":"HI053","name":"María Antonieta","inStock":false},{"code":"HI058","name":"Mandarina y té verde","inStock":false},{"code":"HI059","name":"Mora, rosas y pitanga","inStock":false}],
   },
   {
     name: "Isabella — Sahumerio X5 Unidades",
@@ -902,6 +1016,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Sahumerios",
+    variants: [{"code":"HI001","name":"Sweet peace","inStock":true},{"code":"HI002","name":"Pomelo y melón","inStock":true},{"code":"HI003","name":"María Antonieta","inStock":true},{"code":"HI004","name":"Tropical coconut","inStock":true},{"code":"HI005","name":"Orquídeas y lima","inStock":true},{"code":"HI006","name":"Bergamota y neroli","inStock":true},{"code":"HI007","name":"Sándalo y verbena","inStock":true},{"code":"HI008","name":"Mandarina y té verde","inStock":true},{"code":"HI009","name":"Mora, rosas y pitanga","inStock":true},{"code":"HI010","name":"Flores blancas y vainilla","inStock":true}],
   },
   {
     name: "Isabella — Vela De Soja",
@@ -917,6 +1033,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Vela de soja",
+    variants: [{"code":"HI081","name":"Sweet peace","inStock":true},{"code":"HI084","name":"Tropical coconut","inStock":true},{"code":"HI086","name":"Bergamota y neroli","inStock":true},{"code":"HI082","name":"Pomelo y melón","inStock":false},{"code":"HI085","name":"Orquídeas y lima","inStock":false},{"code":"HI089","name":"Mora, rosas y pitanga","inStock":false},{"code":"HI090","name":"Flores blancas y vainilla","inStock":false}],
   },
   {
     name: "Jabones Funcionales",
@@ -932,6 +1050,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Jabones",
+    variants: [{"code":"AUTO-1406-1783104016581","name":"Cocina","inStock":true},{"code":"AUTO-1406-1783104007788","name":"Body","inStock":false},{"code":"AUTO-1406-1783104010930","name":"Piernas","inStock":false}],
   },
   {
     name: "Jabones Exfoliantes",
@@ -947,6 +1067,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Jabones",
+    variants: [{"code":"AUTO-1413-1783429495532","name":"Pink Musk","inStock":true},{"code":"AUTO-1413-1783429509201","name":"Verbena Cream","inStock":true},{"code":"AUTO-1413-1783429531540","name":"Pasto","inStock":true},{"code":"AUTO-1413-1783429571681","name":"Miel","inStock":true},{"code":"AUTO-1413-1783429622045","name":"Sandalo","inStock":true},{"code":"AUTO-1413-1783429649338","name":"Ruda","inStock":true},{"code":"AUTO-1413-1783429654505","name":"Romero","inStock":true},{"code":"AUTO-1413-1783429665629","name":"Nuez","inStock":true},{"code":"AUTO-1413-1783429693365","name":"Mate","inStock":true},{"code":"AUTO-1413-1783429711406","name":"Calendula","inStock":true},{"code":"AUTO-1413-1783429748551","name":"Cedron","inStock":true},{"code":"AUTO-1413-1783429754804","name":"Lino","inStock":true},{"code":"AUTO-1413-1783429766195","name":"Sesamo Negro","inStock":true},{"code":"AUTO-1413-1783429801320","name":"Tilo","inStock":true},{"code":"AUTO-1413-1783429873345","name":"Cafe","inStock":true},{"code":"AUTO-1413-1783429883184","name":"Avena","inStock":true},{"code":"AUTO-1413-1783429487938","name":"Madera","inStock":false},{"code":"AUTO-1413-1783429515941","name":"Flor de Higo","inStock":false},{"code":"AUTO-1413-1783429537852","name":"Lotus Cream","inStock":false},{"code":"AUTO-1413-1783429552760","name":"Magnolia Cream","inStock":false},{"code":"AUTO-1413-1783429558487","name":"Vanicoco","inStock":false},{"code":"AUTO-1413-1783429576455","name":"Bamboo","inStock":false},{"code":"AUTO-1413-1783429585951","name":"Maracuya","inStock":false},{"code":"AUTO-1413-1783429597389","name":"Jengibre","inStock":false},{"code":"AUTO-1413-1783429603325","name":"Bebe","inStock":false},{"code":"AUTO-1413-1783429628575","name":"Peonias","inStock":false},{"code":"AUTO-1413-1783429634893","name":"Aloe","inStock":false},{"code":"AUTO-1413-1783429677222","name":"Black Roses","inStock":false},{"code":"AUTO-1413-1783429686882","name":"Lavanda","inStock":false},{"code":"AUTO-1413-1783429706111","name":"Canela","inStock":false},{"code":"AUTO-1413-1783429726823","name":"Flores Blancas","inStock":false},{"code":"AUTO-1413-1783429732130","name":"Jazmin","inStock":false},{"code":"AUTO-1413-1783429773564","name":"Verbena","inStock":false},{"code":"AUTO-1413-1783429783595","name":"Puro Limon","inStock":false},{"code":"AUTO-1413-1783429789331","name":"Calma","inStock":false},{"code":"AUTO-1413-1783429808489","name":"Coco","inStock":false},{"code":"AUTO-1413-1783429825371","name":"Vainilla","inStock":false},{"code":"AUTO-1413-1783429833908","name":"Te verde y Pepino","inStock":false},{"code":"AUTO-1413-1783429844243","name":"Rosas","inStock":false},{"code":"AUTO-1413-1783429851385","name":"Naranja Organica","inStock":false},{"code":"AUTO-1413-1783429859474","name":"Menta","inStock":false},{"code":"AUTO-1413-1783429865020","name":"Chocolate","inStock":false},{"code":"AUTO-1413-1783429893290","name":"Almendra","inStock":false}],
   },
   {
     name: "Jabones Ovalados",
@@ -962,6 +1084,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Jabones",
+    variants: [{"code":"AUTO-1405-1783103883409","name":"Afeitar","inStock":true},{"code":"AUTO-1405-1783103873743","name":"Yoga","inStock":false},{"code":"AUTO-1405-1783103878538","name":"Hoy","inStock":false},{"code":"AUTO-1405-1783430212417","name":"Cher","inStock":false},{"code":"AUTO-1405-1783430226155","name":"Bella","inStock":false},{"code":"AUTO-1405-1783430237121","name":"Wana","inStock":false},{"code":"AUTO-1405-1783430250359","name":"Bath","inStock":false},{"code":"AUTO-1405-1783430282374","name":"Hombre","inStock":false}],
   },
   {
     name: "Mini Base Deco",
@@ -992,6 +1116,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Bandeja",
+    variants: [{"code":"AUTO-1441-1783210550469","name":"Negra","inStock":true},{"code":"AUTO-1441-1783210554645","name":"Blanca","inStock":true},{"code":"AUTO-1441-1783210562670","name":"Marmol blanca","inStock":true}],
   },
   {
     name: "Bandeja En Punta",
@@ -1007,6 +1133,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "decoración",
+    variants: [{"code":"AUTO-1442-1783210604364","name":"Negra","inStock":true},{"code":"AUTO-1442-1783210610412","name":"Blanca","inStock":true},{"code":"AUTO-1442-1783210620580","name":"Marmol blanca","inStock":true}],
   },
   {
     name: "Primavera — Body Splash 125ml",
@@ -1022,6 +1150,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Body Splash",
+    variants: [{"code":"HPR011","name":"Wanama","inStock":true},{"code":"HPR012","name":"Bienestar","inStock":true},{"code":"HPR013","name":"Orquídeas","inStock":true},{"code":"HPR014","name":"Flores blancas","inStock":true},{"code":"HPR015","name":"Neroli y bergamota","inStock":true}],
   },
   {
     name: "Primavera — Difusor 150ml",
@@ -1037,6 +1167,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HPR021","name":"Wanama","inStock":true},{"code":"HPR022","name":"Bienestar","inStock":true},{"code":"HPR023","name":"Orquídeas","inStock":true},{"code":"HPR024","name":"Flores blancas","inStock":true},{"code":"HPR025","name":"Neroli y bergamota","inStock":true}],
   },
   {
     name: "Primavera — Home Spray 150ml",
@@ -1052,6 +1184,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HPR016","name":"Wanama","inStock":true},{"code":"HPR017","name":"Bienestar","inStock":true},{"code":"HPR018","name":"Orquídeas","inStock":true},{"code":"HPR019","name":"Flores blancas","inStock":true},{"code":"HPR020","name":"Neroli y bergamota","inStock":true}],
   },
   {
     name: "Primavera — Vela De Soja",
@@ -1067,6 +1201,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Vela de soja",
+    variants: [{"code":"HPR006","name":"Wanama","inStock":true},{"code":"HPR007","name":"Bienestar","inStock":true},{"code":"HPR008","name":"Orquídeas","inStock":true},{"code":"HPR009","name":"Flores blancas","inStock":false},{"code":"HPR010","name":"Neroli y bergamota","inStock":false}],
   },
   {
     name: "Proteccion — Difusor 150ml",
@@ -1082,6 +1218,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Fragancia",
+    variants: [{"code":"HP007","name":"Salud","inStock":true},{"code":"HP008","name":"Energía","inStock":true},{"code":"HP009","name":"Riqueza","inStock":true},{"code":"HP010","name":"Felicidad","inStock":true},{"code":"HP011","name":"Protección","inStock":true}],
   },
   {
     name: "Proteccion — Home Spray 150ml",
@@ -1097,6 +1235,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HP001","name":"Salud","inStock":true},{"code":"HP002","name":"Energía","inStock":true},{"code":"HP003","name":"Riqueza","inStock":true},{"code":"HP004","name":"Felicidad","inStock":true},{"code":"HP005","name":"Protección","inStock":true}],
   },
   {
     name: "Wood — Difusor De Vidrio 200ml",
@@ -1112,6 +1252,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HW011","name":"Orquídeas","inStock":true},{"code":"HW012","name":"Papaya y melón","inStock":true},{"code":"HW013","name":"Bamboo y tilo","inStock":true},{"code":"HW014","name":"Flores blancas","inStock":true},{"code":"HW015","name":"Coco y vainilla","inStock":true},{"code":"HW016","name":"Azahar y lavanda","inStock":true},{"code":"HW017","name":"Jengibre y limón","inStock":true},{"code":"HW018","name":"Arándanos y maderas","inStock":true},{"code":"HW019","name":"Neroli y bergamota","inStock":true},{"code":"HW020","name":"Maderas del oriente","inStock":true}],
   },
   {
     name: "Wood — Home Spray 250ml",
@@ -1127,6 +1269,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HW001","name":"Orquídeas","inStock":true},{"code":"HW002","name":"Papaya y melón","inStock":true},{"code":"HW003","name":"Bamboo y tilo","inStock":true},{"code":"HW004","name":"Flores blancas","inStock":true},{"code":"HW005","name":"Coco y vainilla","inStock":true},{"code":"HW006","name":"Azahar y lavanda","inStock":true},{"code":"HW007","name":"Jengibre y limón","inStock":true},{"code":"HW008","name":"Arándanos y maderas","inStock":true},{"code":"HW009","name":"Neroli y bergamota","inStock":true},{"code":"HW010","name":"Maderas del oriente","inStock":true}],
   },
   {
     name: "Zodiaco — Difusor 150ml",
@@ -1142,6 +1286,8 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Difusores",
+    variants: [{"code":"HZ001","name":"Leo","inStock":true},{"code":"HZ002","name":"Aries","inStock":true},{"code":"HZ003","name":"Libra","inStock":true},{"code":"HZ004","name":"Tauro","inStock":true},{"code":"HZ005","name":"Virgo","inStock":true},{"code":"HZ006","name":"Cáncer","inStock":true},{"code":"HZ007","name":"Piscis","inStock":true},{"code":"HZ009","name":"Géminis","inStock":true},{"code":"HZ010","name":"Escorpio","inStock":true},{"code":"HZ011","name":"Sagitario","inStock":true},{"code":"HZ012","name":"Capricornio","inStock":true}],
   },
   {
     name: "Zodiaco — Home Spray 150ml",
@@ -1157,5 +1303,7 @@ export const yvesHome: PerfumeInput[] = [
       middle: [],
       base: [],
     },
+    variantLabel: "Home spray",
+    variants: [{"code":"HZ013","name":"Leo","inStock":true},{"code":"HZ015","name":"Libra","inStock":true},{"code":"HZ016","name":"Tauro","inStock":true},{"code":"HZ017","name":"Virgo","inStock":true},{"code":"HZ018","name":"Cáncer","inStock":true},{"code":"HZ019","name":"Piscis","inStock":true},{"code":"HZ020","name":"Acuario","inStock":true},{"code":"HZ021","name":"Géminis","inStock":true},{"code":"HZ022","name":"Escorpio","inStock":true},{"code":"HZ023","name":"Sagitario","inStock":true}],
   },
 ];

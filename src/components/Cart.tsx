@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { X, Minus, Plus, ShoppingBag, Send } from "lucide-react";
 import { useCart } from "../context/useCart";
+import { cartItemKey } from "../types";
 import { formatPrice, lineItemTotal } from "../utils/price";
 import { buildWhatsappMessage, buildWhatsappUrl } from "../utils/whatsapp";
 
@@ -79,7 +80,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
             <ul className="space-y-4">
               {cart.map((item) => (
                 <li
-                  key={item.perfume.id}
+                  key={cartItemKey(item)}
                   className="border-b border-gray-100 pb-4"
                 >
                   <div className="flex items-start">
@@ -101,12 +102,17 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                           <p className="text-xs text-gray-500">
                             {item.perfume.brand}
                           </p>
+                          {item.variant && (
+                            <p className="mt-0.5 text-xs font-medium text-[#9A7A1F]">
+                              {item.variant.name}
+                            </p>
+                          )}
                           <p className="mt-1 text-sm font-medium text-[#D4AF37]">
                             {formatPrice(item.perfume.price)}
                           </p>
                         </div>
                         <button
-                          onClick={() => removeFromCart(item.perfume.id)}
+                          onClick={() => removeFromCart(cartItemKey(item))}
                           className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
                           aria-label={`Quitar ${item.perfume.name}`}
                         >
@@ -116,7 +122,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                       <div className="mt-2 flex items-center">
                         <button
                           onClick={() =>
-                            updateQuantity(item.perfume.id, item.quantity - 1)
+                            updateQuantity(cartItemKey(item), item.quantity - 1)
                           }
                           className="rounded p-1 text-gray-500 hover:bg-[#F8F0E3] hover:text-[#1A2238]"
                           aria-label={`Restar ${item.perfume.name}`}
@@ -128,7 +134,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose }) => {
                         </span>
                         <button
                           onClick={() =>
-                            updateQuantity(item.perfume.id, item.quantity + 1)
+                            updateQuantity(cartItemKey(item), item.quantity + 1)
                           }
                           className="rounded p-1 text-gray-500 hover:bg-[#F8F0E3] hover:text-[#1A2238]"
                           aria-label={`Sumar ${item.perfume.name}`}

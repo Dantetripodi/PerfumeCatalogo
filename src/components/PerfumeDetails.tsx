@@ -17,6 +17,7 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
   const { addToCart } = useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [copiedLink, setCopiedLink] = useState(false);
+  const [variantCode, setVariantCode] = useState<string | null>(null);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -31,6 +32,9 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
   useEffect(() => {
     if (!perfume) return;
     setCopiedLink(false);
+    // Nothing is preselected: picking the scent is the decision, and choosing
+    // it for the customer is how the wrong one ends up ordered.
+    setVariantCode(null);
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -42,8 +46,16 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
 
   if (!perfume) return null;
 
+  const hasNotes =
+    perfume.notes.top.length + perfume.notes.middle.length + perfume.notes.base.length > 0;
+  const variants = perfume.variants ?? [];
+  const hasVariants = variants.length > 0;
+  const selectedVariant = variants.find(variant => variant.code === variantCode);
+  const needsChoice = hasVariants && !selectedVariant;
+
   const handleAddToCart = () => {
-    addToCart(perfume);
+    if (needsChoice) return;
+    addToCart(perfume, selectedVariant);
     if (onAddToCart) {
       onAddToCart(perfume);
     }
@@ -61,7 +73,9 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
 
   const favorite = isFavorite(perfume.id);
 
-  const renderNotes = (title: string, notes: string[]) => (
+  // Home products — diffusers, soaps, candles — carry no olfactory notes, and an
+  // empty "Notas de salida:" heading reads as a bug.
+  const renderNotes = (title: string, notes: string[]) => notes.length === 0 ? null : (
     <div className="mb-3">
       <h4 className="font-medium text-[#1A2238] mb-1">{title}:</h4>
       <div className="flex flex-wrap gap-1">
@@ -159,14 +173,53 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
                 <InfoBox label="Duración" value={perfume.longevity} />
               </div>
 
-              <div className="mb-6">
-                <h3 className="text-lg font-serif font-semibold text-[#1A2238] mb-3">
-                  Notas de fragancia
-                </h3>
-                {renderNotes("Notas de salida", perfume.notes.top)}
-                {renderNotes("Notas de corazón", perfume.notes.middle)}
-                {renderNotes("Notas de fondo", perfume.notes.base)}
-              </div>
+              {hasNotes && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-serif font-semibold text-[#1A2238] mb-3">
+                    Notas de fragancia
+                  </h3>
+                  {renderNotes("Notas de salida", perfume.notes.top)}
+                  {renderNotes("Notas de corazón", perfume.notes.middle)}
+                  {renderNotes("Notas de fondo", perfume.notes.base)}
+                </div>
+              )}
+
+              {hasVariants && (
+                <div className="mb-5">
+                  <div className="mb-2 flex items-baseline justify-between">
+                    <h3 className="font-serif text-lg font-semibold text-[#1A2238]">
+                      {perfume.variantLabel ?? "Opciones"}
+                    </h3>
+                    <span className="text-xs text-gray-500">{variants.length} disponibles</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {variants.map(variant => {
+                      const selected = variant.code === variantCode;
+                      return (
+                        <button
+                          key={variant.code || variant.name}
+                          onClick={() => setVariantCode(selected ? null : variant.code)}
+                          disabled={!variant.inStock}
+                          aria-pressed={selected}
+                          className={`rounded-full border px-3 py-1.5 text-sm transition-colors disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-300 disabled:line-through ${
+                            selected
+                              ? "border-[#D4AF37] bg-[#D4AF37] font-medium text-white"
+                              : "border-[#E8DDBF] text-[#1A2238] hover:border-[#D4AF37]"
+                          }`}
+                          title={variant.inStock ? undefined : "Sin stock"}
+                        >
+                          {variant.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {needsChoice && (
+                    <p className="mt-2 text-xs text-[#9A7A1F]">
+                      Elegí una opción para agregarlo al carrito.
+                    </p>
+                  )}
+                </div>
+              )}
 
               {perfume.whatsappHint && (
                 <p className="mb-4 rounded-lg bg-[#F8F0E3] p-3 text-sm leading-6 text-[#1A2238]">
@@ -177,10 +230,11 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
               <div className="space-y-2">
                 <button
                   onClick={handleAddToCart}
-                  className="flex w-full items-center justify-center rounded-md bg-[#1A2238] py-3 font-medium text-white transition-colors duration-200 hover:bg-[#25304F]"
+                  disabled={needsChoice}
+                  className="flex w-full items-center justify-center rounded-md bg-[#1A2238] py-3 font-medium text-white transition-colors duration-200 hover:bg-[#25304F] disabled:cursor-not-allowed disabled:bg-gray-300"
                 >
                   <Plus size={18} className="mr-2" />
-                  Agregar al carrito
+                  {needsChoice ? "Elegí una opción" : "Agregar al carrito"}
                 </button>
                 <button
                   onClick={handleWhatsappInquiry}

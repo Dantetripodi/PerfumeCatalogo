@@ -11,7 +11,7 @@
  */
 import { supabase } from "../lib/supabase";
 import { normalizePerfume, rowToInput } from "./normalize";
-import { Perfume, PerfumeCategory, PerfumeCollection, PerfumeRow, Notes } from "../types";
+import { Perfume, PerfumeCategory, PerfumeCollection, PerfumeRow, PerfumeVariant, Notes } from "../types";
 
 const TABLE = "perfumes";
 const IMAGE_BUCKET = "perfume-images";
@@ -32,6 +32,14 @@ export interface PerfumeDraft {
   notes: Notes;
   collection: PerfumeCollection;
   is_featured: boolean;
+  /**
+   * Optional because the admin form does not edit variants — they come from the
+   * supplier import. Leaving the keys off an update means Supabase never writes
+   * those columns, so editing a product's price from the panel keeps its
+   * variants intact.
+   */
+  variants?: PerfumeVariant[] | null;
+  variant_label?: string | null;
 }
 
 export async function fetchPerfumes(): Promise<RepositoryResult<Perfume[]>> {

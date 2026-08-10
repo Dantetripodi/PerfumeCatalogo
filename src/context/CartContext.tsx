@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { Perfume, CartItem } from '../types';
+import { Perfume, CartItem, PerfumeVariant, cartItemKey, cartLineKey } from '../types';
 import { CART_STORAGE_KEY, CartContext } from './cartState';
 
 const loadCartFromStorage = (): CartItem[] => {
@@ -17,30 +17,33 @@ const loadCartFromStorage = (): CartItem[] => {
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>(() => loadCartFromStorage());
 
-  const addToCart = (perfume: Perfume) => {
+  // Lines are keyed by product *and* variant: two scents of the same diffuser
+  // are two separate things to order.
+  const addToCart = (perfume: Perfume, variant?: PerfumeVariant) => {
+    const key = cartLineKey(perfume.id, variant?.code);
+
     setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.perfume.id === perfume.id);
-      if (existingItem) {
+      const exists = prevCart.some((item) => cartItemKey(item) === key);
+      if (exists) {
         return prevCart.map((item) =>
-          item.perfume.id === perfume.id ? { ...item, quantity: item.quantity + 1 } : item
+          cartItemKey(item) === key ? { ...item, quantity: item.quantity + 1 } : item
         );
-      } else {
-        return [...prevCart, { perfume, quantity: 1 }];
       }
+      return [...prevCart, { perfume, quantity: 1, variant }];
     });
   };
 
-  const removeFromCart = (id: number) => {
-    setCart((prevCart) => prevCart.filter((item) => item.perfume.id !== id));
+  const removeFromCart = (key: string) => {
+    setCart((prevCart) => prevCart.filter((item) => cartItemKey(item) !== key));
   };
 
-  const updateQuantity = (id: number, quantity: number) => {
+  const updateQuantity = (key: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(id);
+      removeFromCart(key);
       return;
     }
     setCart((prevCart) =>
-      prevCart.map((item) => (item.perfume.id === id ? { ...item, quantity } : item))
+      prevCart.map((item) => (cartItemKey(item) === key ? { ...item, quantity } : item))
     );
   };
 

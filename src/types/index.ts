@@ -68,6 +68,20 @@ export const COLLECTION_LABELS: Record<PerfumeCollection, string> = {
   home: "Home",
   accesorio: "Accesorios",
 };
+/**
+ * One of the options a product comes in — the scent of a diffuser, the sign of
+ * a zodiac candle, the flavour of a soap.
+ *
+ * No price: the supplier charges the same for every variant of a product, which
+ * the importer re-checks on each run and warns about if it ever stops being
+ * true. Stock does vary, so a variant can be listed and unavailable.
+ */
+export interface PerfumeVariant {
+  code: string;
+  name: string;
+  inStock: boolean;
+}
+
 export type PerfumeStock = "by-order" | "consult";
 export type PerfumeIntensity = "suave" | "media" | "intensa";
 
@@ -94,6 +108,10 @@ export interface Perfume {
   longevity?: string;
   whatsappHint?: string;
   slug: string;
+  /** Present when the product is sold in several options. */
+  variants?: PerfumeVariant[];
+  /** What the supplier calls the choice: "Sahumerios", "Body Splash"… */
+  variantLabel?: string;
 }
 
 export type PerfumeInput = Omit<
@@ -126,6 +144,8 @@ export interface PerfumeRow {
   notes: Notes;
   collection: PerfumeCollection;
   is_featured: boolean;
+  variants: PerfumeVariant[] | null;
+  variant_label: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -133,13 +153,28 @@ export interface PerfumeRow {
 export interface CartItem {
   perfume: Perfume;
   quantity: number;
+  /** The option chosen at add time. Absent for products sold in one version. */
+  variant?: PerfumeVariant;
+}
+
+/**
+ * Identifies a line. The product id alone is not enough: two scents of the same
+ * diffuser are two different things to order, and collapsing them would send a
+ * WhatsApp message that does not say which one the customer wanted.
+ */
+export function cartLineKey(perfumeId: number, variantCode?: string): string {
+  return `${perfumeId}::${variantCode ?? ""}`;
+}
+
+export function cartItemKey(item: CartItem): string {
+  return cartLineKey(item.perfume.id, item.variant?.code);
 }
 
 export interface CartContextType {
   cart: CartItem[];
-  addToCart: (perfume: Perfume) => void;
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  addToCart: (perfume: Perfume, variant?: PerfumeVariant) => void;
+  removeFromCart: (key: string) => void;
+  updateQuantity: (key: string, quantity: number) => void;
   clearCart: () => void;
   getCartTotal: () => number | "Consultar";
   getCartCount: () => number;

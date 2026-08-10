@@ -1,11 +1,12 @@
 import { createContext } from "react";
-import { CartItem, Perfume } from "../types";
+import { CartItem, Perfume, PerfumeVariant } from "../types";
 
 export interface CartContextValue {
   cart: CartItem[];
-  addToCart: (perfume: Perfume) => void;
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  addToCart: (perfume: Perfume, variant?: PerfumeVariant) => void;
+  /** Keyed by `cartItemKey`, not the product id: a product can hold several lines. */
+  removeFromCart: (key: string) => void;
+  updateQuantity: (key: string, quantity: number) => void;
   clearCart: () => void;
   getCartTotal: () => number | "Consultar";
   getCartCount: () => number;
