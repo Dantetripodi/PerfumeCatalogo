@@ -19,9 +19,20 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
   const isConsultPrice = typeof perfume.price !== "number";
   const favorite = isFavorite(perfume.id);
   const lineBadge = getLineBadge(perfume);
+  const variantCount = perfume.variants?.length ?? 0;
+  const hasVariants = variantCount > 0;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    // A product sold in several scents cannot be quick-added from the list: the
+    // row has no way to say which one, and a cart line without it is an order you
+    // have to chase down over WhatsApp. Send the shopper to the detail to choose.
+    if (hasVariants) {
+      onShowDetails(perfume);
+      return;
+    }
+
     addToCart(perfume);
     if (onAddToCart) {
       onAddToCart(perfume);
@@ -82,11 +93,17 @@ const PerfumeListItem: React.FC<PerfumeListItemProps> = ({ perfume, onShowDetail
             </span>
           ) : null}
 
+          {hasVariants && (
+            <span className="rounded-full bg-[#D4AF37]/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#9A7A1F]">
+              {variantCount} opciones
+            </span>
+          )}
+
           <button
             onClick={handleAddToCart}
             className="ml-auto flex-shrink-0 rounded-full bg-[#1A2238] p-1.5 text-white transition-colors hover:bg-[#25304F]"
-            aria-label={`Agregar ${perfume.name} al carrito`}
-            title="Agregar al carrito"
+            aria-label={hasVariants ? `Elegir una opción de ${perfume.name}` : `Agregar ${perfume.name} al carrito`}
+            title={hasVariants ? "Elegir una opción" : "Agregar al carrito"}
           >
             <Plus size={16} />
           </button>
