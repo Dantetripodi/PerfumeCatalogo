@@ -62,7 +62,7 @@ const PerfumeDetails: React.FC<PerfumeDetailsProps> = ({ perfume, onClose, onAdd
   };
 
   const handleWhatsappInquiry = () => {
-    window.open(buildWhatsappUrl(buildProductInquiryMessage(perfume)), "_blank");
+    window.open(buildWhatsappUrl(buildProductInquiryMessage(perfume, selectedVariant)), "_blank");
   };
 
   const handleCopyLink = async () => {
