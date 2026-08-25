@@ -241,19 +241,34 @@ interface SaveQueueEntry<T> {
   queued: SaveQueueJob<T> | null;
 }
 
+let queueGenerationSequence = 0;
+
 export function createPackSaveQueue(
   getEpoch: () => number = () => 0,
   isMounted: () => boolean = () => true,
 ) {
   const entries = new Map<string, SaveQueueEntry<unknown>>();
   const queueEpoch = getEpoch();
+  const queueGeneration = Object.freeze({ id: ++queueGenerationSequence });
+  let queueActive = true;
 
-  const isCurrentEpoch = (): boolean => isMounted() && getEpoch() === queueEpoch;
+  const isQueueActive = (): boolean =>
+    queueActive && queueGeneration.id > 0 && isMounted() && getEpoch() === queueEpoch;
+
+  const invalidate = (): void => {
+    queueActive = false;
+    entries.forEach((entry) => {
+      if (!entry.queued) return;
+      const cause = new Error("stale pack queue");
+      entry.queued.waiters.forEach(({ reject }) => reject(cause));
+      entry.queued = null;
+    });
+  };
 
   // The repository currently has no AbortSignal contract: in-flight requests
   // finish, but lifecycle guards suppress their state updates and queued jobs.
   function start<T>(key: string, entry: SaveQueueEntry<T>, job: SaveQueueJob<T>, previous?: T): void {
-    if (!isCurrentEpoch()) {
+    if (!isQueueActive()) {
       const cause = new Error("stale pack queue");
       job.waiters.forEach(({ reject }) => reject(cause));
       if (entry.queued) entry.queued.waiters.forEach(({ reject }) => reject(cause));
@@ -262,7 +277,7 @@ export function createPackSaveQueue(
     }
     void Promise.resolve()
       .then(() => {
-        if (!isCurrentEpoch()) throw new Error("stale pack queue");
+        if (!isQueueActive()) throw new Error("stale pack queue");
         return job.operation(previous);
       })
       .then(
@@ -290,8 +305,9 @@ export function createPackSaveQueue(
   }
 
   return {
+    invalidate,
     run<T>(key: string, operation: (previous?: T) => Promise<T>): Promise<T> {
-      if (!isCurrentEpoch()) return Promise.reject(new Error("stale pack queue"));
+      if (!isQueueActive()) return Promise.reject(new Error("stale pack queue"));
       let entry = entries.get(key) as SaveQueueEntry<T> | undefined;
       return new Promise<T>((resolve, reject) => {
         if (!entry) {
@@ -422,7 +438,8 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   useEffect(() => {
     const lifecycle = ++lifecycleRef.current;
     requestSequenceRef.current = createPackRequestSequence();
-    saveQueueRef.current = createPackSaveQueue(() => epochRef.current, () => mountedRef.current);
+    const queue = createPackSaveQueue(() => epochRef.current, () => mountedRef.current);
+    saveQueueRef.current = queue;
     const reset = resetScopedPackState();
     setPacks(reset.packs);
     setSelectedPack(reset.selectedPack);
@@ -433,6 +450,7 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
     if (enabled) void refresh();
     return () => {
       mountedRef.current = false;
+      queue.invalidate();
       if (lifecycleRef.current === lifecycle) lifecycleRef.current += 1;
     };
   }, [authKey, clientScope, enabled, refresh]);

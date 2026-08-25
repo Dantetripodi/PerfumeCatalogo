@@ -319,6 +319,36 @@ describe("content pack state transitions", () => {
     expect(calls).toEqual(["first"]);
   });
 
+  it("invalida la queue vieja entre cleanup/setup y permite guardar en la nueva", async () => {
+    let resolveFirst!: (value: ContentPack) => void;
+    const calls: string[] = [];
+    const oldQueue = createPackSaveQueue(() => 1, () => true);
+    const first = oldQueue.run<ContentPack>("persisted:pack-1", async () => {
+      calls.push("old-first");
+      return new Promise<ContentPack>((resolve) => {
+        resolveFirst = resolve;
+      });
+    });
+    await Promise.resolve();
+    const oldQueued = oldQueue.run<ContentPack>("persisted:pack-1", async () => {
+      calls.push("old-queued");
+      return existingPack;
+    });
+
+    oldQueue.invalidate();
+    const newQueue = createPackSaveQueue(() => 1, () => true);
+    const newSave = newQueue.run<ContentPack>("persisted:pack-1", async () => {
+      calls.push("new");
+      return existingPack;
+    });
+    resolveFirst(existingPack);
+
+    await expect(first).resolves.toBe(existingPack);
+    await expect(oldQueued).rejects.toThrow("stale");
+    await expect(newSave).resolves.toBe(existingPack);
+    expect(calls).toEqual(["old-first", "new"]);
+  });
+
   it("rechaza callbacks stale de A después de logout y una nueva sesión B", () => {
     expect(isCurrentHookContext(1, "admin-a", 2, "admin-b", true)).toBe(false);
     expect(isCurrentHookContext(1, "admin-a", 3, "admin-a", true)).toBe(false);
