@@ -294,6 +294,31 @@ describe("content pack state transitions", () => {
     expect(calls).toEqual(["first"]);
   });
 
+  it("no inicia el job queued después de unmount mientras el primero estaba en vuelo", async () => {
+    let mounted = true;
+    let resolveFirst!: (value: ContentPack) => void;
+    const queue = createPackSaveQueue(() => 1, () => mounted);
+    const calls: string[] = [];
+    const first = queue.run<ContentPack>("persisted:pack-1", async () => {
+      calls.push("first");
+      return new Promise<ContentPack>((resolve) => {
+        resolveFirst = resolve;
+      });
+    });
+    await Promise.resolve();
+    const second = queue.run<ContentPack>("persisted:pack-1", async () => {
+      calls.push("second");
+      return existingPack;
+    });
+
+    mounted = false;
+    resolveFirst(existingPack);
+
+    await expect(first).resolves.toBe(existingPack);
+    await expect(second).rejects.toThrow("stale");
+    expect(calls).toEqual(["first"]);
+  });
+
   it("rechaza callbacks stale de A después de logout y una nueva sesión B", () => {
     expect(isCurrentHookContext(1, "admin-a", 2, "admin-b", true)).toBe(false);
     expect(isCurrentHookContext(1, "admin-a", 3, "admin-a", true)).toBe(false);

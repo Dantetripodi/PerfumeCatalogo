@@ -241,11 +241,14 @@ interface SaveQueueEntry<T> {
   queued: SaveQueueJob<T> | null;
 }
 
-export function createPackSaveQueue(getEpoch: () => number = () => 0) {
+export function createPackSaveQueue(
+  getEpoch: () => number = () => 0,
+  isMounted: () => boolean = () => true,
+) {
   const entries = new Map<string, SaveQueueEntry<unknown>>();
   const queueEpoch = getEpoch();
 
-  const isCurrentEpoch = (): boolean => getEpoch() === queueEpoch;
+  const isCurrentEpoch = (): boolean => isMounted() && getEpoch() === queueEpoch;
 
   // The repository currently has no AbortSignal contract: in-flight requests
   // finish, but lifecycle guards suppress their state updates and queued jobs.
@@ -366,9 +369,9 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const lifecycleRef = useRef(0);
   const epochRef = useRef(0);
   const requestSequenceRef = useRef(createPackRequestSequence());
-  const saveQueueRef = useRef(createPackSaveQueue(() => epochRef.current));
   const authKey = `${clientScope ?? "signed-out"}:${session?.user.id ?? ""}`;
   const mountedRef = useRef(false);
+  const saveQueueRef = useRef(createPackSaveQueue(() => epochRef.current, () => mountedRef.current));
   const scopeRef = useRef<string | null>(clientScope);
   scopeRef.current = clientScope;
   const renderKey = `${authKey}:${enabled}`;
@@ -419,7 +422,7 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   useEffect(() => {
     const lifecycle = ++lifecycleRef.current;
     requestSequenceRef.current = createPackRequestSequence();
-    saveQueueRef.current = createPackSaveQueue(() => epochRef.current);
+    saveQueueRef.current = createPackSaveQueue(() => epochRef.current, () => mountedRef.current);
     const reset = resetScopedPackState();
     setPacks(reset.packs);
     setSelectedPack(reset.selectedPack);
