@@ -8,6 +8,7 @@ import { generateReelScript } from "./templates/reel";
 import { generateInstagramCaption } from "./templates/instagram";
 import { generateImagePrompt } from "./templates/imagePrompt";
 import { generateInstagramStory } from "./templates/stories";
+import { DT_BRAND_KIT } from "./brandKit";
 import type { Perfume } from "../types";
 
 const perfumeFixture: Perfume = {
@@ -66,7 +67,9 @@ describe("generateContentPack", () => {
     expect(prompt).toMatch(/madera|wood|lino|linen|luz natural|natural light|planta|plant/i);
     expect(prompt).toMatch(/minimal|clean|limpia/i);
     expect(prompt).toMatch(/no text|sin texto|no overlay|sin overlay/i);
-    expect(prompt).toMatch(/neon|neón|oversaturation|saturaci[oó]n excesiva|flyer/i);
+    expect(prompt).toContain(`Avoid: ${DT_BRAND_KIT.avoid.join(", ")}.`);
+    expect(prompt).toMatch(/superposici[oó]n m[ií]nima|minimal overlap/i);
+    expect(prompt).toMatch(/texto abundante|excessive text/i);
   });
 });
 

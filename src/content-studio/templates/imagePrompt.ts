@@ -79,6 +79,8 @@ const DEFAULT_PALETTE: PaletteConfig = {
   ingredients: "exotic spices, amber resin, wood elements, delicate flowers",
 };
 
+const BRAND_AVOIDANCE = `Avoid: ${DT_BRAND_KIT.avoid.join(", ")}.`;
+
 function getIngredients(perfume: Perfume): string {
   const allNotes = [
     ...perfume.notes.top.slice(0, 2),
@@ -109,13 +111,13 @@ function generateBotanicalPrompt(perfume: Perfume): string {
     `Background: Flat clean ${palette.bg} surface, with warm cream, beige and camel tones.\n` +
     `Composition: Bottle centered in a clean minimal composition, naturally surrounded by its key fragrance ingredients: ` +
     `${ingredients}. Real botanicals — whole, sliced and scattered around the bottle in a ` +
-    `beautiful organic arrangement. Add restrained DT lifestyle props: ${DT_BRAND_KIT.props.join(", ")}.\n` +
+    `beautiful organic arrangement with minimal overlap. Add restrained DT lifestyle props: ${DT_BRAND_KIT.props.join(", ")}.\n` +
     `Lighting: Soft diffused overhead natural light, no harsh shadows, warm and clean.\n` +
     `Mood: ${genderMood}, ${perfume.category} fragrance family. Premium artisan product.\n` +
     `Format: Instagram portrait 4:5 ratio, 4K resolution, photorealistic, no text, no people, ` +
     `no watermark. Kinfolk / Monocle magazine editorial aesthetic.\n` +
-    `Negative: blurry, dark, low quality, text on image, text overlay, flyer barato, neón, ` +
-    `saturación excesiva, texto abundante, people, faces, cartoon, flat white background.`
+    `${BRAND_AVOIDANCE} No text overlay or abundant text.\n` +
+    `Negative: blurry, dark, low quality, text on image, people, faces, cartoon, flat white background.`
   );
 }
 
@@ -138,7 +140,7 @@ function generateStudioPrompt(perfume: Perfume): string {
     `Brand palette: ${DT_BRAND_KIT.palette.join(", ")}. Mood: ${DT_BRAND_KIT.mood.join(", ")}.\n` +
     `Background: Smooth gradient backdrop — ${palette.bg}. Warm gradient from slightly darker ` +
     `edges to lighter center, no sharp transitions. Elegant and premium.\n` +
-    `Composition: Bottle on a small circular marble or cream pedestal/plinth centered in frame. ` +
+    `Composition: Bottle on a small circular marble or cream pedestal/plinth centered in frame, with minimal overlap. ` +
     `Key ingredients elegantly arranged around the pedestal base: ${ingredients}. ` +
     `Add restrained DT lifestyle props such as ${DT_BRAND_KIT.props.join(", ")}. ` +
     `Ingredients are beautiful and realistic, artfully placed — some whole, some broken naturally.\n` +
@@ -149,8 +151,8 @@ function generateStudioPrompt(perfume: Perfume): string {
     `Colors: Dominant ${palette.bg}. Accent touches of ${palette.accent}.\n` +
     `Format: Instagram portrait 4:5 ratio, 8K resolution, photorealistic commercial product ` +
     `photography, shallow DOF with bottle sharp and background softly blurred. No text, no overlay, no people, no watermark.\n` +
-    `Negative: blurry, white studio background, cheap look, flyer barato, neón, saturación excesiva, ` +
-    `texto abundante, flat lighting, low quality, text, people, faces, overexposed.`
+    `${BRAND_AVOIDANCE} No text overlay or abundant text.\n` +
+    `Negative: blurry, white studio background, cheap look, flat lighting, low quality, text, people, faces, overexposed.`
   );
 }
 
