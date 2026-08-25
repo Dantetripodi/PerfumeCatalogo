@@ -40,8 +40,23 @@ function PackStatus({ status }: { status: ContentPackStatus }) {
 export default function ContentPackInbox({ packs, perfumes, currentPack, onSelectPack, onUpdatePack, onSave, onApprove, onReject, onRegenerate, loading = false, error = null, onRetry }: ContentPackInboxProps) {
   const [tab, setTab] = useState<ContentPackInboxTab>("all");
   const [search, setSearch] = useState("");
+  const [retrying, setRetrying] = useState(false);
+  const [retryError, setRetryError] = useState<string | null>(null);
   const visiblePacks = useMemo(() => filterContentPacks(packs, perfumes, search, tab), [packs, perfumes, search, tab]);
   const currentProduct = currentPack ? getPackProduct(currentPack, perfumes) : null;
+
+  const handleRetry = async () => {
+    if (!onRetry || retrying) return;
+    setRetrying(true);
+    setRetryError(null);
+    try {
+      await onRetry();
+    } catch {
+      setRetryError("No se pudieron cargar los content packs. Intentá nuevamente.");
+    } finally {
+      setRetrying(false);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-[#F8F0E3] px-4 py-6 sm:px-6 lg:px-8">
@@ -54,12 +69,12 @@ export default function ContentPackInbox({ packs, perfumes, currentPack, onSelec
           {tabLabels.map((item) => <button key={item.value} type="button" onClick={() => setTab(item.value)} className={`whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold transition ${tab === item.value ? "bg-[#1A2238] text-white" : "text-gray-500 hover:bg-[#F8F0E3] hover:text-[#1A2238]"}`}>{item.label}<span className="ml-1.5 text-xs opacity-70">{item.value === "all" ? packs.length : packs.filter((pack) => pack.status === item.value).length}</span></button>)}
         </div>
 
-        {error && <div role="alert" className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800"><span className="flex items-center gap-2"><AlertCircle size={17} />{error}</span>{onRetry && <button type="button" onClick={() => void onRetry()} className="font-semibold underline">Reintentar</button>}</div>}
-        {loading && <div className="mb-5 flex items-center justify-center gap-2 rounded-xl border border-[#E8DDBF] bg-white p-8 text-sm text-gray-500"><LoaderCircle size={18} className="animate-spin text-[#D4AF37]" />Cargando content packs…</div>}
+        {(error || retryError) && <div role="alert" className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800"><span className="flex items-center gap-2"><AlertCircle size={17} />{retryError ?? error}</span>{onRetry && <button type="button" disabled={retrying} onClick={handleRetry} className="font-semibold underline disabled:cursor-not-allowed disabled:opacity-50">{retrying ? "Reintentando…" : "Reintentar"}</button>}</div>}
+        {(loading || retrying) && <div className="mb-5 flex items-center justify-center gap-2 rounded-xl border border-[#E8DDBF] bg-white p-8 text-sm text-gray-500"><LoaderCircle size={18} className="animate-spin text-[#D4AF37]" />{retrying ? "Reintentando…" : "Cargando content packs…"}</div>}
 
-        {!loading && !error && visiblePacks.length === 0 && <div className="rounded-2xl border-2 border-dashed border-[#E8DDBF] bg-white p-12 text-center"><Inbox size={34} className="mx-auto mb-3 text-[#D4AF37]" /><h2 className="font-serif text-xl font-bold text-[#1A2238]">No hay packs para mostrar</h2><p className="mt-1 text-sm text-gray-500">Probá cambiar el filtro o la búsqueda.</p></div>}
+        {!loading && !retrying && !error && !retryError && visiblePacks.length === 0 && <div className="rounded-2xl border-2 border-dashed border-[#E8DDBF] bg-white p-12 text-center"><Inbox size={34} className="mx-auto mb-3 text-[#D4AF37]" /><h2 className="font-serif text-xl font-bold text-[#1A2238]">No hay packs para mostrar</h2><p className="mt-1 text-sm text-gray-500">Probá cambiar el filtro o la búsqueda.</p></div>}
 
-        {!loading && visiblePacks.length > 0 && <div className="grid gap-5 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.7fr)]">
+        {!loading && !retrying && visiblePacks.length > 0 && <div className="grid gap-5 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.7fr)]">
           <section aria-label="Lista de content packs" className="space-y-2">
             {visiblePacks.map((pack) => { const product = getPackProduct(pack, perfumes); const selected = currentPack === pack || (currentPack?.id && pack.id === currentPack.id) || (currentPack?.clientId && pack.clientId === currentPack.clientId); return <button key={pack.id ?? pack.clientId ?? `${pack.productId}-${pack.updatedAt}`} type="button" onClick={() => onSelectPack(pack)} className={`w-full rounded-xl border p-3 text-left transition ${selected ? "border-[#D4AF37] bg-[#FFF9E8] shadow-sm" : "border-[#E8DDBF] bg-white hover:border-[#D4AF37]/60"}`}><div className="flex gap-3"><div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-[#F8F0E3]">{product?.image ? <img src={product.image} alt="" className="h-full w-full object-cover" /> : <FileText className="m-4 text-[#D4AF37]" size={22} />}</div><div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-2"><p className="truncate text-sm font-bold text-[#1A2238]">{product?.name ?? `Producto #${pack.productId}`}</p><PackStatus status={pack.status} /></div><p className="mt-1 line-clamp-2 text-xs text-gray-500">{pack.payload.instagramCaption || "Sin caption"}</p><p className="mt-2 text-[11px] text-gray-400">{new Intl.DateTimeFormat("es-AR", { dateStyle: "medium" }).format(new Date(pack.updatedAt))}</p></div></div></button>; })}
           </section>

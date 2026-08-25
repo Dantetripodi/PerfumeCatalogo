@@ -21,3 +21,8 @@ export function filterContentPacks<T extends ProductLookup>(packs: ContentPack[]
     return matchesTab && matchesSearch;
   });
 }
+
+export function contentPackItemKey(prefix: string, values: string[], index: number): string {
+  const content = values.map((value) => value.trim()).join("|").replace(/\|+$/, "");
+  return content ? `${prefix}-${content}` : `${prefix}-empty-${index}`;
+}

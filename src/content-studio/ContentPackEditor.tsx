@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import type { Perfume } from "../types";
 import type { ContentPack, ContentPackPayload, ImageConcept, ReelIdea, StoryIdea } from "./contentPackTypes";
+import { contentPackItemKey } from "./ContentPackInbox.utils";
 
 export interface ContentPackEditorProps {
   pack: ContentPack;
@@ -50,12 +51,13 @@ function lines(value: string): string[] {
   return value.split("\n").map((item) => item.trim()).filter(Boolean);
 }
 
-function Field({ label, value, onChange, rows = 4, placeholder }: {
+function Field({ label, value, onChange, rows = 4, placeholder, disabled = false }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   rows?: number;
   placeholder?: string;
+  disabled?: boolean;
 }) {
   return (
     <label className="block">
@@ -64,6 +66,7 @@ function Field({ label, value, onChange, rows = 4, placeholder }: {
         value={value}
         rows={rows}
         placeholder={placeholder}
+        disabled={disabled}
         onChange={(event) => onChange(event.target.value)}
         className="w-full resize-y rounded-lg border border-[#E8DDBF] bg-white px-3 py-2.5 text-sm leading-relaxed text-[#1A2238] outline-none transition focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/30"
       />
@@ -99,6 +102,7 @@ export default function ContentPackEditor({
   const payload = pack.payload;
 
   const updatePayload = (changes: Partial<ContentPackPayload>) => {
+    if (busy) return;
     onChange({ ...pack, payload: { ...payload, ...changes }, updatedAt: new Date().toISOString() });
   };
 
@@ -152,24 +156,24 @@ export default function ContentPackEditor({
       </header>
 
       <Section title="Instagram" icon={<Sparkles size={19} className="text-[#D4AF37]" />}>
-        <Field label="Caption" value={payload.instagramCaption} onChange={(value) => updatePayload({ instagramCaption: value })} rows={6} />
-        {payload.stories.map((story, index) => <div key={`story-${index}`} className="rounded-lg border border-[#E8DDBF] bg-white p-3"><p className="mb-3 text-xs font-semibold text-gray-500">Historia {index + 1}</p><div className="grid gap-3 sm:grid-cols-2"><Field label="Título" value={story.title} onChange={(value) => updateStory(index, { title: value })} rows={2} /><Field label="Texto" value={story.text} onChange={(value) => updateStory(index, { text: value })} rows={3} /></div><div className="mt-3"><Field label="CTA" value={story.cta ?? ""} onChange={(value) => updateStory(index, { cta: value })} rows={2} /></div></div>)}
+        <Field disabled={busy} label="Caption" value={payload.instagramCaption} onChange={(value) => updatePayload({ instagramCaption: value })} rows={6} />
+        {payload.stories.map((story, index) => <div key={contentPackItemKey("story", [story.title, story.text, story.cta ?? ""], index)} className="rounded-lg border border-[#E8DDBF] bg-white p-3"><p className="mb-3 text-xs font-semibold text-gray-500">Historia {index + 1}</p><div className="grid gap-3 sm:grid-cols-2"><Field disabled={busy} label="Título" value={story.title} onChange={(value) => updateStory(index, { title: value })} rows={2} /><Field disabled={busy} label="Texto" value={story.text} onChange={(value) => updateStory(index, { text: value })} rows={3} /></div><div className="mt-3"><Field disabled={busy} label="CTA" value={story.cta ?? ""} onChange={(value) => updateStory(index, { cta: value })} rows={2} /></div></div>)}
         <button type="button" disabled={busy} onClick={() => updatePayload({ stories: [...payload.stories, { title: "", text: "", cta: "" }] })} className="text-xs font-semibold text-[#9A7A1F] hover:underline disabled:opacity-50">+ Agregar historia</button>
       </Section>
 
       <Section title="Reel" icon={<FileText size={19} className="text-[#D4AF37]" />}>
-        <Field label="Hook" value={payload.reel.hook} onChange={(value) => updateReel({ hook: value })} rows={3} />
-        <div className="grid gap-4 sm:grid-cols-2"><Field label="Shots (uno por línea)" value={payload.reel.shots.join("\n")} onChange={(value) => updateReel({ shots: lines(value) })} rows={5} /><Field label="Texto en pantalla (uno por línea)" value={payload.reel.onScreenText.join("\n")} onChange={(value) => updateReel({ onScreenText: lines(value) })} rows={5} /></div>
-        <div className="grid gap-4 sm:grid-cols-2"><Field label="CTA" value={payload.reel.cta} onChange={(value) => updateReel({ cta: value })} rows={3} /><Field label="Caption" value={payload.reel.caption} onChange={(value) => updateReel({ caption: value })} rows={4} /></div>
+        <Field disabled={busy} label="Hook" value={payload.reel.hook} onChange={(value) => updateReel({ hook: value })} rows={3} />
+        <div className="grid gap-4 sm:grid-cols-2"><Field disabled={busy} label="Shots (uno por línea)" value={payload.reel.shots.join("\n")} onChange={(value) => updateReel({ shots: lines(value) })} rows={5} /><Field disabled={busy} label="Texto en pantalla (uno por línea)" value={payload.reel.onScreenText.join("\n")} onChange={(value) => updateReel({ onScreenText: lines(value) })} rows={5} /></div>
+        <div className="grid gap-4 sm:grid-cols-2"><Field disabled={busy} label="CTA" value={payload.reel.cta} onChange={(value) => updateReel({ cta: value })} rows={3} /><Field disabled={busy} label="Caption" value={payload.reel.caption} onChange={(value) => updateReel({ caption: value })} rows={4} /></div>
       </Section>
 
       <Section title="WhatsApp y hashtags" icon={<MessageCircle size={19} className="text-[#D4AF37]" />}>
-        <Field label="Mensaje de WhatsApp" value={payload.whatsappText} onChange={(value) => updatePayload({ whatsappText: value })} rows={6} />
-        <Field label="Hashtags (uno por línea)" value={payload.hashtags.join("\n")} onChange={(value) => updatePayload({ hashtags: lines(value) })} rows={4} />
+        <Field disabled={busy} label="Mensaje de WhatsApp" value={payload.whatsappText} onChange={(value) => updatePayload({ whatsappText: value })} rows={6} />
+        <Field disabled={busy} label="Hashtags (uno por línea)" value={payload.hashtags.join("\n")} onChange={(value) => updatePayload({ hashtags: lines(value) })} rows={4} />
       </Section>
 
       <Section title="Conceptos de imagen" icon={<ImageIcon size={19} className="text-[#D4AF37]" />}>
-        {payload.imageConcepts.map((concept, index) => <div key={`concept-${index}`} className="rounded-lg border border-[#E8DDBF] bg-white p-3"><p className="mb-3 text-xs font-semibold text-gray-500">Concepto {index + 1}</p><div className="grid gap-3 sm:grid-cols-2"><Field label="Título" value={concept.title} onChange={(value) => updateConcept(index, { title: value })} rows={2} /><Field label="Texto superpuesto" value={concept.overlayText ?? ""} onChange={(value) => updateConcept(index, { overlayText: value })} rows={2} /></div><div className="mt-3"><Field label="Escena" value={concept.scene} onChange={(value) => updateConcept(index, { scene: value })} rows={4} /></div></div>)}
+        {payload.imageConcepts.map((concept, index) => <div key={contentPackItemKey("concept", [concept.title, concept.scene, concept.overlayText ?? ""], index)} className="rounded-lg border border-[#E8DDBF] bg-white p-3"><p className="mb-3 text-xs font-semibold text-gray-500">Concepto {index + 1}</p><div className="grid gap-3 sm:grid-cols-2"><Field disabled={busy} label="Título" value={concept.title} onChange={(value) => updateConcept(index, { title: value })} rows={2} /><Field disabled={busy} label="Texto superpuesto" value={concept.overlayText ?? ""} onChange={(value) => updateConcept(index, { overlayText: value })} rows={2} /></div><div className="mt-3"><Field disabled={busy} label="Escena" value={concept.scene} onChange={(value) => updateConcept(index, { scene: value })} rows={4} /></div></div>)}
         <button type="button" disabled={busy} onClick={() => updatePayload({ imageConcepts: [...payload.imageConcepts, { title: "", scene: "", overlayText: "" }] })} className="text-xs font-semibold text-[#9A7A1F] hover:underline disabled:opacity-50">+ Agregar concepto</button>
       </Section>
     </div>
