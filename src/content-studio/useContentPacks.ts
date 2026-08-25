@@ -134,6 +134,25 @@ export function canSavePack(pack: ContentPack): boolean {
   return pack.id !== undefined || isValidScope(pack.clientScope);
 }
 
+export function canMutatePack(
+  enabled: boolean,
+  clientScope: string | null,
+  pack: ContentPack,
+): boolean {
+  return enabled &&
+    isValidScope(clientScope) &&
+    isValidScope(pack.clientScope) &&
+    pack.clientScope === clientScope;
+}
+
+export function canRegeneratePack(
+  enabled: boolean,
+  clientScope: string | null,
+  pack: ContentPack,
+): boolean {
+  return canMutatePack(enabled, clientScope, pack);
+}
+
 export function resetScopedPackState() {
   return {
     packs: [] as ContentPack[],
@@ -166,12 +185,24 @@ interface SaveQueueEntry<T> {
   queued: SaveQueueJob<T> | null;
 }
 
-export function createPackSaveQueue() {
+export function createPackSaveQueue(isActive: () => boolean = () => true) {
   const entries = new Map<string, SaveQueueEntry<unknown>>();
 
+  // The repository currently has no AbortSignal contract: in-flight requests
+  // finish, but lifecycle guards suppress their state updates and queued jobs.
   function start<T>(key: string, entry: SaveQueueEntry<T>, job: SaveQueueJob<T>, previous?: T): void {
+    if (!isActive()) {
+      const cause = new Error("inactive pack queue");
+      job.waiters.forEach(({ reject }) => reject(cause));
+      if (entry.queued) entry.queued.waiters.forEach(({ reject }) => reject(cause));
+      entries.delete(key);
+      return;
+    }
     void Promise.resolve()
-      .then(() => job.operation(previous))
+      .then(() => {
+        if (!isActive()) throw new Error("inactive pack queue");
+        return job.operation(previous);
+      })
       .then(
         (result) => {
           job.waiters.forEach(({ resolve }) => resolve(result));
@@ -198,6 +229,7 @@ export function createPackSaveQueue() {
 
   return {
     run<T>(key: string, operation: (previous?: T) => Promise<T>): Promise<T> {
+      if (!isActive()) return Promise.reject(new Error("inactive pack queue"));
       let entry = entries.get(key) as SaveQueueEntry<T> | undefined;
       return new Promise<T>((resolve, reject) => {
         if (!entry) {
@@ -273,8 +305,9 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState<string | null>(null);
   const lifecycleRef = useRef(0);
+  const activeRef = useRef(false);
   const requestSequenceRef = useRef(createPackRequestSequence());
-  const saveQueueRef = useRef(createPackSaveQueue());
+  const saveQueueRef = useRef(createPackSaveQueue(() => activeRef.current));
   const authKey = `${clientScope ?? "signed-out"}:${session?.user.id ?? ""}`;
 
   const refresh = useCallback(async () => {
@@ -288,7 +321,10 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
     setLoading(true);
     setError(null);
     try {
-      const nextPacks = await listContentPacks();
+      const nextPacks = (await listContentPacks()).map((pack) => ({
+        ...pack,
+        clientScope,
+      }));
       if (
         lifecycleRef.current !== lifecycle ||
         !requestSequenceRef.current.isCurrent("refresh", sequence)
@@ -310,16 +346,19 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
 
   useEffect(() => {
     const lifecycle = ++lifecycleRef.current;
+    activeRef.current = false;
     requestSequenceRef.current = createPackRequestSequence();
-    saveQueueRef.current = createPackSaveQueue();
+    saveQueueRef.current = createPackSaveQueue(() => activeRef.current);
     const reset = resetScopedPackState();
     setPacks(reset.packs);
     setSelectedPack(reset.selectedPack);
     setSelectedProduct(reset.selectedProduct);
     setError(reset.error);
     setLoading(enabled);
+    activeRef.current = enabled;
     if (enabled) void refresh();
     return () => {
+      activeRef.current = false;
       if (lifecycleRef.current === lifecycle) lifecycleRef.current += 1;
     };
   }, [authKey, enabled, refresh]);
@@ -345,7 +384,7 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   );
 
   const savePack = useCallback((pack: ContentPack) => {
-    if (!canSavePack(pack)) {
+    if (!canSavePack(pack) || !canMutatePack(enabled, clientScope, pack)) {
       setError("El content pack necesita un scope de administrador válido.");
       return Promise.resolve(null);
     }
@@ -364,14 +403,15 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
               reason: target.reason,
               payload: target.payload,
             });
+        const scopedSaved = { ...saved, clientScope };
         if (
           lifecycleRef.current === lifecycle &&
           requestSequenceRef.current.isCurrent(key, sequence)
         ) {
-          setPacks((current) => replacePack(current, candidate, saved));
-          setSelectedPack((current) => (samePack(current, candidate) ? saved : current));
+          setPacks((current) => replacePack(current, candidate, scopedSaved));
+          setSelectedPack((current) => (samePack(current, candidate) ? scopedSaved : current));
         }
-        return saved;
+        return scopedSaved;
       } catch (cause) {
         if (
           lifecycleRef.current === lifecycle &&
@@ -385,11 +425,11 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
       }
     });
     return pending.catch(() => null);
-  }, []);
+  }, [clientScope, enabled]);
 
   const changeStatus = useCallback((pack: ContentPack | undefined, action: ContentPackAction) => {
     const current = pack ?? selectedPack;
-    if (!current?.id) {
+    if (!current?.id || !canMutatePack(enabled, clientScope, current)) {
       setError("Guardá el draft antes de cambiar su estado.");
       return Promise.resolve(null);
     }
@@ -405,14 +445,15 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
           target.id as string,
           nextStatus(target.status, action),
         );
+        const scopedUpdated = { ...updated, clientScope };
         if (
           lifecycleRef.current === lifecycle &&
           requestSequenceRef.current.isCurrent(key, sequence)
         ) {
-          setPacks((items) => replacePack(items, current, updated));
-          setSelectedPack((item) => (samePack(item, current) ? updated : item));
+          setPacks((items) => replacePack(items, current, scopedUpdated));
+          setSelectedPack((item) => (samePack(item, current) ? scopedUpdated : item));
         }
-        return updated;
+        return scopedUpdated;
       } catch (cause) {
         if (
           lifecycleRef.current === lifecycle &&
@@ -422,12 +463,13 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
       }
     });
     return pending.catch(() => null);
-  }, [selectedPack]);
+  }, [clientScope, enabled, selectedPack]);
 
   const regeneratePack = useCallback(
     (pack = selectedPack ?? undefined, product = selectedProduct ?? undefined) => {
-      if (!pack || !product) return null;
-      if (!isValidScope(clientScope)) return null;
+      if (!pack || !product || !isValidScope(clientScope) || !canRegeneratePack(enabled, clientScope, pack)) {
+        return null;
+      }
       const regenerated = regenerateContentPack(pack, product, clientScope);
       if (!regenerated) return null;
       setPacks((current) => [regenerated, ...current]);
@@ -435,7 +477,7 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
       setError(null);
       return regenerated;
     },
-    [clientScope, selectedPack, selectedProduct],
+    [clientScope, enabled, selectedPack, selectedProduct],
   );
 
   return {

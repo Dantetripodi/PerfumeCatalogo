@@ -11,6 +11,8 @@ vi.mock("./contentPackRepository", () => ({
 import {
   canEdit,
   canCreateDraft,
+  canMutatePack,
+  canRegeneratePack,
   canSavePack,
   createPackSaveQueue,
   createLocalContentPack,
@@ -159,6 +161,17 @@ describe("content pack state transitions", () => {
     expect(canSavePack({ ...externalDraft, clientScope: "   " })).toBe(false);
   });
 
+  it("bloquea mutaciones disabled o cross-scope", () => {
+    const scopedPack = { ...existingPack, clientScope: "admin-a" };
+    expect(canMutatePack(false, "admin-a", scopedPack)).toBe(false);
+    expect(canMutatePack(true, "admin-b", scopedPack)).toBe(false);
+    expect(canMutatePack(true, "admin-a", { ...scopedPack, clientScope: undefined })).toBe(false);
+    expect(canMutatePack(true, "admin-a", scopedPack)).toBe(true);
+    expect(canRegeneratePack(false, "admin-a", scopedPack)).toBe(false);
+    expect(canRegeneratePack(true, "admin-b", scopedPack)).toBe(false);
+    expect(canRegeneratePack(true, "admin-a", scopedPack)).toBe(true);
+  });
+
   it("limpia también el producto seleccionado al cerrar el scope", () => {
     expect(resetScopedPackState()).toEqual({
       packs: [],
@@ -250,6 +263,30 @@ describe("content pack state transitions", () => {
     await expect(save).resolves.toBe(saved);
     await expect(status).resolves.toBe(approved);
     expect(calls).toEqual(["save", "status:draft"]);
+  });
+
+  it("no ejecuta una operación queued después de invalidar la sesión", async () => {
+    let active = true;
+    const queue = createPackSaveQueue(() => active);
+    let resolveFirst!: (value: ContentPack) => void;
+    const calls: string[] = [];
+    const first = queue.run<ContentPack>("persisted:pack-1", async () => {
+      calls.push("first");
+      return new Promise<ContentPack>((resolve) => {
+        resolveFirst = resolve;
+      });
+    });
+    await Promise.resolve();
+    const second = queue.run<ContentPack>("persisted:pack-1", async () => {
+      calls.push("second");
+      return existingPack;
+    });
+
+    active = false;
+    resolveFirst(existingPack);
+    await expect(first).resolves.toBe(existingPack);
+    await expect(second).rejects.toThrow("inactive");
+    expect(calls).toEqual(["first"]);
   });
 
   it("normaliza errores sin exponer el Error.message original", () => {
