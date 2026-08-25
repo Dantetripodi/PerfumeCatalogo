@@ -86,4 +86,10 @@ describe("ContentPackInbox helpers", () => {
 
     expect(new Set(keys).size).toBe(duplicatePacks.length);
   });
+
+  it("mantiene la key de Inbox estable al reordenar un pack con identidad", () => {
+    const persistedPack = makePack({ id: "pack-1", clientId: "local-1" });
+
+    expect(contentPackListItemKey(persistedPack, 0)).toBe(contentPackListItemKey(persistedPack, 4));
+  });
 });

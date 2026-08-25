@@ -28,6 +28,7 @@ export function contentPackItemKey(prefix: string, index: number, content?: read
 }
 
 export function contentPackListItemKey(pack: ContentPack, index: number): string {
-  const identity = pack.id ?? pack.clientId ?? `${pack.productId}-${pack.updatedAt}`;
-  return `pack-${identity}-${index}`;
+  const identity = pack.id || pack.clientId;
+  if (identity) return `pack-${identity}`;
+  return `pack-fallback-${pack.productId}-${pack.updatedAt}-${index}`;
 }
