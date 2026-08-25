@@ -101,10 +101,10 @@ function validateReason(reason: string): asserts reason is ContentPackReason {
   }
 }
 
-function databaseError(message: string): ContentPackRepositoryError {
+function databaseError(): ContentPackRepositoryError {
   return new ContentPackRepositoryError(
     "DATABASE_ERROR",
-    `No se pudo guardar el content pack: ${message}`,
+    "No se pudo procesar el content pack.",
   );
 }
 
@@ -116,7 +116,7 @@ export async function listContentPacks(status?: ContentPackStatus): Promise<Cont
   if (status !== undefined) query = query.eq("status", status);
 
   const { data, error } = (await query) as QueryResult<ContentPackRow[]>;
-  if (error) throw databaseError(error.message);
+  if (error) throw databaseError();
   return (data ?? []).map(mapRow);
 }
 
@@ -137,7 +137,7 @@ export async function createContentPack(input: NewContentPack): Promise<ContentP
     .select()
     .single();
 
-  if (error || !data) throw databaseError(error?.message ?? "respuesta vacía");
+  if (error || !data) throw databaseError();
   return mapRow(data as ContentPackRow);
 }
 
@@ -154,7 +154,7 @@ export async function updateContentPack(
     .select()
     .single();
 
-  if (error || !data) throw databaseError(error?.message ?? "respuesta vacía");
+  if (error || !data) throw databaseError();
   return mapRow(data as ContentPackRow);
 }
 
@@ -172,6 +172,6 @@ export async function setContentPackStatus(
     .select()
     .single();
 
-  if (error || !data) throw databaseError(error?.message ?? "respuesta vacía");
+  if (error || !data) throw databaseError();
   return mapRow(data as ContentPackRow);
 }

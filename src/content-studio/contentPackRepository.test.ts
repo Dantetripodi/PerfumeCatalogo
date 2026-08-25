@@ -101,6 +101,21 @@ describe("contentPackRepository", () => {
     expect(chain.order).toHaveBeenCalledWith("created_at", { ascending: false });
   });
 
+  it("sanitiza los errores de base de datos sin exponer detalles de Supabase", async () => {
+    authorizedSession();
+    queryChain({
+      data: null,
+      error: { message: "secret relation, token=private-value" },
+    });
+
+    await expect(listContentPacks()).rejects.toEqual(
+      new ContentPackRepositoryError(
+        "DATABASE_ERROR",
+        "No se pudo procesar el content pack.",
+      ),
+    );
+  });
+
   it("envía product_id, reason, payload y draft al crear", async () => {
     authorizedSession();
     const chain = queryChain({ data: row, error: null });
