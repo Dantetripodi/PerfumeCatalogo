@@ -65,9 +65,17 @@ export function applyIfCurrentHookContext(
 }
 
 export interface HookRenderContext {
-  key: string;
-  scope: string | null;
-  epoch: number;
+  readonly key: string;
+  readonly scope: string | null;
+  readonly epoch: number;
+}
+
+export function createHookRenderContext(
+  key: string,
+  scope: string | null,
+  epoch: number,
+): HookRenderContext {
+  return Object.freeze({ key, scope, epoch });
 }
 
 export function isCurrentHookRenderContext(
@@ -365,13 +373,12 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   scopeRef.current = clientScope;
   const renderKey = `${authKey}:${enabled}`;
   const renderContextRef = useRef<HookRenderContext>({
-    key: renderKey,
-    scope: clientScope,
-    epoch: epochRef.current,
+    ...createHookRenderContext(renderKey, clientScope, epochRef.current + 1),
   });
+  if (epochRef.current === 0) epochRef.current = renderContextRef.current.epoch;
   if (renderContextRef.current.key !== renderKey) {
     epochRef.current += 1;
-    renderContextRef.current = { key: renderKey, scope: clientScope, epoch: epochRef.current };
+    renderContextRef.current = createHookRenderContext(renderKey, clientScope, epochRef.current);
   }
   const callbackContext = renderContextRef.current;
 
@@ -412,9 +419,12 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   useEffect(() => {
     const lifecycle = ++lifecycleRef.current;
     requestSequenceRef.current = createPackRequestSequence();
+    const renderContextAtSetup = renderContextRef.current;
+    if (renderContextAtSetup.epoch !== epochRef.current) {
+      epochRef.current += 1;
+      renderContextRef.current = createHookRenderContext(renderKey, clientScope, epochRef.current);
+    }
     saveQueueRef.current = createPackSaveQueue(() => epochRef.current);
-    epochRef.current += 1;
-    renderContextRef.current.epoch = epochRef.current;
     const reset = resetScopedPackState();
     setPacks(reset.packs);
     setSelectedPack(reset.selectedPack);
@@ -425,10 +435,10 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
     if (enabled) void refresh();
     return () => {
       mountedRef.current = false;
-      epochRef.current += 1;
+      if (renderContextRef.current === renderContextAtSetup) epochRef.current += 1;
       if (lifecycleRef.current === lifecycle) lifecycleRef.current += 1;
     };
-  }, [authKey, enabled, refresh]);
+  }, [authKey, clientScope, enabled, refresh, renderKey]);
 
   const selectPack = useCallback((pack: ContentPack | null) => {
     if (!isCurrentHookRenderContext(

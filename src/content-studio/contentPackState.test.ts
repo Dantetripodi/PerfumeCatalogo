@@ -28,6 +28,7 @@ import {
   isValidScope,
   isCurrentHookContext,
   isCurrentHookRenderContext,
+  createHookRenderContext,
   applyIfCurrentHookContext,
 } from "./useContentPacks";
 
@@ -315,12 +316,25 @@ describe("content pack state transitions", () => {
   });
 
   it("mantiene callbacks nuevos válidos tras cleanup/setup del mismo authKey", () => {
-    const renderContext = { key: "admin-a:true", scope: "admin-a", epoch: 1 };
-    const oldRenderContext = { ...renderContext };
-    renderContext.epoch = 2;
+    const oldRenderContext = createHookRenderContext("admin-a:true", "admin-a", 1);
+    const renderContext = createHookRenderContext("admin-a:true", "admin-a", 2);
 
+    expect(renderContext).not.toBe(oldRenderContext);
+    expect(Object.isFrozen(oldRenderContext)).toBe(true);
     expect(isCurrentHookRenderContext(renderContext, renderContext, 2, "admin-a", true)).toBe(true);
     expect(isCurrentHookRenderContext(oldRenderContext, renderContext, 2, "admin-a", true)).toBe(false);
+  });
+
+  it("permite guardar en una queue creada después de fijar la nueva generación", async () => {
+    let epoch = 1;
+    const context = createHookRenderContext("admin-a:true", "admin-a", epoch);
+    epoch = 2;
+    const currentContext = createHookRenderContext("admin-a:true", "admin-a", epoch);
+    const queue = createPackSaveQueue(() => epoch);
+
+    expect(isCurrentHookRenderContext(currentContext, currentContext, epoch, "admin-a", true)).toBe(true);
+    await expect(queue.run("pack-1", async () => existingPack)).resolves.toBe(existingPack);
+    expect(isCurrentHookRenderContext(context, currentContext, epoch, "admin-a", true)).toBe(false);
   });
 
   it("normaliza errores sin exponer el Error.message original", () => {
