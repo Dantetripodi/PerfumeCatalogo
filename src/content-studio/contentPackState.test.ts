@@ -11,6 +11,7 @@ vi.mock("./contentPackRepository", () => ({
 import {
   canEdit,
   canCreateDraft,
+  canSavePack,
   createPackSaveQueue,
   createLocalContentPack,
   createPackRequestSequence,
@@ -75,6 +76,7 @@ describe("content pack state transitions", () => {
 
   it("regenera un pack existente como draft local nuevo sin mutar el original", () => {
     const regenerated = regenerateContentPack(existingPack, perfume, "admin-a");
+    if (!regenerated) throw new Error("expected a scoped regenerated pack");
 
     expect(regenerated.id).toBeUndefined();
     expect(regenerated.clientScope).toBe("admin-a");
@@ -83,6 +85,11 @@ describe("content pack state transitions", () => {
     expect(existingPack.id).toBe("pack-1");
     expect(existingPack.status).toBe("approved");
     expect(regenerated).not.toBe(existingPack);
+  });
+
+  it("rechaza scopes vacíos al regenerar", () => {
+    expect(regenerateContentPack(existingPack, perfume, "")).toBeNull();
+    expect(regenerateContentPack(existingPack, perfume, "   ")).toBeNull();
   });
 
   it("asigna identidades locales distintas a dos drafts", () => {
@@ -135,7 +142,20 @@ describe("content pack state transitions", () => {
   it("bloquea drafts sin scope o con el hook disabled", () => {
     expect(canCreateDraft(false, "admin-a")).toBe(false);
     expect(canCreateDraft(true, null)).toBe(false);
+    expect(canCreateDraft(true, "")).toBe(false);
+    expect(canCreateDraft(true, "   ")).toBe(false);
     expect(canCreateDraft(true, "admin-a")).toBe(true);
+  });
+
+  it("rechaza un draft externo sin scope antes de guardarlo", () => {
+    const externalDraft: ContentPack = {
+      ...existingPack,
+      id: undefined,
+      clientId: "external-draft",
+    };
+
+    expect(canSavePack(externalDraft)).toBe(false);
+    expect(canSavePack({ ...externalDraft, clientScope: "   " })).toBe(false);
   });
 
   it("limpia también el producto seleccionado al cerrar el scope", () => {

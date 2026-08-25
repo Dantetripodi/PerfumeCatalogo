@@ -32,6 +32,10 @@ export function nextStatus(
 
 let localPackSequence = 0;
 
+export function hasValidPackScope(scope: string | null | undefined): scope is string {
+  return typeof scope === "string" && scope.trim().length > 0;
+}
+
 function uniqueLocalPackId(): string {
   localPackSequence += 1;
   const randomId = globalThis.crypto?.randomUUID?.();
@@ -43,6 +47,9 @@ export function createLocalContentPack(
   reason: ContentPackReason,
   clientScope: string,
 ): ContentPack {
+  if (!hasValidPackScope(clientScope)) {
+    throw new Error("El content pack necesita un scope de administrador válido.");
+  }
   const now = new Date().toISOString();
   return {
     ...generateContentPack(product, reason),
@@ -59,7 +66,8 @@ export function regenerateContentPack(
   pack: ContentPack,
   product: Perfume,
   clientScope: string,
-): ContentPack {
+): ContentPack | null {
+  if (!hasValidPackScope(clientScope)) return null;
   return createLocalContentPack(product, pack.reason, clientScope);
 }
 
@@ -114,7 +122,11 @@ export function canCreateDraft(
   enabled: boolean,
   clientScope: string | null,
 ): clientScope is string {
-  return enabled && clientScope !== null;
+  return enabled && hasValidPackScope(clientScope);
+}
+
+export function canSavePack(pack: ContentPack): boolean {
+  return pack.id !== undefined || hasValidPackScope(pack.clientScope);
 }
 
 export function resetScopedPackState() {
@@ -249,7 +261,7 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   } = options;
   const clientScope = adminIdentity !== undefined ? adminIdentity : session?.user.id ?? null;
   const admin = isAdmin ?? session?.user.app_metadata?.content_admin === true;
-  const enabled = clientScope !== null && session !== null && admin;
+  const enabled = hasValidPackScope(clientScope) && session !== null && admin;
   const [packs, setPacks] = useState<ContentPack[]>([]);
   const [selectedPack, setSelectedPack] = useState<ContentPack | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Perfume | null>(initialProduct);
@@ -328,6 +340,10 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   );
 
   const savePack = useCallback((pack: ContentPack) => {
+    if (!canSavePack(pack)) {
+      setError("El content pack necesita un scope de administrador válido.");
+      return Promise.resolve(null);
+    }
     const candidate = pack.id || pack.clientId ? pack : { ...pack, clientId: uniqueLocalPackId() };
     const key = packKey(candidate);
     const lifecycle = lifecycleRef.current;
@@ -406,8 +422,9 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const regeneratePack = useCallback(
     (pack = selectedPack ?? undefined, product = selectedProduct ?? undefined) => {
       if (!pack || !product) return null;
-      if (!clientScope) return null;
+      if (!hasValidPackScope(clientScope)) return null;
       const regenerated = regenerateContentPack(pack, product, clientScope);
+      if (!regenerated) return null;
       setPacks((current) => [regenerated, ...current]);
       setSelectedPack(regenerated);
       setError(null);
