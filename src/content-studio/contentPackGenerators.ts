@@ -29,8 +29,14 @@ export function normalizeStories(source: string): StoryIdea[] {
   });
 }
 
+const CONTENT_LABEL = "Texto(?: en pantalla| animado)?|VO";
+const ON_SCREEN_LABEL = "Texto(?: en pantalla| animado)?";
+
+const hasLabel = (line: string, label: string): boolean =>
+  new RegExp(`^(?:${label})\\s*:`, "i").test(line);
+
 const stripLabel = (line: string, label: string): string =>
-  line.replace(new RegExp(`^${label}\\s*:?\\s*`, "i"), "").trim();
+  line.replace(new RegExp(`^(?:${label})\\s*:\\s*`, "i"), "").trim();
 
 export function normalizeReel(source: string, caption: string): ReelIdea {
   const lines = cleanLines(source);
@@ -38,20 +44,24 @@ export function normalizeReel(source: string, caption: string): ReelIdea {
   const ctaIndex = lines.findIndex((line) => /CTA/i.test(line));
   const hookText = lines
     .slice(Math.max(0, hookIndex), ctaIndex === -1 ? undefined : ctaIndex)
-    .find((line) => /Texto(?: en pantalla)?|VO/i.test(line));
+    .find((line) => hasLabel(line, CONTENT_LABEL));
   const shots = lines
     .filter((line) => line.startsWith("📷"))
     .map((line) => line.replace(/^📷\s*/, "").trim());
   const onScreenText = lines
-    .filter((line) => /^Texto(?: en pantalla)?\s*:/i.test(line))
-    .map((line) => stripLabel(line, "Texto(?: en pantalla)?"));
+    .filter((line) => hasLabel(line, ON_SCREEN_LABEL))
+    .map((line) => stripLabel(line, ON_SCREEN_LABEL));
   const ctaLines = ctaIndex === -1 ? [] : lines.slice(ctaIndex + 1);
+  const ctaTextLine =
+    ctaLines.find((line) => hasLabel(line, ON_SCREEN_LABEL)) ??
+    ctaLines.find((line) => hasLabel(line, "VO"));
+  const ctaLabel = ctaTextLine && hasLabel(ctaTextLine, ON_SCREEN_LABEL) ? ON_SCREEN_LABEL : "VO";
 
   return {
-    hook: hookText ? stripLabel(hookText, "Texto(?: en pantalla)?|VO") : lines[0] ?? "",
+    hook: hookText ? stripLabel(hookText, CONTENT_LABEL) : lines[0] ?? "",
     shots,
     onScreenText,
-    cta: ctaLines.join(" "),
+    cta: ctaTextLine ? stripLabel(ctaTextLine, ctaLabel) : "",
     caption,
   };
 }
