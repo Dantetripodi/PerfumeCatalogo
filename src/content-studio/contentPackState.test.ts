@@ -325,6 +325,21 @@ describe("content pack state transitions", () => {
     expect(isCurrentHookRenderContext(oldRenderContext, renderContext, 2, "admin-a", true)).toBe(false);
   });
 
+  it("reactiva callbacks del mismo contexto después de cleanup/setup StrictMode", () => {
+    const context = createHookRenderContext("admin-a:true", "admin-a", 7);
+
+    expect(isCurrentHookRenderContext(context, context, 7, "admin-a", false)).toBe(false);
+    expect(isCurrentHookRenderContext(context, context, 7, "admin-a", true)).toBe(true);
+  });
+
+  it("mantiene bloqueado el callback A después de logout y contexto B", () => {
+    const contextA = createHookRenderContext("admin-a:true", "admin-a", 1);
+    const contextB = createHookRenderContext("admin-b:true", "admin-b", 2);
+
+    expect(isCurrentHookRenderContext(contextA, contextB, 2, "admin-b", true)).toBe(false);
+    expect(isCurrentHookRenderContext(contextB, contextB, 2, "admin-b", true)).toBe(true);
+  });
+
   it("permite guardar en una queue creada después de fijar la nueva generación", async () => {
     let epoch = 1;
     const context = createHookRenderContext("admin-a:true", "admin-a", epoch);

@@ -419,11 +419,6 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   useEffect(() => {
     const lifecycle = ++lifecycleRef.current;
     requestSequenceRef.current = createPackRequestSequence();
-    const renderContextAtSetup = renderContextRef.current;
-    if (renderContextAtSetup.epoch !== epochRef.current) {
-      epochRef.current += 1;
-      renderContextRef.current = createHookRenderContext(renderKey, clientScope, epochRef.current);
-    }
     saveQueueRef.current = createPackSaveQueue(() => epochRef.current);
     const reset = resetScopedPackState();
     setPacks(reset.packs);
@@ -435,10 +430,9 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
     if (enabled) void refresh();
     return () => {
       mountedRef.current = false;
-      if (renderContextRef.current === renderContextAtSetup) epochRef.current += 1;
       if (lifecycleRef.current === lifecycle) lifecycleRef.current += 1;
     };
-  }, [authKey, clientScope, enabled, refresh, renderKey]);
+  }, [authKey, clientScope, enabled, refresh]);
 
   const selectPack = useCallback((pack: ContentPack | null) => {
     if (!isCurrentHookRenderContext(
