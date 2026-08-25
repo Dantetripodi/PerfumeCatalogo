@@ -185,14 +185,17 @@ interface SaveQueueEntry<T> {
   queued: SaveQueueJob<T> | null;
 }
 
-export function createPackSaveQueue(isActive: () => boolean = () => true) {
+export function createPackSaveQueue(getEpoch: () => number = () => 0) {
   const entries = new Map<string, SaveQueueEntry<unknown>>();
+  const queueEpoch = getEpoch();
+
+  const isCurrentEpoch = (): boolean => getEpoch() === queueEpoch;
 
   // The repository currently has no AbortSignal contract: in-flight requests
   // finish, but lifecycle guards suppress their state updates and queued jobs.
   function start<T>(key: string, entry: SaveQueueEntry<T>, job: SaveQueueJob<T>, previous?: T): void {
-    if (!isActive()) {
-      const cause = new Error("inactive pack queue");
+    if (!isCurrentEpoch()) {
+      const cause = new Error("stale pack queue");
       job.waiters.forEach(({ reject }) => reject(cause));
       if (entry.queued) entry.queued.waiters.forEach(({ reject }) => reject(cause));
       entries.delete(key);
@@ -200,7 +203,7 @@ export function createPackSaveQueue(isActive: () => boolean = () => true) {
     }
     void Promise.resolve()
       .then(() => {
-        if (!isActive()) throw new Error("inactive pack queue");
+        if (!isCurrentEpoch()) throw new Error("stale pack queue");
         return job.operation(previous);
       })
       .then(
@@ -229,7 +232,7 @@ export function createPackSaveQueue(isActive: () => boolean = () => true) {
 
   return {
     run<T>(key: string, operation: (previous?: T) => Promise<T>): Promise<T> {
-      if (!isActive()) return Promise.reject(new Error("inactive pack queue"));
+      if (!isCurrentEpoch()) return Promise.reject(new Error("stale pack queue"));
       let entry = entries.get(key) as SaveQueueEntry<T> | undefined;
       return new Promise<T>((resolve, reject) => {
         if (!entry) {
@@ -305,9 +308,9 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState<string | null>(null);
   const lifecycleRef = useRef(0);
-  const activeRef = useRef(false);
+  const epochRef = useRef(0);
   const requestSequenceRef = useRef(createPackRequestSequence());
-  const saveQueueRef = useRef(createPackSaveQueue(() => activeRef.current));
+  const saveQueueRef = useRef(createPackSaveQueue(() => epochRef.current));
   const authKey = `${clientScope ?? "signed-out"}:${session?.user.id ?? ""}`;
 
   const refresh = useCallback(async () => {
@@ -346,19 +349,18 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
 
   useEffect(() => {
     const lifecycle = ++lifecycleRef.current;
-    activeRef.current = false;
+    epochRef.current += 1;
     requestSequenceRef.current = createPackRequestSequence();
-    saveQueueRef.current = createPackSaveQueue(() => activeRef.current);
+    saveQueueRef.current = createPackSaveQueue(() => epochRef.current);
     const reset = resetScopedPackState();
     setPacks(reset.packs);
     setSelectedPack(reset.selectedPack);
     setSelectedProduct(reset.selectedProduct);
     setError(reset.error);
     setLoading(enabled);
-    activeRef.current = enabled;
     if (enabled) void refresh();
     return () => {
-      activeRef.current = false;
+      epochRef.current += 1;
       if (lifecycleRef.current === lifecycle) lifecycleRef.current += 1;
     };
   }, [authKey, enabled, refresh]);

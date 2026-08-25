@@ -265,9 +265,9 @@ describe("content pack state transitions", () => {
     expect(calls).toEqual(["save", "status:draft"]);
   });
 
-  it("no ejecuta una operación queued después de invalidar la sesión", async () => {
-    let active = true;
-    const queue = createPackSaveQueue(() => active);
+  it("no revive una operación queued después de invalidar y reactivar la sesión", async () => {
+    let epoch = 1;
+    const queue = createPackSaveQueue(() => epoch);
     let resolveFirst!: (value: ContentPack) => void;
     const calls: string[] = [];
     const first = queue.run<ContentPack>("persisted:pack-1", async () => {
@@ -282,10 +282,11 @@ describe("content pack state transitions", () => {
       return existingPack;
     });
 
-    active = false;
+    epoch = 2;
+    epoch = 3;
     resolveFirst(existingPack);
     await expect(first).resolves.toBe(existingPack);
-    await expect(second).rejects.toThrow("inactive");
+    await expect(second).rejects.toThrow("stale");
     expect(calls).toEqual(["first"]);
   });
 
