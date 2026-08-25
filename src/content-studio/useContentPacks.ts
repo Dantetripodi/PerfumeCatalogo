@@ -29,11 +29,20 @@ export function nextStatus(
   return "rejected";
 }
 
-function localPack(product: Perfume, reason: ContentPackReason): ContentPack {
+let localPackSequence = 0;
+
+function uniqueLocalPackId(): string {
+  localPackSequence += 1;
+  const randomId = globalThis.crypto?.randomUUID?.();
+  return randomId ? `local-${randomId}` : `local-${Date.now()}-${localPackSequence}`;
+}
+
+export function createLocalContentPack(product: Perfume, reason: ContentPackReason): ContentPack {
   const now = new Date().toISOString();
   return {
     ...generateContentPack(product, reason),
     id: undefined,
+    clientId: uniqueLocalPackId(),
     status: "draft",
     createdAt: now,
     updatedAt: now,
@@ -41,7 +50,27 @@ function localPack(product: Perfume, reason: ContentPackReason): ContentPack {
 }
 
 export function regenerateContentPack(pack: ContentPack, product: Perfume): ContentPack {
-  return localPack(product, pack.reason);
+  return createLocalContentPack(product, pack.reason);
+}
+
+function samePack(left: ContentPack | null | undefined, right: ContentPack): boolean {
+  if (!left) return false;
+  if (left.id || right.id) return left.id !== undefined && left.id === right.id;
+  return left.clientId !== undefined && left.clientId === right.clientId;
+}
+
+function replacePack(
+  packs: ContentPack[],
+  targetPack: ContentPack,
+  replacement: ContentPack,
+): ContentPack[] {
+  const index = packs.findIndex((pack) => samePack(pack, targetPack));
+  if (index === -1) return [replacement, ...packs];
+  return packs.map((pack, packIndex) => (packIndex === index ? replacement : pack));
+}
+
+export function preserveEditedPack(packs: ContentPack[], editedPack: ContentPack): ContentPack[] {
+  return replacePack(packs, editedPack, editedPack);
 }
 
 export interface UseContentPacksOptions {
@@ -116,7 +145,7 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const createDraft = useCallback(
     (product = selectedProduct ?? undefined, reason: ContentPackReason = "manual") => {
       if (!product) return null;
-      const draft = localPack(product, reason);
+      const draft = createLocalContentPack(product, reason);
       setPacks((current) => [draft, ...current]);
       setSelectedPack(draft);
       setError(null);
@@ -136,13 +165,13 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
             payload: pack.payload,
           });
       setPacks((current) => {
-        const index = current.findIndex((item) => item.id === pack.id);
-        if (index === -1) return [saved, ...current];
-        return current.map((item, itemIndex) => (itemIndex === index ? saved : item));
+        return replacePack(current, pack, saved);
       });
-      setSelectedPack((current) => (current === pack || current?.id === pack.id ? saved : current));
+      setSelectedPack((current) => (samePack(current, pack) ? saved : current));
       return saved;
     } catch (cause) {
+      setPacks((current) => preserveEditedPack(current, pack));
+      setSelectedPack((current) => (samePack(current, pack) ? pack : current));
       setError(errorMessage(cause));
       return null;
     }

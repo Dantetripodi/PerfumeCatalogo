@@ -8,7 +8,13 @@ vi.mock("./contentPackRepository", () => ({
   updateContentPack: vi.fn(),
 }));
 
-import { canEdit, nextStatus, regenerateContentPack } from "./useContentPacks";
+import {
+  canEdit,
+  createLocalContentPack,
+  nextStatus,
+  preserveEditedPack,
+  regenerateContentPack,
+} from "./useContentPacks";
 
 const payload = {
   instagramCaption: "Caption",
@@ -68,5 +74,30 @@ describe("content pack state transitions", () => {
     expect(existingPack.id).toBe("pack-1");
     expect(existingPack.status).toBe("approved");
     expect(regenerated).not.toBe(existingPack);
+  });
+
+  it("asigna identidades locales distintas a dos drafts", () => {
+    const first = createLocalContentPack(perfume, "manual");
+    const second = createLocalContentPack(perfume, "manual");
+
+    expect(first.id).toBeUndefined();
+    expect(second.id).toBeUndefined();
+    expect(first.clientId).toBeDefined();
+    expect(second.clientId).toBeDefined();
+    expect(first.clientId).not.toBe(second.clientId);
+  });
+
+  it("preserva el payload editado cuando falla el save", () => {
+    const first = createLocalContentPack(perfume, "manual");
+    const second = createLocalContentPack(perfume, "manual");
+    const edited = { ...second, payload: { ...second.payload, instagramCaption: "Edición local" } };
+
+    const preserved = preserveEditedPack([first, second], edited);
+
+    expect(preserved).toHaveLength(2);
+    expect(preserved.find((pack) => pack.clientId === second.clientId)?.payload.instagramCaption).toBe(
+      "Edición local",
+    );
+    expect(preserved.find((pack) => pack.clientId === first.clientId)).toBe(first);
   });
 });

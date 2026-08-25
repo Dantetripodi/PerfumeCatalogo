@@ -33,6 +33,8 @@ export interface ContentPackPayload {
 export interface ContentPack {
   /** Undefined while the pack is only being edited locally. */
   id?: string;
+  /** Stable client-only identity for unsaved local packs. */
+  clientId?: string;
   productId: number;
   reason: ContentPackReason;
   payload: ContentPackPayload;
