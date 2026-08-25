@@ -27,6 +27,7 @@ import {
   selectRefreshedPack,
   isValidScope,
   isCurrentHookContext,
+  isCurrentHookRenderContext,
   applyIfCurrentHookContext,
 } from "./useContentPacks";
 
@@ -311,6 +312,15 @@ describe("content pack state transitions", () => {
     expect(setSelectedPack).not.toHaveBeenCalled();
     expect(setSelectedProduct).not.toHaveBeenCalled();
     expect(setError).not.toHaveBeenCalled();
+  });
+
+  it("mantiene callbacks nuevos válidos tras cleanup/setup del mismo authKey", () => {
+    const renderContext = { key: "admin-a:true", scope: "admin-a", epoch: 1 };
+    const oldRenderContext = { ...renderContext };
+    renderContext.epoch = 2;
+
+    expect(isCurrentHookRenderContext(renderContext, renderContext, 2, "admin-a", true)).toBe(true);
+    expect(isCurrentHookRenderContext(oldRenderContext, renderContext, 2, "admin-a", true)).toBe(false);
   });
 
   it("normaliza errores sin exponer el Error.message original", () => {

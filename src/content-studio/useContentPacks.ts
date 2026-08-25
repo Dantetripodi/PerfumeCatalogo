@@ -64,6 +64,26 @@ export function applyIfCurrentHookContext(
   return true;
 }
 
+export interface HookRenderContext {
+  key: string;
+  scope: string | null;
+  epoch: number;
+}
+
+export function isCurrentHookRenderContext(
+  callbackContext: HookRenderContext,
+  currentContext: HookRenderContext,
+  currentEpoch: number,
+  currentScope: string | null,
+  mounted: boolean,
+): boolean {
+  return mounted &&
+    callbackContext === currentContext &&
+    callbackContext.epoch === currentEpoch &&
+    callbackContext.scope === currentScope &&
+    isValidScope(currentScope);
+}
+
 function uniqueLocalPackId(): string {
   localPackSequence += 1;
   const randomId = globalThis.crypto?.randomUUID?.();
@@ -343,12 +363,17 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const mountedRef = useRef(false);
   const scopeRef = useRef<string | null>(clientScope);
   scopeRef.current = clientScope;
-  const renderContextRef = useRef({ authKey, epoch: epochRef.current });
-  if (renderContextRef.current.authKey !== authKey) {
+  const renderKey = `${authKey}:${enabled}`;
+  const renderContextRef = useRef<HookRenderContext>({
+    key: renderKey,
+    scope: clientScope,
+    epoch: epochRef.current,
+  });
+  if (renderContextRef.current.key !== renderKey) {
     epochRef.current += 1;
-    renderContextRef.current = { authKey, epoch: epochRef.current };
+    renderContextRef.current = { key: renderKey, scope: clientScope, epoch: epochRef.current };
   }
-  const renderEpoch = renderContextRef.current.epoch;
+  const callbackContext = renderContextRef.current;
 
   const refresh = useCallback(async () => {
     if (!enabled) {
@@ -388,6 +413,8 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
     const lifecycle = ++lifecycleRef.current;
     requestSequenceRef.current = createPackRequestSequence();
     saveQueueRef.current = createPackSaveQueue(() => epochRef.current);
+    epochRef.current += 1;
+    renderContextRef.current.epoch = epochRef.current;
     const reset = resetScopedPackState();
     setPacks(reset.packs);
     setSelectedPack(reset.selectedPack);
@@ -398,37 +425,37 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
     if (enabled) void refresh();
     return () => {
       mountedRef.current = false;
-      if (renderContextRef.current.authKey === authKey) epochRef.current += 1;
+      epochRef.current += 1;
       if (lifecycleRef.current === lifecycle) lifecycleRef.current += 1;
     };
   }, [authKey, enabled, refresh]);
 
   const selectPack = useCallback((pack: ContentPack | null) => {
-    applyIfCurrentHookContext(
-      renderEpoch,
-      clientScope,
+    if (!isCurrentHookRenderContext(
+      callbackContext,
+      renderContextRef.current,
       epochRef.current,
       scopeRef.current,
       mountedRef.current,
-      () => setSelectedPack(pack),
-    );
-  }, [clientScope, renderEpoch]);
+    )) return;
+    setSelectedPack(pack);
+  }, [callbackContext]);
 
   const selectProduct = useCallback((product: Perfume | null) => {
-    applyIfCurrentHookContext(
-      renderEpoch,
-      clientScope,
+    if (!isCurrentHookRenderContext(
+      callbackContext,
+      renderContextRef.current,
       epochRef.current,
       scopeRef.current,
       mountedRef.current,
-      () => setSelectedProduct(product),
-    );
-  }, [clientScope, renderEpoch]);
+    )) return;
+    setSelectedProduct(product);
+  }, [callbackContext]);
 
   const createDraft = useCallback(
     (product = selectedProduct ?? undefined, reason: ContentPackReason = "manual") => {
       if (
-        !isCurrentHookContext(renderEpoch, clientScope, epochRef.current, scopeRef.current, mountedRef.current) ||
+        !isCurrentHookRenderContext(callbackContext, renderContextRef.current, epochRef.current, scopeRef.current, mountedRef.current) ||
         !product ||
         !canCreateDraft(enabled, clientScope)
       ) return null;
@@ -438,11 +465,11 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
       setError(null);
       return draft;
     },
-    [clientScope, enabled, renderEpoch, selectedProduct],
+    [callbackContext, clientScope, enabled, selectedProduct],
   );
 
   const savePack = useCallback((pack: ContentPack) => {
-    if (!isCurrentHookContext(renderEpoch, clientScope, epochRef.current, scopeRef.current, mountedRef.current)) {
+    if (!isCurrentHookRenderContext(callbackContext, renderContextRef.current, epochRef.current, scopeRef.current, mountedRef.current)) {
       return Promise.resolve(null);
     }
     if (!canSavePack(pack) || !canMutatePack(enabled, clientScope, pack)) {
@@ -486,11 +513,11 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
       }
     });
     return pending.catch(() => null);
-  }, [clientScope, enabled, renderEpoch]);
+  }, [callbackContext, clientScope, enabled]);
 
   const changeStatus = useCallback((pack: ContentPack | undefined, action: ContentPackAction) => {
     const current = pack ?? selectedPack;
-    if (!isCurrentHookContext(renderEpoch, clientScope, epochRef.current, scopeRef.current, mountedRef.current)) {
+    if (!isCurrentHookRenderContext(callbackContext, renderContextRef.current, epochRef.current, scopeRef.current, mountedRef.current)) {
       return Promise.resolve(null);
     }
     if (!current?.id || !canMutatePack(enabled, clientScope, current)) {
@@ -527,12 +554,12 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
       }
     });
     return pending.catch(() => null);
-  }, [clientScope, enabled, renderEpoch, selectedPack]);
+  }, [callbackContext, clientScope, enabled, selectedPack]);
 
   const regeneratePack = useCallback(
     (pack = selectedPack ?? undefined, product = selectedProduct ?? undefined) => {
       if (
-        !isCurrentHookContext(renderEpoch, clientScope, epochRef.current, scopeRef.current, mountedRef.current) ||
+        !isCurrentHookRenderContext(callbackContext, renderContextRef.current, epochRef.current, scopeRef.current, mountedRef.current) ||
         !pack ||
         !product ||
         !isValidScope(clientScope) ||
@@ -547,7 +574,7 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
       setError(null);
       return regenerated;
     },
-    [clientScope, enabled, renderEpoch, selectedPack, selectedProduct],
+    [callbackContext, clientScope, enabled, selectedPack, selectedProduct],
   );
 
   return {
