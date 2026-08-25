@@ -79,7 +79,13 @@ const DEFAULT_PALETTE: PaletteConfig = {
   ingredients: "exotic spices, amber resin, wood elements, delicate flowers",
 };
 
-const BRAND_AVOIDANCE = `Avoid: ${DT_BRAND_KIT.avoid.join(", ")}.`;
+const BRAND_GUIDANCE = {
+  palette: `Brand palette: ${DT_BRAND_KIT.palette.join(", ")}.`,
+  mood: `Mood: ${DT_BRAND_KIT.mood.join(", ")}.`,
+  props: `Add restrained DT lifestyle props: ${DT_BRAND_KIT.props.join(", ")}.`,
+  avoid: `Avoid: ${DT_BRAND_KIT.avoid.join(", ")}.`,
+  text: "No text overlay or abundant text.",
+} as const;
 
 function getIngredients(perfume: Perfume): string {
   const allNotes = [
@@ -107,16 +113,16 @@ function generateBotanicalPrompt(perfume: Perfume): string {
     `Botanical flat lay product photography for Instagram, editorial infographic style, ` +
     `similar to artisan candle brand catalog photography.\n\n` +
     `Product: Perfume bottle "${perfume.name}" by ${perfume.brand}.\n` +
-    `Brand palette: ${DT_BRAND_KIT.palette.join(", ")}. Mood: ${DT_BRAND_KIT.mood.join(", ")}.\n` +
+    `${BRAND_GUIDANCE.palette} ${BRAND_GUIDANCE.mood}\n` +
     `Background: Flat clean ${palette.bg} surface, with warm cream, beige and camel tones.\n` +
     `Composition: Bottle centered in a clean minimal composition, naturally surrounded by its key fragrance ingredients: ` +
     `${ingredients}. Real botanicals — whole, sliced and scattered around the bottle in a ` +
-    `beautiful organic arrangement with minimal overlap. Add restrained DT lifestyle props: ${DT_BRAND_KIT.props.join(", ")}.\n` +
+    `beautiful organic arrangement with minimal overlap. ${BRAND_GUIDANCE.props}\n` +
     `Lighting: Soft diffused overhead natural light, no harsh shadows, warm and clean.\n` +
     `Mood: ${genderMood}, ${perfume.category} fragrance family. Premium artisan product.\n` +
     `Format: Instagram portrait 4:5 ratio, 4K resolution, photorealistic, no text, no people, ` +
     `no watermark. Kinfolk / Monocle magazine editorial aesthetic.\n` +
-    `${BRAND_AVOIDANCE} No text overlay or abundant text.\n` +
+    `${BRAND_GUIDANCE.avoid} ${BRAND_GUIDANCE.text}\n` +
     `Negative: blurry, dark, low quality, text on image, people, faces, cartoon, flat white background.`
   );
 }
@@ -137,12 +143,12 @@ function generateStudioPrompt(perfume: Perfume): string {
     `Luxury perfume bottle product photography for Instagram, studio pedestal style, ` +
     `similar to Yves d'Orgeval Paris or Parfums de Marly product campaigns.\n\n` +
     `Product: Perfume bottle "${perfume.name}" by ${perfume.brand}.\n` +
-    `Brand palette: ${DT_BRAND_KIT.palette.join(", ")}. Mood: ${DT_BRAND_KIT.mood.join(", ")}.\n` +
+    `${BRAND_GUIDANCE.palette} ${BRAND_GUIDANCE.mood}\n` +
     `Background: Smooth gradient backdrop — ${palette.bg}. Warm gradient from slightly darker ` +
     `edges to lighter center, no sharp transitions. Elegant and premium.\n` +
     `Composition: Bottle on a small circular marble or cream pedestal/plinth centered in frame, with minimal overlap. ` +
     `Key ingredients elegantly arranged around the pedestal base: ${ingredients}. ` +
-    `Add restrained DT lifestyle props such as ${DT_BRAND_KIT.props.join(", ")}. ` +
+    `${BRAND_GUIDANCE.props} ` +
     `Ingredients are beautiful and realistic, artfully placed — some whole, some broken naturally.\n` +
     `Lighting: Professional studio 3-point lighting. Strong warm key light from upper-right ` +
     `creating beautiful gloss on the bottle. Soft fill. Subtle drop shadow under pedestal. ` +
@@ -151,7 +157,7 @@ function generateStudioPrompt(perfume: Perfume): string {
     `Colors: Dominant ${palette.bg}. Accent touches of ${palette.accent}.\n` +
     `Format: Instagram portrait 4:5 ratio, 8K resolution, photorealistic commercial product ` +
     `photography, shallow DOF with bottle sharp and background softly blurred. No text, no overlay, no people, no watermark.\n` +
-    `${BRAND_AVOIDANCE} No text overlay or abundant text.\n` +
+    `${BRAND_GUIDANCE.avoid} ${BRAND_GUIDANCE.text}\n` +
     `Negative: blurry, white studio background, cheap look, flat lighting, low quality, text, people, faces, overexposed.`
   );
 }

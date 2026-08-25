@@ -1,5 +1,6 @@
 import type { Perfume } from "../types";
 import { generateAllContent } from "./generators";
+import { REEL_TEXT_MAX_LENGTH, STORY_FRAME_MAX_LENGTH, truncateText } from "./templates/text";
 import type {
   ContentPackReason,
   NewContentPack,
@@ -23,8 +24,8 @@ export function normalizeStories(source: string): StoryIdea[] {
     const isLast = index === storyCount - 1;
     return {
       title: `Story ${index + 1}`,
-      text: line,
-      ...(isLast ? { cta: line } : {}),
+      text: truncateText(line, STORY_FRAME_MAX_LENGTH),
+      ...(isLast ? { cta: truncateText(line, STORY_FRAME_MAX_LENGTH) } : {}),
     };
   });
 }
@@ -74,10 +75,16 @@ export function normalizeReel(source: string, caption: string): ReelIdea {
   const ctaLabel = ctaTextLine && hasLabel(ctaTextLine, ON_SCREEN_LABEL) ? ON_SCREEN_LABEL : "VO";
 
   return {
-    hook: hookText ? stripLabel(hookText, CONTENT_LABEL) : lines[0] ?? "",
+    hook: truncateText(
+      hookText ? stripLabel(hookText, CONTENT_LABEL) : lines[0] ?? "",
+      REEL_TEXT_MAX_LENGTH,
+    ),
     shots,
-    onScreenText,
-    cta: ctaTextLine ? stripLabel(ctaTextLine, ctaLabel) : "",
+    onScreenText: onScreenText.map((text) => truncateText(text, REEL_TEXT_MAX_LENGTH)),
+    cta: truncateText(
+      ctaTextLine ? stripLabel(ctaTextLine, ctaLabel) : "",
+      REEL_TEXT_MAX_LENGTH,
+    ),
     caption,
   };
 }

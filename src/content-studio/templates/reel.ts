@@ -1,4 +1,5 @@
-import { Perfume } from "../../types";
+import type { Perfume } from "../../types";
+import { REEL_TEXT_MAX_LENGTH, truncateText } from "./text";
 // ─── Templates de guion para Reels ──────────────────────────────────────────
 // Formato explícito para conservar Hook, shots, texto en pantalla y CTA.
 
@@ -10,6 +11,9 @@ const midStr = (p: Perfume) =>
 
 const baseStr = (p: Perfume) =>
   p.notes.base.length ? p.notes.base.slice(0, 2).join(" y ") : "base duradera";
+
+const onScreenNotes = (p: Perfume) =>
+  truncateText(`Notas: ${topStr(p)}`, REEL_TEXT_MAX_LENGTH);
 
 export function generateReelScript(perfume: Perfume): string {
   const isArab = perfume.brand.toLowerCase().includes("arab") || perfume.category === "oriental";
@@ -53,7 +57,7 @@ export function generateReelScript(perfume: Perfume): string {
     `[8–18s] DESCRIPCIÓN\n` +
     `📷 Movimiento suave alrededor del frasco, en un ambiente cálido y minimalista.\n` +
     `VO: "${perfume.description}"\n` +
-    `Texto: "Notas: ${topStr(perfume)}"\n\n` +
+    `Texto: "${onScreenNotes(perfume)}"\n\n` +
     `[18–26s] SENSACIÓN\n` +
     `📷 Frasco en mano, movimiento sutil junto a una textura de lino.\n` +
     `VO: "Una presencia cuidada, natural y fácil de hacer tuya."\n` +

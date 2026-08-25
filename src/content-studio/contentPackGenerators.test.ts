@@ -8,6 +8,7 @@ import { generateReelScript } from "./templates/reel";
 import { generateInstagramCaption } from "./templates/instagram";
 import { generateImagePrompt } from "./templates/imagePrompt";
 import { generateInstagramStory } from "./templates/stories";
+import { truncateText } from "./templates/text";
 import { DT_BRAND_KIT } from "./brandKit";
 import type { Perfume } from "../types";
 
@@ -33,6 +34,19 @@ const perfumeFixture: Perfume = {
   occasion: "uso diario",
   intensity: "suave",
   longevity: "6 a 8 horas",
+};
+
+const longPerfumeFixture: Perfume = {
+  ...perfumeFixture,
+  id: 43,
+  name: "Eau de Lumière Edición Especial Extraordinaria de Colección Limitada",
+  description:
+    "Una fragancia extraordinariamente luminosa, fresca, envolvente y fácil de llevar todos los días durante muchas horas.",
+  notes: {
+    top: ["bergamota muy fresca y luminosa de Sicilia", "mandarina dulce y chispeante"],
+    middle: ["neroli blanco cremoso y jazmín delicado"],
+    base: ["almizcle blanco suave y envolvente", "cedro cálido y persistente"],
+  },
 };
 
 describe("generateContentPack", () => {
@@ -74,6 +88,10 @@ describe("generateContentPack", () => {
 });
 
 describe("DT templates", () => {
+  it("trunca por palabras sin exceder el límite solicitado", () => {
+    expect(truncateText("Notas de bergamota fresca", 20)).toBe("Notas de bergamota…");
+  });
+
   it("mantiene stories en frames breves con saludo, pregunta, producto y CTA", () => {
     const story = generateInstagramStory(perfumeFixture);
     const frames = story.split("\n");
@@ -97,6 +115,19 @@ describe("DT templates", () => {
     expect(reel.shots.length).toBeGreaterThanOrEqual(3);
     expect(reel.onScreenText.every((text) => text.length <= 60)).toBe(true);
     expect(reel.cta).toMatch(/WhatsApp|escribinos|mensaje|pedilo/i);
+  });
+
+  it("mantiene límites reales con nombres y notas extensos", () => {
+    const storyFrames = generateInstagramStory(longPerfumeFixture).split("\n");
+    const reel = normalizeReel(
+      generateReelScript(longPerfumeFixture),
+      "Caption",
+    );
+
+    expect(storyFrames.every((frame) => frame.length <= 72)).toBe(true);
+    expect(reel.onScreenText.every((text) => text.length <= 60)).toBe(true);
+    expect(reel.cta.length).toBeLessThanOrEqual(60);
+    expect(reel.onScreenText.some((text) => text.endsWith("…"))).toBe(true);
   });
 });
 

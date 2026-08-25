@@ -1,4 +1,5 @@
-import { Perfume } from "../../types";
+import type { Perfume } from "../../types";
+import { STORY_FRAME_MAX_LENGTH, truncateText } from "./text";
 // ─── Templates para Historias de Instagram ──────────────────────────────────
 // Frames breves, conversacionales y fáciles de acompañar con una foto.
 
@@ -28,5 +29,8 @@ const templates: TemplateFunc[] = [
 
 export function generateInstagramStory(perfume: Perfume): string {
   const idx = (perfume.id + 1) % templates.length;
-  return templates[idx](perfume);
+  return templates[idx](perfume)
+    .split("\n")
+    .map((frame) => truncateText(frame, STORY_FRAME_MAX_LENGTH))
+    .join("\n");
 }
