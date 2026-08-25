@@ -27,6 +27,7 @@ import {
   selectRefreshedPack,
   isValidScope,
   isCurrentHookContext,
+  applyIfCurrentHookContext,
 } from "./useContentPacks";
 
 const payload = {
@@ -296,6 +297,20 @@ describe("content pack state transitions", () => {
     expect(isCurrentHookContext(1, "admin-a", 3, "admin-a", true)).toBe(false);
     expect(isCurrentHookContext(2, "admin-b", 2, "admin-b", true)).toBe(true);
     expect(isCurrentHookContext(2, "admin-b", 2, "admin-b", false)).toBe(false);
+  });
+
+  it("no reinyecta selección ni error desde efectos stale", () => {
+    const setSelectedPack = vi.fn();
+    const setSelectedProduct = vi.fn();
+    const setError = vi.fn();
+    const staleContext = [1, "admin-a", 2, "admin-b", true] as const;
+
+    expect(applyIfCurrentHookContext(...staleContext, setSelectedPack)).toBe(false);
+    expect(applyIfCurrentHookContext(...staleContext, setSelectedProduct)).toBe(false);
+    expect(applyIfCurrentHookContext(...staleContext, setError)).toBe(false);
+    expect(setSelectedPack).not.toHaveBeenCalled();
+    expect(setSelectedProduct).not.toHaveBeenCalled();
+    expect(setError).not.toHaveBeenCalled();
   });
 
   it("normaliza errores sin exponer el Error.message original", () => {

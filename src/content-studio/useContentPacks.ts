@@ -49,6 +49,21 @@ export function isCurrentHookContext(
     isValidScope(currentScope);
 }
 
+export function applyIfCurrentHookContext(
+  renderEpoch: number,
+  renderScope: string | null,
+  currentEpoch: number,
+  currentScope: string | null,
+  mounted: boolean,
+  effect: () => void,
+): boolean {
+  if (!isCurrentHookContext(renderEpoch, renderScope, currentEpoch, currentScope, mounted)) {
+    return false;
+  }
+  effect();
+  return true;
+}
+
 function uniqueLocalPackId(): string {
   localPackSequence += 1;
   const randomId = globalThis.crypto?.randomUUID?.();
@@ -389,12 +404,26 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   }, [authKey, enabled, refresh]);
 
   const selectPack = useCallback((pack: ContentPack | null) => {
-    setSelectedPack(pack);
-  }, []);
+    applyIfCurrentHookContext(
+      renderEpoch,
+      clientScope,
+      epochRef.current,
+      scopeRef.current,
+      mountedRef.current,
+      () => setSelectedPack(pack),
+    );
+  }, [clientScope, renderEpoch]);
 
   const selectProduct = useCallback((product: Perfume | null) => {
-    setSelectedProduct(product);
-  }, []);
+    applyIfCurrentHookContext(
+      renderEpoch,
+      clientScope,
+      epochRef.current,
+      scopeRef.current,
+      mountedRef.current,
+      () => setSelectedProduct(product),
+    );
+  }, [clientScope, renderEpoch]);
 
   const createDraft = useCallback(
     (product = selectedProduct ?? undefined, reason: ContentPackReason = "manual") => {
@@ -413,11 +442,10 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   );
 
   const savePack = useCallback((pack: ContentPack) => {
-    if (
-      !isCurrentHookContext(renderEpoch, clientScope, epochRef.current, scopeRef.current, mountedRef.current) ||
-      !canSavePack(pack) ||
-      !canMutatePack(enabled, clientScope, pack)
-    ) {
+    if (!isCurrentHookContext(renderEpoch, clientScope, epochRef.current, scopeRef.current, mountedRef.current)) {
+      return Promise.resolve(null);
+    }
+    if (!canSavePack(pack) || !canMutatePack(enabled, clientScope, pack)) {
       setError("El content pack necesita un scope de administrador válido.");
       return Promise.resolve(null);
     }
@@ -462,11 +490,10 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
 
   const changeStatus = useCallback((pack: ContentPack | undefined, action: ContentPackAction) => {
     const current = pack ?? selectedPack;
-    if (
-      !isCurrentHookContext(renderEpoch, clientScope, epochRef.current, scopeRef.current, mountedRef.current) ||
-      !current?.id ||
-      !canMutatePack(enabled, clientScope, current)
-    ) {
+    if (!isCurrentHookContext(renderEpoch, clientScope, epochRef.current, scopeRef.current, mountedRef.current)) {
+      return Promise.resolve(null);
+    }
+    if (!current?.id || !canMutatePack(enabled, clientScope, current)) {
       setError("Guardá el draft antes de cambiar su estado.");
       return Promise.resolve(null);
     }
