@@ -10,6 +10,7 @@ vi.mock("./contentPackRepository", () => ({
 
 import {
   canEdit,
+  canCreateDraft,
   createPackSaveQueue,
   createLocalContentPack,
   createPackRequestSequence,
@@ -19,6 +20,7 @@ import {
   preserveEditedPack,
   replacePack,
   regenerateContentPack,
+  resetScopedPackState,
   selectRefreshedPack,
 } from "./useContentPacks";
 
@@ -116,6 +118,8 @@ describe("content pack state transitions", () => {
       localDraft,
       persisted,
     ]);
+    const unscopedDraft = createLocalContentPack(perfume, "manual", null);
+    expect(mergeRefreshedPacks([unscopedDraft], [persisted], "admin-a")).toEqual([persisted]);
   });
 
   it("no mezcla drafts al cambiar de identidad ni al hacer logout", () => {
@@ -125,6 +129,21 @@ describe("content pack state transitions", () => {
     expect(mergeRefreshedPacks([adminADraft], [], "admin-b")).toEqual([]);
     expect(mergeRefreshedPacks([adminADraft], [], null)).toEqual([]);
     expect(mergeRefreshedPacks([adminBDraft], [], "admin-b")).toEqual([adminBDraft]);
+  });
+
+  it("bloquea drafts sin scope o con el hook disabled", () => {
+    expect(canCreateDraft(false, "admin-a")).toBe(false);
+    expect(canCreateDraft(true, null)).toBe(false);
+    expect(canCreateDraft(true, "admin-a")).toBe(true);
+  });
+
+  it("limpia también el producto seleccionado al cerrar el scope", () => {
+    expect(resetScopedPackState()).toEqual({
+      packs: [],
+      selectedPack: null,
+      selectedProduct: null,
+      error: null,
+    });
   });
 
   it("limpia la selección persistida si refresh ya no la devuelve", () => {

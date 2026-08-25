@@ -88,6 +88,7 @@ export function mergeRefreshedPacks(
     (pack) =>
       pack.id === undefined &&
       pack.clientId !== undefined &&
+      clientScope !== null &&
       pack.clientScope === clientScope,
   );
   return [...localDrafts, ...refreshedPacks];
@@ -100,9 +101,22 @@ export function selectRefreshedPack(
 ): ContentPack | null {
   if (!selectedPack) return null;
   if (selectedPack.id === undefined) {
-    return selectedPack.clientScope === clientScope ? selectedPack : null;
+    return clientScope !== null && selectedPack.clientScope === clientScope ? selectedPack : null;
   }
   return refreshedPacks.find((pack) => pack.id === selectedPack.id) ?? null;
+}
+
+export function canCreateDraft(enabled: boolean, clientScope: string | null): boolean {
+  return enabled && clientScope !== null;
+}
+
+export function resetScopedPackState() {
+  return {
+    packs: [] as ContentPack[],
+    selectedPack: null as ContentPack | null,
+    selectedProduct: null as Perfume | null,
+    error: null as string | null,
+  };
 }
 
 export function createPackRequestSequence() {
@@ -274,9 +288,11 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
     const lifecycle = ++lifecycleRef.current;
     requestSequenceRef.current = createPackRequestSequence();
     saveQueueRef.current = createPackSaveQueue();
-    setPacks([]);
-    setSelectedPack(null);
-    setError(null);
+    const reset = resetScopedPackState();
+    setPacks(reset.packs);
+    setSelectedPack(reset.selectedPack);
+    setSelectedProduct(reset.selectedProduct);
+    setError(reset.error);
     setLoading(enabled);
     if (enabled) void refresh();
     return () => {
@@ -294,14 +310,14 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
 
   const createDraft = useCallback(
     (product = selectedProduct ?? undefined, reason: ContentPackReason = "manual") => {
-      if (!product) return null;
+      if (!product || !canCreateDraft(enabled, clientScope)) return null;
       const draft = createLocalContentPack(product, reason, clientScope);
       setPacks((current) => [draft, ...current]);
       setSelectedPack(draft);
       setError(null);
       return draft;
     },
-    [clientScope, selectedProduct],
+    [clientScope, enabled, selectedProduct],
   );
 
   const savePack = useCallback((pack: ContentPack) => {
