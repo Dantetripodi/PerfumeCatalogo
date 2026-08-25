@@ -41,7 +41,7 @@ function uniqueLocalPackId(): string {
 export function createLocalContentPack(
   product: Perfume,
   reason: ContentPackReason,
-  clientScope: string | null = null,
+  clientScope: string,
 ): ContentPack {
   const now = new Date().toISOString();
   return {
@@ -55,8 +55,12 @@ export function createLocalContentPack(
   };
 }
 
-export function regenerateContentPack(pack: ContentPack, product: Perfume): ContentPack {
-  return createLocalContentPack(product, pack.reason, pack.clientScope ?? null);
+export function regenerateContentPack(
+  pack: ContentPack,
+  product: Perfume,
+  clientScope: string,
+): ContentPack {
+  return createLocalContentPack(product, pack.reason, clientScope);
 }
 
 function samePack(left: ContentPack | null | undefined, right: ContentPack): boolean {
@@ -106,7 +110,10 @@ export function selectRefreshedPack(
   return refreshedPacks.find((pack) => pack.id === selectedPack.id) ?? null;
 }
 
-export function canCreateDraft(enabled: boolean, clientScope: string | null): boolean {
+export function canCreateDraft(
+  enabled: boolean,
+  clientScope: string | null,
+): clientScope is string {
   return enabled && clientScope !== null;
 }
 
@@ -399,13 +406,14 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const regeneratePack = useCallback(
     (pack = selectedPack ?? undefined, product = selectedProduct ?? undefined) => {
       if (!pack || !product) return null;
-      const regenerated = regenerateContentPack(pack, product);
+      if (!clientScope) return null;
+      const regenerated = regenerateContentPack(pack, product, clientScope);
       setPacks((current) => [regenerated, ...current]);
       setSelectedPack(regenerated);
       setError(null);
       return regenerated;
     },
-    [selectedPack, selectedProduct],
+    [clientScope, selectedPack, selectedProduct],
   );
 
   return {

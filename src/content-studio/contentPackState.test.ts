@@ -74,9 +74,10 @@ describe("content pack state transitions", () => {
   });
 
   it("regenera un pack existente como draft local nuevo sin mutar el original", () => {
-    const regenerated = regenerateContentPack(existingPack, perfume);
+    const regenerated = regenerateContentPack(existingPack, perfume, "admin-a");
 
     expect(regenerated.id).toBeUndefined();
+    expect(regenerated.clientScope).toBe("admin-a");
     expect(regenerated.status).toBe("draft");
     expect(regenerated.productId).toBe(existingPack.productId);
     expect(existingPack.id).toBe("pack-1");
@@ -85,8 +86,8 @@ describe("content pack state transitions", () => {
   });
 
   it("asigna identidades locales distintas a dos drafts", () => {
-    const first = createLocalContentPack(perfume, "manual");
-    const second = createLocalContentPack(perfume, "manual");
+    const first = createLocalContentPack(perfume, "manual", "admin-a");
+    const second = createLocalContentPack(perfume, "manual", "admin-a");
 
     expect(first.id).toBeUndefined();
     expect(second.id).toBeUndefined();
@@ -96,8 +97,8 @@ describe("content pack state transitions", () => {
   });
 
   it("preserva el payload editado cuando falla el save", () => {
-    const first = createLocalContentPack(perfume, "manual");
-    const second = createLocalContentPack(perfume, "manual");
+    const first = createLocalContentPack(perfume, "manual", "admin-a");
+    const second = createLocalContentPack(perfume, "manual", "admin-a");
     const edited = { ...second, payload: { ...second.payload, instagramCaption: "Edición local" } };
 
     const preserved = preserveEditedPack([first, second], edited);
@@ -118,7 +119,7 @@ describe("content pack state transitions", () => {
       localDraft,
       persisted,
     ]);
-    const unscopedDraft = createLocalContentPack(perfume, "manual", null);
+    const unscopedDraft = { ...localDraft, clientScope: null };
     expect(mergeRefreshedPacks([unscopedDraft], [persisted], "admin-a")).toEqual([persisted]);
   });
 
