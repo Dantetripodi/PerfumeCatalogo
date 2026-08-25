@@ -36,6 +36,19 @@ export function isValidScope(scope: string | null | undefined): scope is string 
   return typeof scope === "string" && scope.trim().length > 0;
 }
 
+export function isCurrentHookContext(
+  renderEpoch: number,
+  renderScope: string | null,
+  currentEpoch: number,
+  currentScope: string | null,
+  mounted: boolean,
+): boolean {
+  return mounted &&
+    renderEpoch === currentEpoch &&
+    renderScope === currentScope &&
+    isValidScope(currentScope);
+}
+
 function uniqueLocalPackId(): string {
   localPackSequence += 1;
   const randomId = globalThis.crypto?.randomUUID?.();
@@ -312,6 +325,15 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const requestSequenceRef = useRef(createPackRequestSequence());
   const saveQueueRef = useRef(createPackSaveQueue(() => epochRef.current));
   const authKey = `${clientScope ?? "signed-out"}:${session?.user.id ?? ""}`;
+  const mountedRef = useRef(false);
+  const scopeRef = useRef<string | null>(clientScope);
+  scopeRef.current = clientScope;
+  const renderContextRef = useRef({ authKey, epoch: epochRef.current });
+  if (renderContextRef.current.authKey !== authKey) {
+    epochRef.current += 1;
+    renderContextRef.current = { authKey, epoch: epochRef.current };
+  }
+  const renderEpoch = renderContextRef.current.epoch;
 
   const refresh = useCallback(async () => {
     if (!enabled) {
@@ -349,7 +371,6 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
 
   useEffect(() => {
     const lifecycle = ++lifecycleRef.current;
-    epochRef.current += 1;
     requestSequenceRef.current = createPackRequestSequence();
     saveQueueRef.current = createPackSaveQueue(() => epochRef.current);
     const reset = resetScopedPackState();
@@ -358,9 +379,11 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
     setSelectedProduct(reset.selectedProduct);
     setError(reset.error);
     setLoading(enabled);
+    mountedRef.current = true;
     if (enabled) void refresh();
     return () => {
-      epochRef.current += 1;
+      mountedRef.current = false;
+      if (renderContextRef.current.authKey === authKey) epochRef.current += 1;
       if (lifecycleRef.current === lifecycle) lifecycleRef.current += 1;
     };
   }, [authKey, enabled, refresh]);
@@ -375,18 +398,26 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
 
   const createDraft = useCallback(
     (product = selectedProduct ?? undefined, reason: ContentPackReason = "manual") => {
-      if (!product || !canCreateDraft(enabled, clientScope)) return null;
+      if (
+        !isCurrentHookContext(renderEpoch, clientScope, epochRef.current, scopeRef.current, mountedRef.current) ||
+        !product ||
+        !canCreateDraft(enabled, clientScope)
+      ) return null;
       const draft = createLocalContentPack(product, reason, clientScope);
       setPacks((current) => [draft, ...current]);
       setSelectedPack(draft);
       setError(null);
       return draft;
     },
-    [clientScope, enabled, selectedProduct],
+    [clientScope, enabled, renderEpoch, selectedProduct],
   );
 
   const savePack = useCallback((pack: ContentPack) => {
-    if (!canSavePack(pack) || !canMutatePack(enabled, clientScope, pack)) {
+    if (
+      !isCurrentHookContext(renderEpoch, clientScope, epochRef.current, scopeRef.current, mountedRef.current) ||
+      !canSavePack(pack) ||
+      !canMutatePack(enabled, clientScope, pack)
+    ) {
       setError("El content pack necesita un scope de administrador válido.");
       return Promise.resolve(null);
     }
@@ -427,11 +458,15 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
       }
     });
     return pending.catch(() => null);
-  }, [clientScope, enabled]);
+  }, [clientScope, enabled, renderEpoch]);
 
   const changeStatus = useCallback((pack: ContentPack | undefined, action: ContentPackAction) => {
     const current = pack ?? selectedPack;
-    if (!current?.id || !canMutatePack(enabled, clientScope, current)) {
+    if (
+      !isCurrentHookContext(renderEpoch, clientScope, epochRef.current, scopeRef.current, mountedRef.current) ||
+      !current?.id ||
+      !canMutatePack(enabled, clientScope, current)
+    ) {
       setError("Guardá el draft antes de cambiar su estado.");
       return Promise.resolve(null);
     }
@@ -465,11 +500,17 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
       }
     });
     return pending.catch(() => null);
-  }, [clientScope, enabled, selectedPack]);
+  }, [clientScope, enabled, renderEpoch, selectedPack]);
 
   const regeneratePack = useCallback(
     (pack = selectedPack ?? undefined, product = selectedProduct ?? undefined) => {
-      if (!pack || !product || !isValidScope(clientScope) || !canRegeneratePack(enabled, clientScope, pack)) {
+      if (
+        !isCurrentHookContext(renderEpoch, clientScope, epochRef.current, scopeRef.current, mountedRef.current) ||
+        !pack ||
+        !product ||
+        !isValidScope(clientScope) ||
+        !canRegeneratePack(enabled, clientScope, pack)
+      ) {
         return null;
       }
       const regenerated = regenerateContentPack(pack, product, clientScope);
@@ -479,7 +520,7 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
       setError(null);
       return regenerated;
     },
-    [clientScope, enabled, selectedPack, selectedProduct],
+    [clientScope, enabled, renderEpoch, selectedPack, selectedProduct],
   );
 
   return {

@@ -26,6 +26,7 @@ import {
   resetScopedPackState,
   selectRefreshedPack,
   isValidScope,
+  isCurrentHookContext,
 } from "./useContentPacks";
 
 const payload = {
@@ -288,6 +289,13 @@ describe("content pack state transitions", () => {
     await expect(first).resolves.toBe(existingPack);
     await expect(second).rejects.toThrow("stale");
     expect(calls).toEqual(["first"]);
+  });
+
+  it("rechaza callbacks stale de A después de logout y una nueva sesión B", () => {
+    expect(isCurrentHookContext(1, "admin-a", 2, "admin-b", true)).toBe(false);
+    expect(isCurrentHookContext(1, "admin-a", 3, "admin-a", true)).toBe(false);
+    expect(isCurrentHookContext(2, "admin-b", 2, "admin-b", true)).toBe(true);
+    expect(isCurrentHookContext(2, "admin-b", 2, "admin-b", false)).toBe(false);
   });
 
   it("normaliza errores sin exponer el Error.message original", () => {
