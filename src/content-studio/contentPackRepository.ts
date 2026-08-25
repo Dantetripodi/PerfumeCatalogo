@@ -42,12 +42,29 @@ type ContentPackRow = {
 
 type QueryResult<T> = { data: T | null; error: { message: string } | null };
 
-function isContentPackStatus(value: string): value is ContentPackStatus {
+function isContentPackStatus(value: unknown): value is ContentPackStatus {
   return value === "draft" || value === "approved" || value === "rejected";
 }
 
-function isContentPackReason(value: string): value is ContentPackReason {
+function isContentPackReason(value: unknown): value is ContentPackReason {
   return value === "manual" || value === "new_product";
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isContentPackPayload(value: unknown): value is ContentPackPayload {
+  if (!isRecord(value)) return false;
+
+  return (
+    typeof value.instagramCaption === "string" &&
+    Array.isArray(value.stories) &&
+    isRecord(value.reel) &&
+    Array.isArray(value.hashtags) &&
+    Array.isArray(value.imageConcepts) &&
+    typeof value.whatsappText === "string"
+  );
 }
 
 function mapRow(row: unknown): ContentPack {
@@ -65,15 +82,14 @@ function mapRow(row: unknown): ContentPack {
 }
 
 function isContentPackRow(row: unknown): row is ContentPackRow {
-  if (typeof row !== "object" || row === null) return false;
-  const candidate = row as Partial<ContentPackRow>;
+  if (!isRecord(row)) return false;
+  const candidate = row;
   return (
     typeof candidate.id === "string" &&
     typeof candidate.product_id === "number" &&
-    isContentPackReason(candidate.reason ?? "") &&
-    typeof candidate.payload === "object" &&
-    candidate.payload !== null &&
-    isContentPackStatus(candidate.status ?? "") &&
+    isContentPackReason(candidate.reason) &&
+    isContentPackPayload(candidate.payload) &&
+    isContentPackStatus(candidate.status) &&
     typeof candidate.created_at === "string" &&
     typeof candidate.updated_at === "string"
   );
@@ -87,7 +103,7 @@ async function assertContentAdmin(): Promise<void> {
     );
   }
 
-  let data: { session: { user: { app_metadata?: Record<string, unknown> } } | null };
+  let data: { session: { user: { app_metadata?: Record<string, unknown> } | null } | null } | null;
   try {
     ({ data } = await supabase.auth.getSession());
   } catch {
@@ -97,7 +113,7 @@ async function assertContentAdmin(): Promise<void> {
     );
   }
 
-  const user = data.session?.user;
+  const user = data?.session?.user;
   if (!user) {
     throw new ContentPackRepositoryError("SESSION_MISSING", "No hay una sesión activa.");
   }

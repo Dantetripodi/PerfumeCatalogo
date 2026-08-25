@@ -171,6 +171,39 @@ describe("contentPackRepository", () => {
     );
   });
 
+  it.each([
+    ["array", []],
+    ["incompleto", { instagramCaption: "Caption" }],
+    ["instagramCaption no string", { ...payload, instagramCaption: 42 }],
+    ["stories no array", { ...payload, stories: {} }],
+    ["reel no object", { ...payload, reel: [] }],
+    ["hashtags no array", { ...payload, hashtags: "#perfume" }],
+    ["imageConcepts no array", { ...payload, imageConcepts: {} }],
+    ["whatsappText no string", { ...payload, whatsappText: null }],
+  ])("rechaza payload %s con error sanitizado", async (_case, invalidPayload) => {
+    authorizedSession();
+    queryChain({ data: [{ ...row, payload: invalidPayload }], error: null });
+
+    await expect(listContentPacks()).rejects.toEqual(
+      new ContentPackRepositoryError(
+        "DATABASE_ERROR",
+        "No se pudo procesar el content pack.",
+      ),
+    );
+  });
+
+  it.each([
+    ["data null", null],
+    ["session ausente", { session: null }],
+    ["user ausente", { session: { user: null } }],
+  ])("normaliza sesión %s como ausente", async (_case, sessionData) => {
+    getSession.mockResolvedValue({ data: sessionData });
+
+    await expect(listContentPacks()).rejects.toEqual(
+      new ContentPackRepositoryError("SESSION_MISSING", "No hay una sesión activa."),
+    );
+  });
+
   it("normaliza una respuesta vacía al crear", async () => {
     authorizedSession();
     queryChain({ data: null, error: null });
