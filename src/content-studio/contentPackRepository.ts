@@ -12,6 +12,7 @@ const CONTENT_ADMIN_CLAIM = "content_admin";
 
 export type ContentPackRepositoryErrorCode =
   | "CONFIGURATION_MISSING"
+  | "AUTH_ERROR"
   | "SESSION_MISSING"
   | "PERMISSION_DENIED"
   | "INVALID_STATUS"
@@ -49,7 +50,9 @@ function isContentPackReason(value: string): value is ContentPackReason {
   return value === "manual" || value === "new_product";
 }
 
-function mapRow(row: ContentPackRow): ContentPack {
+function mapRow(row: unknown): ContentPack {
+  if (!isContentPackRow(row)) throw databaseError();
+
   return {
     id: row.id,
     productId: row.product_id,
@@ -61,6 +64,21 @@ function mapRow(row: ContentPackRow): ContentPack {
   };
 }
 
+function isContentPackRow(row: unknown): row is ContentPackRow {
+  if (typeof row !== "object" || row === null) return false;
+  const candidate = row as Partial<ContentPackRow>;
+  return (
+    typeof candidate.id === "string" &&
+    typeof candidate.product_id === "number" &&
+    isContentPackReason(candidate.reason ?? "") &&
+    typeof candidate.payload === "object" &&
+    candidate.payload !== null &&
+    isContentPackStatus(candidate.status ?? "") &&
+    typeof candidate.created_at === "string" &&
+    typeof candidate.updated_at === "string"
+  );
+}
+
 async function assertContentAdmin(): Promise<void> {
   if (!SUPABASE_CONFIGURED) {
     throw new ContentPackRepositoryError(
@@ -69,13 +87,22 @@ async function assertContentAdmin(): Promise<void> {
     );
   }
 
-  const { data } = await supabase.auth.getSession();
+  let data: { session: { user: { app_metadata?: Record<string, unknown> } } | null };
+  try {
+    ({ data } = await supabase.auth.getSession());
+  } catch {
+    throw new ContentPackRepositoryError(
+      "AUTH_ERROR",
+      "No se pudo validar la sesión del administrador.",
+    );
+  }
+
   const user = data.session?.user;
   if (!user) {
     throw new ContentPackRepositoryError("SESSION_MISSING", "No hay una sesión activa.");
   }
 
-  if (user.app_metadata[CONTENT_ADMIN_CLAIM] !== true) {
+  if (user.app_metadata?.[CONTENT_ADMIN_CLAIM] !== true) {
     throw new ContentPackRepositoryError(
       "PERMISSION_DENIED",
       "El usuario no tiene permisos para gestionar content packs.",
@@ -108,16 +135,29 @@ function databaseError(): ContentPackRepositoryError {
   );
 }
 
+async function runDatabaseOperation<T>(operation: () => Promise<T>): Promise<T> {
+  try {
+    return await operation();
+  } catch (error) {
+    if (error instanceof ContentPackRepositoryError) throw error;
+    throw databaseError();
+  }
+}
+
 export async function listContentPacks(status?: ContentPackStatus): Promise<ContentPack[]> {
   await assertContentAdmin();
   if (status !== undefined) validateStatus(status);
 
-  let query = supabase.from(TABLE).select("*").order("created_at", { ascending: false });
-  if (status !== undefined) query = query.eq("status", status);
+  return runDatabaseOperation(async () => {
+    let query = supabase.from(TABLE).select("*").order("created_at", { ascending: false });
+    if (status !== undefined) query = query.eq("status", status);
 
-  const { data, error } = (await query) as QueryResult<ContentPackRow[]>;
-  if (error) throw databaseError();
-  return (data ?? []).map(mapRow);
+    const { data, error } = (await query) as QueryResult<ContentPackRow[]>;
+    if (error) throw databaseError();
+    if (data === null) return [];
+    if (!Array.isArray(data)) throw databaseError();
+    return data.map(mapRow);
+  });
 }
 
 export async function createContentPack(input: NewContentPack): Promise<ContentPack> {
@@ -125,20 +165,22 @@ export async function createContentPack(input: NewContentPack): Promise<ContentP
   validateReason(input.reason);
   const updatedAt = new Date().toISOString();
 
-  const { data, error } = await supabase
-    .from(TABLE)
-    .insert({
-      product_id: input.productId,
-      reason: input.reason,
-      payload: input.payload,
-      status: "draft",
-      updated_at: updatedAt,
-    })
-    .select()
-    .single();
+  return runDatabaseOperation(async () => {
+    const { data, error } = await supabase
+      .from(TABLE)
+      .insert({
+        product_id: input.productId,
+        reason: input.reason,
+        payload: input.payload,
+        status: "draft",
+        updated_at: updatedAt,
+      })
+      .select()
+      .single();
 
-  if (error || !data) throw databaseError();
-  return mapRow(data as ContentPackRow);
+    if (error || !data) throw databaseError();
+    return mapRow(data);
+  });
 }
 
 export async function updateContentPack(
@@ -147,15 +189,17 @@ export async function updateContentPack(
 ): Promise<ContentPack> {
   await assertContentAdmin();
 
-  const { data, error } = await supabase
-    .from(TABLE)
-    .update({ payload, updated_at: new Date().toISOString() })
-    .eq("id", id)
-    .select()
-    .single();
+  return runDatabaseOperation(async () => {
+    const { data, error } = await supabase
+      .from(TABLE)
+      .update({ payload, updated_at: new Date().toISOString() })
+      .eq("id", id)
+      .select()
+      .single();
 
-  if (error || !data) throw databaseError();
-  return mapRow(data as ContentPackRow);
+    if (error || !data) throw databaseError();
+    return mapRow(data);
+  });
 }
 
 export async function setContentPackStatus(
@@ -165,13 +209,15 @@ export async function setContentPackStatus(
   await assertContentAdmin();
   validateStatus(status);
 
-  const { data, error } = await supabase
-    .from(TABLE)
-    .update({ status, updated_at: new Date().toISOString() })
-    .eq("id", id)
-    .select()
-    .single();
+  return runDatabaseOperation(async () => {
+    const { data, error } = await supabase
+      .from(TABLE)
+      .update({ status, updated_at: new Date().toISOString() })
+      .eq("id", id)
+      .select()
+      .single();
 
-  if (error || !data) throw databaseError();
-  return mapRow(data as ContentPackRow);
+    if (error || !data) throw databaseError();
+    return mapRow(data);
+  });
 }

@@ -116,6 +116,73 @@ describe("contentPackRepository", () => {
     );
   });
 
+  it("normaliza un getSession rechazado", async () => {
+    getSession.mockRejectedValue(new Error("raw auth secret"));
+
+    await expect(listContentPacks()).rejects.toEqual(
+      new ContentPackRepositoryError(
+        "AUTH_ERROR",
+        "No se pudo validar la sesión del administrador.",
+      ),
+    );
+  });
+
+  it("normaliza una query rechazada al listar", async () => {
+    authorizedSession();
+    const chain = queryChain({ data: [], error: null });
+    chain.then.mockImplementation((_resolve: unknown, reject: (error: Error) => unknown) =>
+      reject(new Error("raw list secret")),
+    );
+
+    await expect(listContentPacks()).rejects.toEqual(
+      new ContentPackRepositoryError(
+        "DATABASE_ERROR",
+        "No se pudo procesar el content pack.",
+      ),
+    );
+  });
+
+  it.each([
+    ["crear", () => createContentPack({ productId: 42, reason: "manual", payload })],
+    ["actualizar", () => updateContentPack("pack-1", payload)],
+    ["cambiar estado", () => setContentPackStatus("pack-1", "approved")],
+  ])("normaliza una query rechazada al %s", async (_operation, operation) => {
+    authorizedSession();
+    const chain = queryChain({ data: row, error: null });
+    chain.single.mockRejectedValue(new Error("raw query secret"));
+
+    await expect(operation()).rejects.toEqual(
+      new ContentPackRepositoryError(
+        "DATABASE_ERROR",
+        "No se pudo procesar el content pack.",
+      ),
+    );
+  });
+
+  it("rechaza una respuesta malformada sin exponer un error crudo", async () => {
+    authorizedSession();
+    queryChain({ data: [{ ...row, product_id: "42" }], error: null });
+
+    await expect(listContentPacks()).rejects.toEqual(
+      new ContentPackRepositoryError(
+        "DATABASE_ERROR",
+        "No se pudo procesar el content pack.",
+      ),
+    );
+  });
+
+  it("normaliza una respuesta vacía al crear", async () => {
+    authorizedSession();
+    queryChain({ data: null, error: null });
+
+    await expect(createContentPack({ productId: 42, reason: "manual", payload })).rejects.toEqual(
+      new ContentPackRepositoryError(
+        "DATABASE_ERROR",
+        "No se pudo procesar el content pack.",
+      ),
+    );
+  });
+
   it("envía product_id, reason, payload y draft al crear", async () => {
     authorizedSession();
     const chain = queryChain({ data: row, error: null });
