@@ -8,6 +8,9 @@
 const STUDIO_PIN = import.meta.env.VITE_STUDIO_PIN ?? "dt2025";
 const SESSION_KEY = "dtfragancias_studio_unlocked";
 
+export const ADMIN_ONLY_ACCESS_MESSAGE =
+  "Para usar DT Content Agent, iniciá sesión desde Admin; el PIN por sí solo no habilita esta herramienta.";
+
 /** True when the PIN was already entered in this browser session. */
 export function isStudioUnlocked(): boolean {
   return sessionStorage.getItem(SESSION_KEY) === "1";

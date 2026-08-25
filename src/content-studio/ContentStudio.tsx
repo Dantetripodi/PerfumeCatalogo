@@ -10,6 +10,7 @@ import ContentPackEditor from "./ContentPackEditor";
 import ContentPackInbox from "./ContentPackInbox";
 import { useContentPacks } from "./useContentPacks";
 import type { ContentPack } from "./contentPackTypes";
+import { ADMIN_ONLY_ACCESS_MESSAGE } from "./studioAccess";
 
 interface ContentStudioProps {
   perfumes: Perfume[];
@@ -52,7 +53,7 @@ const ContentStudio: React.FC<ContentStudioProps> = ({ perfumes, onBack, adminId
   };
 
   if (!adminIdentity || !session) {
-    return <div className="min-h-screen bg-[#F8F0E3]"><StudioHeader onBack={onBack} selectedPerfume={null} /><div className="mx-auto max-w-lg px-4 py-20 text-center"><p className="font-serif text-2xl font-bold text-[#1A2238]">Acceso denegado</p><p className="mt-3 text-sm text-gray-600">Content Agent está disponible únicamente para el administrador autenticado.</p></div></div>;
+    return <div className="min-h-screen bg-[#F8F0E3]"><StudioHeader onBack={onBack} selectedPerfume={null} /><div className="mx-auto max-w-lg px-4 py-20 text-center"><p className="font-serif text-2xl font-bold text-[#1A2238]">Acceso denegado</p><p className="mt-3 text-sm text-gray-600">{ADMIN_ONLY_ACCESS_MESSAGE}</p></div></div>;
   }
 
   return <div className="min-h-screen bg-[#F8F0E3]"><StudioHeader onBack={onBack} selectedPerfume={selectedPerfume} /><div className="container mx-auto px-4 py-6">
