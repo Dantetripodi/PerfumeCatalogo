@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import type { Perfume } from "../types";
 import {
@@ -15,6 +15,7 @@ import type {
 } from "./contentPackTypes";
 
 export type ContentPackAction = "approve" | "reject";
+export type ContentPackErrorOperation = "refresh" | "save" | "status";
 
 export function canEdit(status: ContentPackStatus): boolean {
   return status === "draft" || status === "approved" || status === "rejected";
@@ -73,6 +74,60 @@ export function preserveEditedPack(packs: ContentPack[], editedPack: ContentPack
   return replacePack(packs, editedPack, editedPack);
 }
 
+export function mergeRefreshedPacks(
+  currentPacks: ContentPack[],
+  refreshedPacks: ContentPack[],
+): ContentPack[] {
+  const localDrafts = currentPacks.filter((pack) => pack.id === undefined && pack.clientId !== undefined);
+  return [...localDrafts, ...refreshedPacks];
+}
+
+export function createPackRequestSequence() {
+  const latest = new Map<string, number>();
+  return {
+    next(key: string): number {
+      const sequence = (latest.get(key) ?? 0) + 1;
+      latest.set(key, sequence);
+      return sequence;
+    },
+    isCurrent(key: string, sequence: number): boolean {
+      return latest.get(key) === sequence;
+    },
+  };
+}
+
+export function createPackSaveLock() {
+  const pending = new Map<string, Promise<unknown>>();
+  return {
+    run<T>(key: string, operation: () => Promise<T>): Promise<T> {
+      const current = pending.get(key);
+      if (current) return current as Promise<T>;
+
+      const next = operation();
+      pending.set(key, next);
+      void next.then(
+        () => {
+          if (pending.get(key) === next) pending.delete(key);
+        },
+        () => {
+          if (pending.get(key) === next) pending.delete(key);
+        },
+      );
+      return next;
+    },
+  };
+}
+
+export function normalizeContentPackError(
+  error: unknown,
+  operation: ContentPackErrorOperation,
+): string {
+  void error;
+  if (operation === "refresh") return "No se pudieron cargar los content packs.";
+  if (operation === "status") return "No se pudo actualizar el estado del content pack.";
+  return "No se pudo guardar el content pack.";
+}
+
 export interface UseContentPacksOptions {
   session?: Session | null;
   isAdmin?: boolean;
@@ -95,8 +150,8 @@ export interface UseContentPacksState {
   regeneratePack: (pack?: ContentPack, product?: Perfume) => ContentPack | null;
 }
 
-function errorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : "No se pudo procesar el content pack.";
+function packKey(pack: ContentPack): string {
+  return pack.id ? `persisted:${pack.id}` : `local:${pack.clientId ?? "anonymous"}`;
 }
 
 export function useContentPacks(options: UseContentPacksOptions = {}): UseContentPacksState {
@@ -108,6 +163,10 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const [selectedProduct, setSelectedProduct] = useState<Perfume | null>(initialProduct);
   const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState<string | null>(null);
+  const lifecycleRef = useRef(0);
+  const requestSequenceRef = useRef(createPackRequestSequence());
+  const saveLockRef = useRef(createPackSaveLock());
+  const authKey = session?.user.id ?? "signed-out";
 
   const refresh = useCallback(async () => {
     if (!enabled) {
@@ -115,24 +174,40 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
       return;
     }
 
+    const lifecycle = lifecycleRef.current;
+    const sequence = requestSequenceRef.current.next("refresh");
     setLoading(true);
     setError(null);
     try {
       const nextPacks = await listContentPacks();
-      setPacks(nextPacks);
+      if (
+        lifecycleRef.current !== lifecycle ||
+        !requestSequenceRef.current.isCurrent("refresh", sequence)
+      ) return;
+      setPacks((current) => mergeRefreshedPacks(current, nextPacks));
       setSelectedPack((current) =>
-        current?.id ? nextPacks.find((pack) => pack.id === current.id) ?? null : current,
+        current?.id ? nextPacks.find((pack) => pack.id === current.id) ?? current : current,
       );
     } catch (cause) {
-      setError(errorMessage(cause));
+      if (
+        lifecycleRef.current === lifecycle &&
+        requestSequenceRef.current.isCurrent("refresh", sequence)
+      ) setError(normalizeContentPackError(cause, "refresh"));
     } finally {
-      setLoading(false);
+      if (
+        lifecycleRef.current === lifecycle &&
+        requestSequenceRef.current.isCurrent("refresh", sequence)
+      ) setLoading(false);
     }
   }, [enabled]);
 
   useEffect(() => {
+    const lifecycle = ++lifecycleRef.current;
     void refresh();
-  }, [refresh]);
+    return () => {
+      if (lifecycleRef.current === lifecycle) lifecycleRef.current += 1;
+    };
+  }, [authKey, refresh]);
 
   const selectPack = useCallback((pack: ContentPack | null) => {
     setSelectedPack(pack);
@@ -154,27 +229,41 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
     [selectedProduct],
   );
 
-  const savePack = useCallback(async (pack: ContentPack) => {
+  const savePack = useCallback((pack: ContentPack) => {
+    const candidate = pack.id || pack.clientId ? pack : { ...pack, clientId: uniqueLocalPackId() };
+    const key = packKey(candidate);
+    const lifecycle = lifecycleRef.current;
     setError(null);
-    try {
-      const saved = pack.id
-        ? await updateContentPack(pack.id, pack.payload)
-        : await createContentPack({
-            productId: pack.productId,
-            reason: pack.reason,
-            payload: pack.payload,
-          });
-      setPacks((current) => {
-        return replacePack(current, pack, saved);
-      });
-      setSelectedPack((current) => (samePack(current, pack) ? saved : current));
-      return saved;
-    } catch (cause) {
-      setPacks((current) => preserveEditedPack(current, pack));
-      setSelectedPack((current) => (samePack(current, pack) ? pack : current));
-      setError(errorMessage(cause));
-      return null;
-    }
+    return saveLockRef.current.run(key, async () => {
+      const sequence = requestSequenceRef.current.next(key);
+      try {
+        const saved = candidate.id
+          ? await updateContentPack(candidate.id, candidate.payload)
+          : await createContentPack({
+              productId: candidate.productId,
+              reason: candidate.reason,
+              payload: candidate.payload,
+            });
+        if (
+          lifecycleRef.current === lifecycle &&
+          requestSequenceRef.current.isCurrent(key, sequence)
+        ) {
+          setPacks((current) => replacePack(current, candidate, saved));
+          setSelectedPack((current) => (samePack(current, candidate) ? saved : current));
+        }
+        return saved;
+      } catch (cause) {
+        if (
+          lifecycleRef.current === lifecycle &&
+          requestSequenceRef.current.isCurrent(key, sequence)
+        ) {
+          setPacks((current) => preserveEditedPack(current, candidate));
+          setSelectedPack((current) => (samePack(current, candidate) ? candidate : current));
+          setError(normalizeContentPackError(cause, "save"));
+        }
+        return null;
+      }
+    });
   }, []);
 
   const changeStatus = useCallback(async (pack: ContentPack | undefined, action: ContentPackAction) => {
@@ -184,14 +273,24 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
       return null;
     }
 
+    const key = packKey(current);
+    const lifecycle = lifecycleRef.current;
+    const sequence = requestSequenceRef.current.next(key);
     setError(null);
     try {
       const updated = await setContentPackStatus(current.id, nextStatus(current.status, action));
-      setPacks((items) => items.map((item) => (item.id === updated.id ? updated : item)));
-      setSelectedPack((item) => (item?.id === updated.id ? updated : item));
+      if (
+        lifecycleRef.current !== lifecycle ||
+        !requestSequenceRef.current.isCurrent(key, sequence)
+      ) return updated;
+      setPacks((items) => replacePack(items, current, updated));
+      setSelectedPack((item) => (samePack(item, current) ? updated : item));
       return updated;
     } catch (cause) {
-      setError(errorMessage(cause));
+      if (
+        lifecycleRef.current === lifecycle &&
+        requestSequenceRef.current.isCurrent(key, sequence)
+      ) setError(normalizeContentPackError(cause, "status"));
       return null;
     }
   }, [selectedPack]);

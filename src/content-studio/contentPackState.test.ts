@@ -10,7 +10,11 @@ vi.mock("./contentPackRepository", () => ({
 
 import {
   canEdit,
+  createPackSaveLock,
   createLocalContentPack,
+  createPackRequestSequence,
+  mergeRefreshedPacks,
+  normalizeContentPackError,
   nextStatus,
   preserveEditedPack,
   regenerateContentPack,
@@ -99,5 +103,57 @@ describe("content pack state transitions", () => {
       "Edición local",
     );
     expect(preserved.find((pack) => pack.clientId === first.clientId)).toBe(first);
+  });
+
+  it("preserva drafts locales al aplicar un refresh persistido", () => {
+    const localDraft = createLocalContentPack(perfume, "manual");
+    const persisted = { ...existingPack, payload: { ...payload, instagramCaption: "Persistido" } };
+
+    expect(mergeRefreshedPacks([localDraft, existingPack], [persisted])).toEqual([
+      localDraft,
+      persisted,
+    ]);
+  });
+
+  it("descarta respuestas de refresh que ya no son la última secuencia", () => {
+    const sequence = createPackRequestSequence();
+    const first = sequence.next("refresh");
+    const second = sequence.next("refresh");
+
+    expect(sequence.isCurrent("refresh", first)).toBe(false);
+    expect(sequence.isCurrent("refresh", second)).toBe(true);
+  });
+
+  it("mantiene secuencias independientes por identidad persistida", () => {
+    const sequence = createPackRequestSequence();
+    const oldPackOne = sequence.next("persisted:pack-1");
+    const packTwo = sequence.next("persisted:pack-2");
+    const newPackOne = sequence.next("persisted:pack-1");
+
+    expect(sequence.isCurrent("persisted:pack-1", oldPackOne)).toBe(false);
+    expect(sequence.isCurrent("persisted:pack-1", newPackOne)).toBe(true);
+    expect(sequence.isCurrent("persisted:pack-2", packTwo)).toBe(true);
+  });
+
+  it("comparte el Promise pendiente para saves de la misma identidad", async () => {
+    const lock = createPackSaveLock();
+    let resolvePending!: (value: string) => void;
+    const pending = new Promise<string>((resolve) => {
+      resolvePending = resolve;
+    });
+    const operation = vi.fn(() => pending);
+    const first = lock.run("local:one", operation);
+    const second = lock.run("local:one", operation);
+
+    expect(second).toBe(first);
+    expect(operation).toHaveBeenCalledTimes(1);
+    resolvePending("saved");
+    await expect(first).resolves.toBe("saved");
+  });
+
+  it("normaliza errores sin exponer el Error.message original", () => {
+    expect(normalizeContentPackError(new Error("token=secret"), "save")).toBe(
+      "No se pudo guardar el content pack.",
+    );
   });
 });
