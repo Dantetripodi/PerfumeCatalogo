@@ -19,6 +19,7 @@ import {
   preserveEditedPack,
   replacePack,
   regenerateContentPack,
+  selectRefreshedPack,
 } from "./useContentPacks";
 
 const payload = {
@@ -107,13 +108,28 @@ describe("content pack state transitions", () => {
   });
 
   it("preserva drafts locales al aplicar un refresh persistido", () => {
-    const localDraft = createLocalContentPack(perfume, "manual");
+    const localDraft = createLocalContentPack(perfume, "manual", "admin-a");
+    const otherDraft = createLocalContentPack(perfume, "manual", "admin-b");
     const persisted = { ...existingPack, payload: { ...payload, instagramCaption: "Persistido" } };
 
-    expect(mergeRefreshedPacks([localDraft, existingPack], [persisted])).toEqual([
+    expect(mergeRefreshedPacks([localDraft, otherDraft, existingPack], [persisted], "admin-a")).toEqual([
       localDraft,
       persisted,
     ]);
+  });
+
+  it("no mezcla drafts al cambiar de identidad ni al hacer logout", () => {
+    const adminADraft = createLocalContentPack(perfume, "manual", "admin-a");
+    const adminBDraft = createLocalContentPack(perfume, "manual", "admin-b");
+
+    expect(mergeRefreshedPacks([adminADraft], [], "admin-b")).toEqual([]);
+    expect(mergeRefreshedPacks([adminADraft], [], null)).toEqual([]);
+    expect(mergeRefreshedPacks([adminBDraft], [], "admin-b")).toEqual([adminBDraft]);
+  });
+
+  it("limpia la selección persistida si refresh ya no la devuelve", () => {
+    expect(selectRefreshedPack(existingPack, [])).toBeNull();
+    expect(selectRefreshedPack(existingPack, [existingPack])).toBe(existingPack);
   });
 
   it("descarta respuestas de refresh que ya no son la última secuencia", () => {
@@ -161,6 +177,25 @@ describe("content pack state transitions", () => {
 
     expect(repositoryCalls).toEqual(["A", "B"]);
     expect(replacePack([first], second, savedB)[0].payload.instagramCaption).toBe("B");
+  });
+
+  it("ordena save y status en la misma cola por identidad", async () => {
+    const queue = createPackSaveQueue();
+    const calls: string[] = [];
+    const saved = { ...existingPack, status: "draft" as const };
+    const approved = { ...saved, status: "approved" as const };
+    const save = queue.run<ContentPack>("persisted:pack-1", async () => {
+      calls.push("save");
+      return saved;
+    });
+    const status = queue.run<ContentPack>("persisted:pack-1", async (previous) => {
+      calls.push(`status:${previous?.status}`);
+      return approved;
+    });
+
+    await expect(save).resolves.toBe(saved);
+    await expect(status).resolves.toBe(approved);
+    expect(calls).toEqual(["save", "status:draft"]);
   });
 
   it("normaliza errores sin exponer el Error.message original", () => {

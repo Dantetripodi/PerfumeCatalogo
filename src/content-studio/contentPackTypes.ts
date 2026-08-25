@@ -35,6 +35,8 @@ export interface ContentPack {
   id?: string;
   /** Stable client-only identity for unsaved local packs. */
   clientId?: string;
+  /** Hook scope that owns an unsaved local pack; never persisted. */
+  clientScope?: string | null;
   productId: number;
   reason: ContentPackReason;
   payload: ContentPackPayload;

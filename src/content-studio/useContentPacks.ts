@@ -38,12 +38,17 @@ function uniqueLocalPackId(): string {
   return randomId ? `local-${randomId}` : `local-${Date.now()}-${localPackSequence}`;
 }
 
-export function createLocalContentPack(product: Perfume, reason: ContentPackReason): ContentPack {
+export function createLocalContentPack(
+  product: Perfume,
+  reason: ContentPackReason,
+  clientScope: string | null = null,
+): ContentPack {
   const now = new Date().toISOString();
   return {
     ...generateContentPack(product, reason),
     id: undefined,
     clientId: uniqueLocalPackId(),
+    clientScope,
     status: "draft",
     createdAt: now,
     updatedAt: now,
@@ -51,7 +56,7 @@ export function createLocalContentPack(product: Perfume, reason: ContentPackReas
 }
 
 export function regenerateContentPack(pack: ContentPack, product: Perfume): ContentPack {
-  return createLocalContentPack(product, pack.reason);
+  return createLocalContentPack(product, pack.reason, pack.clientScope ?? null);
 }
 
 function samePack(left: ContentPack | null | undefined, right: ContentPack): boolean {
@@ -77,9 +82,27 @@ export function preserveEditedPack(packs: ContentPack[], editedPack: ContentPack
 export function mergeRefreshedPacks(
   currentPacks: ContentPack[],
   refreshedPacks: ContentPack[],
+  clientScope: string | null = null,
 ): ContentPack[] {
-  const localDrafts = currentPacks.filter((pack) => pack.id === undefined && pack.clientId !== undefined);
+  const localDrafts = currentPacks.filter(
+    (pack) =>
+      pack.id === undefined &&
+      pack.clientId !== undefined &&
+      pack.clientScope === clientScope,
+  );
   return [...localDrafts, ...refreshedPacks];
+}
+
+export function selectRefreshedPack(
+  selectedPack: ContentPack | null,
+  refreshedPacks: ContentPack[],
+  clientScope?: string | null,
+): ContentPack | null {
+  if (!selectedPack) return null;
+  if (selectedPack.id === undefined) {
+    return selectedPack.clientScope === clientScope ? selectedPack : null;
+  }
+  return refreshedPacks.find((pack) => pack.id === selectedPack.id) ?? null;
 }
 
 export function createPackRequestSequence() {
@@ -169,6 +192,8 @@ export function normalizeContentPackError(
 }
 
 export interface UseContentPacksOptions {
+  /** Stable admin/user id that owns this hook state; null disables persistence and clears state. */
+  adminIdentity?: string | null;
   session?: Session | null;
   isAdmin?: boolean;
   selectedProduct?: Perfume | null;
@@ -195,9 +220,15 @@ function packKey(pack: ContentPack): string {
 }
 
 export function useContentPacks(options: UseContentPacksOptions = {}): UseContentPacksState {
-  const { session = null, isAdmin, selectedProduct: initialProduct = null } = options;
+  const {
+    adminIdentity,
+    session = null,
+    isAdmin,
+    selectedProduct: initialProduct = null,
+  } = options;
+  const clientScope = adminIdentity !== undefined ? adminIdentity : session?.user.id ?? null;
   const admin = isAdmin ?? session?.user.app_metadata?.content_admin === true;
-  const enabled = session !== null && admin;
+  const enabled = clientScope !== null && session !== null && admin;
   const [packs, setPacks] = useState<ContentPack[]>([]);
   const [selectedPack, setSelectedPack] = useState<ContentPack | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Perfume | null>(initialProduct);
@@ -206,7 +237,7 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const lifecycleRef = useRef(0);
   const requestSequenceRef = useRef(createPackRequestSequence());
   const saveQueueRef = useRef(createPackSaveQueue());
-  const authKey = session?.user.id ?? "signed-out";
+  const authKey = `${clientScope ?? "signed-out"}:${session?.user.id ?? ""}`;
 
   const refresh = useCallback(async () => {
     if (!enabled) {
@@ -224,10 +255,8 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
         lifecycleRef.current !== lifecycle ||
         !requestSequenceRef.current.isCurrent("refresh", sequence)
       ) return;
-      setPacks((current) => mergeRefreshedPacks(current, nextPacks));
-      setSelectedPack((current) =>
-        current?.id ? nextPacks.find((pack) => pack.id === current.id) ?? current : current,
-      );
+      setPacks((current) => mergeRefreshedPacks(current, nextPacks, clientScope));
+      setSelectedPack((current) => selectRefreshedPack(current, nextPacks, clientScope));
     } catch (cause) {
       if (
         lifecycleRef.current === lifecycle &&
@@ -239,15 +268,21 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
         requestSequenceRef.current.isCurrent("refresh", sequence)
       ) setLoading(false);
     }
-  }, [enabled]);
+  }, [clientScope, enabled]);
 
   useEffect(() => {
     const lifecycle = ++lifecycleRef.current;
-    void refresh();
+    requestSequenceRef.current = createPackRequestSequence();
+    saveQueueRef.current = createPackSaveQueue();
+    setPacks([]);
+    setSelectedPack(null);
+    setError(null);
+    setLoading(enabled);
+    if (enabled) void refresh();
     return () => {
       if (lifecycleRef.current === lifecycle) lifecycleRef.current += 1;
     };
-  }, [authKey, refresh]);
+  }, [authKey, enabled, refresh]);
 
   const selectPack = useCallback((pack: ContentPack | null) => {
     setSelectedPack(pack);
@@ -260,13 +295,13 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const createDraft = useCallback(
     (product = selectedProduct ?? undefined, reason: ContentPackReason = "manual") => {
       if (!product) return null;
-      const draft = createLocalContentPack(product, reason);
+      const draft = createLocalContentPack(product, reason, clientScope);
       setPacks((current) => [draft, ...current]);
       setSelectedPack(draft);
       setError(null);
       return draft;
     },
-    [selectedProduct],
+    [clientScope, selectedProduct],
   );
 
   const savePack = useCallback((pack: ContentPack) => {
@@ -308,33 +343,41 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
     return pending.catch(() => null);
   }, []);
 
-  const changeStatus = useCallback(async (pack: ContentPack | undefined, action: ContentPackAction) => {
+  const changeStatus = useCallback((pack: ContentPack | undefined, action: ContentPackAction) => {
     const current = pack ?? selectedPack;
     if (!current?.id) {
       setError("Guardá el draft antes de cambiar su estado.");
-      return null;
+      return Promise.resolve(null);
     }
 
     const key = packKey(current);
     const lifecycle = lifecycleRef.current;
     const sequence = requestSequenceRef.current.next(key);
     setError(null);
-    try {
-      const updated = await setContentPackStatus(current.id, nextStatus(current.status, action));
-      if (
-        lifecycleRef.current !== lifecycle ||
-        !requestSequenceRef.current.isCurrent(key, sequence)
-      ) return updated;
-      setPacks((items) => replacePack(items, current, updated));
-      setSelectedPack((item) => (samePack(item, current) ? updated : item));
-      return updated;
-    } catch (cause) {
-      if (
-        lifecycleRef.current === lifecycle &&
-        requestSequenceRef.current.isCurrent(key, sequence)
-      ) setError(normalizeContentPackError(cause, "status"));
-      return null;
-    }
+    const pending = saveQueueRef.current.run<ContentPack>(key, async (previous) => {
+      const target = previous?.id ? previous : current;
+      try {
+        const updated = await setContentPackStatus(
+          target.id as string,
+          nextStatus(target.status, action),
+        );
+        if (
+          lifecycleRef.current === lifecycle &&
+          requestSequenceRef.current.isCurrent(key, sequence)
+        ) {
+          setPacks((items) => replacePack(items, current, updated));
+          setSelectedPack((item) => (samePack(item, current) ? updated : item));
+        }
+        return updated;
+      } catch (cause) {
+        if (
+          lifecycleRef.current === lifecycle &&
+          requestSequenceRef.current.isCurrent(key, sequence)
+        ) setError(normalizeContentPackError(cause, "status"));
+        throw cause;
+      }
+    });
+    return pending.catch(() => null);
   }, [selectedPack]);
 
   const regeneratePack = useCallback(
