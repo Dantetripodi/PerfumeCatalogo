@@ -15,6 +15,7 @@ import { Grid, List, Sparkles } from "lucide-react";
 import { usePerfumeCatalog } from "./hooks/usePerfumeCatalog";
 import { useAdminAuth } from "./hooks/useAdminAuth";
 import { Perfume } from "./types";
+import { isContentAdminSession } from "./content-studio/studioAccess";
 
 // The studio, the carousel generator and the admin panel are internal tools
 // behind a PIN. Loading them lazily keeps roughly 1.500 lines of tooling out of
@@ -72,7 +73,7 @@ function App() {
     closeAdmin,
     closePin,
     confirmPin,
-  } = useInternalTools(session !== null);
+  } = useInternalTools(isContentAdminSession(session));
 
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
@@ -126,7 +127,7 @@ function App() {
               onBack={closeTool}
               adminIdentity={session?.user.id ?? null}
               session={session}
-              isAdmin={session !== null}
+              isAdmin={isContentAdminSession(session)}
             />
           </Suspense>
         </FavoritesProvider>

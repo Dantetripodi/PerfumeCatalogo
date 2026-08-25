@@ -10,7 +10,7 @@ import ContentPackEditor from "./ContentPackEditor";
 import ContentPackInbox from "./ContentPackInbox";
 import { useContentPacks } from "./useContentPacks";
 import type { ContentPack } from "./contentPackTypes";
-import { ADMIN_ONLY_ACCESS_MESSAGE } from "./studioAccess";
+import { ADMIN_ONLY_ACCESS_MESSAGE, shouldShowContentPackError } from "./studioAccess";
 
 interface ContentStudioProps {
   perfumes: Perfume[];
@@ -52,7 +52,7 @@ const ContentStudio: React.FC<ContentStudioProps> = ({ perfumes, onBack, adminId
     if (packs.regeneratePack(pack, product ?? undefined)) setMode("inbox");
   };
 
-  if (!adminIdentity || !session) {
+  if (!adminIdentity || !session || !isAdmin) {
     return <div className="min-h-screen bg-[#F8F0E3]"><StudioHeader onBack={onBack} selectedPerfume={null} /><div className="mx-auto max-w-lg px-4 py-20 text-center"><p className="font-serif text-2xl font-bold text-[#1A2238]">Acceso denegado</p><p className="mt-3 text-sm text-gray-600">{ADMIN_ONLY_ACCESS_MESSAGE}</p></div></div>;
   }
 
@@ -60,6 +60,7 @@ const ContentStudio: React.FC<ContentStudioProps> = ({ perfumes, onBack, adminId
     <div className="mb-7 flex flex-wrap items-center justify-between gap-3"><div className="flex rounded-xl border border-[#E8DDBF] bg-white p-1"><ModeButton active={mode === "generate"} onClick={() => setMode("generate")}><Sparkles size={15} />Generar</ModeButton><ModeButton active={mode === "inbox"} onClick={() => setMode("inbox")}><Inbox size={15} />Bandeja</ModeButton></div>{mode === "inbox" && <button type="button" onClick={() => setMode("generate")} className="rounded-lg bg-[#1A2238] px-4 py-2 text-sm font-semibold text-white">Nuevo pack</button>}</div>
     {mode === "inbox" ? <ContentPackInbox packs={packs.packs} perfumes={perfumes} currentPack={packs.selectedPack} onSelectPack={packs.selectPack} onUpdatePack={packs.selectPack} onSave={save} onApprove={(pack) => { setSaving(true); return packs.approvePack(pack).then(() => undefined).finally(() => setSaving(false)); }} onReject={(pack) => { setSaving(true); return packs.rejectPack(pack).then(() => undefined).finally(() => setSaving(false)); }} onRegenerate={regenerate} loading={packs.loading} error={packs.error} onRetry={packs.refresh} /> : <>
       <div className="mb-8 text-center"><p className="mx-auto max-w-xl text-sm text-gray-500">Elegí un perfume del catálogo y generá captions, historias, reels, WhatsApp y prompts listos para revisar.</p></div>
+      {shouldShowContentPackError(mode, packs.error) && <div role="alert" className="mb-6 flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800"><span className="font-semibold">Error:</span><span>{packs.error}</span></div>}
       <ProductSelector perfumes={filteredPerfumes} selectedPerfume={selectedPerfume} selectedId={selectedId} search={search} isOpen={isDropdownOpen} onToggle={() => setIsDropdownOpen((value) => !value)} onSearch={setSearch} onSelect={selectProduct} />
       {!selectedPerfume && <EmptySelection />}
       {content && selectedPerfume && <><ProductHeader perfume={selectedPerfume} /><div className="mb-5 flex flex-wrap items-center justify-center gap-3"><button type="button" onClick={generateDraft} className="inline-flex items-center gap-2 rounded-lg bg-[#1A2238] px-4 py-2.5 text-sm font-semibold text-white"><Sparkles size={16} />Generar Content Pack</button>{packs.selectedPack && <button type="button" disabled={saving} onClick={() => void save(packs.selectedPack as ContentPack)} className="inline-flex items-center gap-2 rounded-lg border border-[#1A2238] bg-white px-4 py-2.5 text-sm font-semibold text-[#1A2238] disabled:opacity-50">Guardar borrador</button>}<span className="text-xs text-gray-500">La vista previa se genera localmente; guardala para enviarla a la bandeja.</span></div><div className="grid grid-cols-1 gap-5 lg:grid-cols-2">{SECTIONS.map((section) => <ContentCard key={section} icon={CONTENT_SECTION_ICONS[section]} label={CONTENT_SECTION_LABELS[section]} content={Array.isArray(content[section]) ? content[section] : content[section] as string} className={section === "reelScript" || section === "imagePrompt" ? "lg:col-span-2" : ""} />)}</div>{packs.selectedPack && <div className="mt-8"><ContentPackEditor pack={packs.selectedPack} product={selectedPerfume} onChange={packs.selectPack} onSave={() => save(packs.selectedPack as ContentPack)} onApprove={() => packs.approvePack(packs.selectedPack as ContentPack).then(() => undefined)} onReject={() => packs.rejectPack(packs.selectedPack as ContentPack).then(() => undefined)} onRegenerate={() => regenerate(packs.selectedPack as ContentPack)} saving={saving} /></div>} {!packs.selectedPack && <p className="mt-8 text-center text-xs text-gray-400">Generá el pack para abrir el editor y guardarlo como borrador.</p>}</>}
