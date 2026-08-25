@@ -54,15 +54,54 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === "string");
+}
+
+function isOptionalString(value: Record<string, unknown>, key: string): boolean {
+  return value[key] === undefined || typeof value[key] === "string";
+}
+
+function isStoryIdea(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  return (
+    typeof value.title === "string" &&
+    typeof value.text === "string" &&
+    isOptionalString(value, "cta")
+  );
+}
+
+function isReelIdea(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  return (
+    typeof value.hook === "string" &&
+    isStringArray(value.shots) &&
+    isStringArray(value.onScreenText) &&
+    typeof value.cta === "string" &&
+    typeof value.caption === "string"
+  );
+}
+
+function isImageConcept(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  return (
+    typeof value.title === "string" &&
+    typeof value.scene === "string" &&
+    isOptionalString(value, "overlayText")
+  );
+}
+
 function isContentPackPayload(value: unknown): value is ContentPackPayload {
   if (!isRecord(value)) return false;
 
   return (
     typeof value.instagramCaption === "string" &&
     Array.isArray(value.stories) &&
-    isRecord(value.reel) &&
-    Array.isArray(value.hashtags) &&
+    value.stories.every(isStoryIdea) &&
+    isReelIdea(value.reel) &&
+    isStringArray(value.hashtags) &&
     Array.isArray(value.imageConcepts) &&
+    value.imageConcepts.every(isImageConcept) &&
     typeof value.whatsappText === "string"
   );
 }

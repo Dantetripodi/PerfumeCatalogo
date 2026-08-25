@@ -180,6 +180,10 @@ describe("contentPackRepository", () => {
     ["hashtags no array", { ...payload, hashtags: "#perfume" }],
     ["imageConcepts no array", { ...payload, imageConcepts: {} }],
     ["whatsappText no string", { ...payload, whatsappText: null }],
+    ["story malformada", { ...payload, stories: [{}] }],
+    ["reel incompleto", { ...payload, reel: {} }],
+    ["hashtag malformado", { ...payload, hashtags: [42] }],
+    ["imageConcept malformado", { ...payload, imageConcepts: [null] }],
   ])("rechaza payload %s con error sanitizado", async (_case, invalidPayload) => {
     authorizedSession();
     queryChain({ data: [{ ...row, payload: invalidPayload }], error: null });
