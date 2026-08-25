@@ -121,7 +121,13 @@ function App() {
       <CartProvider>
         <FavoritesProvider>
           <Suspense fallback={<ToolLoading />}>
-            <ContentStudio perfumes={allPerfumes} onBack={closeTool} />
+            <ContentStudio
+              perfumes={allPerfumes}
+              onBack={closeTool}
+              adminIdentity={session?.user.id ?? null}
+              session={session}
+              isAdmin={session !== null}
+            />
           </Suspense>
         </FavoritesProvider>
       </CartProvider>

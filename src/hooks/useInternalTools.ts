@@ -4,6 +4,16 @@ import { isStudioUnlocked } from "../content-studio/studioAccess";
 export type AppView = "catalog" | "content-studio" | "carousel";
 type PinTarget = "content-studio" | "carousel";
 
+export function canOpenInternalTool(
+  target: PinTarget,
+  hasAdminSession: boolean,
+  studioUnlocked: boolean,
+): boolean {
+  return target === "content-studio"
+    ? hasAdminSession
+    : hasAdminSession || studioUnlocked;
+}
+
 /**
  * Owns the way into the owner-only tools: the Content Studio, the carousel
  * generator and the admin panel.
@@ -19,18 +29,20 @@ export function useInternalTools(hasAdminSession: boolean) {
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
   const [pinTarget, setPinTarget] = useState<PinTarget>("content-studio");
 
-  const canAccess = isStudioUnlocked() || hasAdminSession;
-
   const openTool = useCallback(
     (target: PinTarget) => {
+      const canAccess = canOpenInternalTool(target, hasAdminSession, isStudioUnlocked());
       if (canAccess) {
         setAppView(target);
         return;
       }
+      // Content Studio is admin-only. A PIN must never open it or show a
+      // misleading PIN modal when there is no authenticated session.
+      if (target === "content-studio") return;
       setPinTarget(target);
       setIsPinModalOpen(true);
     },
-    [canAccess]
+    [hasAdminSession]
   );
 
   const openStudio = useCallback(() => openTool("content-studio"), [openTool]);
@@ -60,8 +72,9 @@ export function useInternalTools(hasAdminSession: boolean) {
 
   const confirmPin = useCallback(() => {
     setIsPinModalOpen(false);
+    if (pinTarget === "content-studio" && !hasAdminSession) return;
     setAppView(pinTarget);
-  }, [pinTarget]);
+  }, [hasAdminSession, pinTarget]);
 
   // Hash routes: #/admin, #/studio, #/carousel
   useEffect(() => {
