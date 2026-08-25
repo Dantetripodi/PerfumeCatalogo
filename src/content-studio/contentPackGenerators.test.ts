@@ -4,6 +4,7 @@ import {
   normalizeReel,
   normalizeStories,
 } from "./contentPackGenerators";
+import { generateReelScript } from "./templates/reel";
 import type { Perfume } from "../types";
 
 const perfumeFixture: Perfume = {
@@ -104,5 +105,28 @@ describe("normalizeReel", () => {
     expect(reel.shots).toHaveLength(4);
     expect(reel.onScreenText).toContain("Notas frescas");
     expect(reel.cta).toBe("WhatsApp en la bio 📲");
+  });
+
+  it("recorta comillas del formato real regular de generateReelScript", () => {
+    const reel = normalizeReel(generateReelScript(perfumeFixture), "Caption");
+
+    expect(reel.hook).toBe("Este perfume te va a sorprender");
+    expect(reel.onScreenText).toEqual([
+      "Este perfume te va a sorprender",
+      "Notas: bergamota, mandarina",
+      "Calidad premium, precio accesible",
+      "WhatsApp en la bio 📲",
+    ]);
+    expect(reel.cta).toBe("WhatsApp en la bio 📲");
+  });
+
+  it("recorta comillas del formato real árabe con Texto animado", () => {
+    const arabicPerfume = { ...perfumeFixture, brand: "Arabian Collection", category: "oriental" as const };
+    const reel = normalizeReel(generateReelScript(arabicPerfume), "Caption");
+
+    expect(reel.hook).toBe("¿Conocés los perfumes árabes?");
+    expect(reel.onScreenText).toContain("Dura más de 8 horas");
+    expect(reel.onScreenText).toContain("Escribinos al WhatsApp 👇");
+    expect(reel.cta).toBe("Escribinos al WhatsApp 👇");
   });
 });

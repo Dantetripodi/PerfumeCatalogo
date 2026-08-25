@@ -35,8 +35,24 @@ const ON_SCREEN_LABEL = "Texto(?: en pantalla| animado)?";
 const hasLabel = (line: string, label: string): boolean =>
   new RegExp(`^(?:${label})\\s*:`, "i").test(line);
 
+const trimWrappingQuotes = (value: string): string => {
+  const quotePairs: ReadonlyArray<readonly [string, string]> = [
+    ["\"", "\""],
+    ["'", "'"],
+    ["“", "”"],
+  ];
+
+  for (const [opening, closing] of quotePairs) {
+    if (value.startsWith(opening) && value.endsWith(closing)) {
+      return value.slice(opening.length, value.length - closing.length).trim();
+    }
+  }
+
+  return value;
+};
+
 const stripLabel = (line: string, label: string): string =>
-  line.replace(new RegExp(`^(?:${label})\\s*:\\s*`, "i"), "").trim();
+  trimWrappingQuotes(line.replace(new RegExp(`^(?:${label})\\s*:\\s*`, "i"), "").trim());
 
 export function normalizeReel(source: string, caption: string): ReelIdea {
   const lines = cleanLines(source);
