@@ -10,13 +10,14 @@ vi.mock("./contentPackRepository", () => ({
 
 import {
   canEdit,
-  createPackSaveLock,
+  createPackSaveQueue,
   createLocalContentPack,
   createPackRequestSequence,
   mergeRefreshedPacks,
   normalizeContentPackError,
   nextStatus,
   preserveEditedPack,
+  replacePack,
   regenerateContentPack,
 } from "./useContentPacks";
 
@@ -135,20 +136,31 @@ describe("content pack state transitions", () => {
     expect(sequence.isCurrent("persisted:pack-2", packTwo)).toBe(true);
   });
 
-  it("comparte el Promise pendiente para saves de la misma identidad", async () => {
-    const lock = createPackSaveLock();
-    let resolvePending!: (value: string) => void;
-    const pending = new Promise<string>((resolve) => {
-      resolvePending = resolve;
+  it("encola el último payload y deja seleccionado el resultado B", async () => {
+    const queue = createPackSaveQueue();
+    let resolveFirst!: (value: ContentPack) => void;
+    const first = { ...existingPack, payload: { ...payload, instagramCaption: "A" } };
+    const second = { ...existingPack, payload: { ...payload, instagramCaption: "B" } };
+    const repositoryCalls: string[] = [];
+    const firstPending = new Promise<ContentPack>((resolve) => {
+      resolveFirst = resolve;
     });
-    const operation = vi.fn(() => pending);
-    const first = lock.run("local:one", operation);
-    const second = lock.run("local:one", operation);
+    const firstSave = queue.run<ContentPack>("persisted:pack-1", async () => {
+      repositoryCalls.push(first.payload.instagramCaption);
+      return firstPending;
+    });
+    const secondSave = queue.run<ContentPack>("persisted:pack-1", async (previous) => {
+      repositoryCalls.push(second.payload.instagramCaption);
+      expect(previous).toBe(first);
+      return second;
+    });
 
-    expect(second).toBe(first);
-    expect(operation).toHaveBeenCalledTimes(1);
-    resolvePending("saved");
-    await expect(first).resolves.toBe("saved");
+    resolveFirst(first);
+    await expect(firstSave).resolves.toBe(first);
+    const savedB = await secondSave;
+
+    expect(repositoryCalls).toEqual(["A", "B"]);
+    expect(replacePack([first], second, savedB)[0].payload.instagramCaption).toBe("B");
   });
 
   it("normaliza errores sin exponer el Error.message original", () => {

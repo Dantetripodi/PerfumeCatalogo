@@ -60,7 +60,7 @@ function samePack(left: ContentPack | null | undefined, right: ContentPack): boo
   return left.clientId !== undefined && left.clientId === right.clientId;
 }
 
-function replacePack(
+export function replacePack(
   packs: ContentPack[],
   targetPack: ContentPack,
   replacement: ContentPack,
@@ -96,24 +96,64 @@ export function createPackRequestSequence() {
   };
 }
 
-export function createPackSaveLock() {
-  const pending = new Map<string, Promise<unknown>>();
-  return {
-    run<T>(key: string, operation: () => Promise<T>): Promise<T> {
-      const current = pending.get(key);
-      if (current) return current as Promise<T>;
+interface SaveQueueJob<T> {
+  operation: (previous?: T) => Promise<T>;
+  waiters: Array<{ resolve: (value: T) => void; reject: (cause: unknown) => void }>;
+}
 
-      const next = operation();
-      pending.set(key, next);
-      void next.then(
-        () => {
-          if (pending.get(key) === next) pending.delete(key);
+interface SaveQueueEntry<T> {
+  queued: SaveQueueJob<T> | null;
+}
+
+export function createPackSaveQueue() {
+  const entries = new Map<string, SaveQueueEntry<unknown>>();
+
+  function start<T>(key: string, entry: SaveQueueEntry<T>, job: SaveQueueJob<T>, previous?: T): void {
+    void Promise.resolve()
+      .then(() => job.operation(previous))
+      .then(
+        (result) => {
+          job.waiters.forEach(({ resolve }) => resolve(result));
+          if (entry.queued) {
+            const next = entry.queued;
+            entry.queued = null;
+            start(key, entry, next, result);
+          } else {
+            entries.delete(key);
+          }
         },
-        () => {
-          if (pending.get(key) === next) pending.delete(key);
+        (cause) => {
+          job.waiters.forEach(({ reject }) => reject(cause));
+          if (entry.queued) {
+            const next = entry.queued;
+            entry.queued = null;
+            start(key, entry, next);
+          } else {
+            entries.delete(key);
+          }
         },
       );
-      return next;
+  }
+
+  return {
+    run<T>(key: string, operation: (previous?: T) => Promise<T>): Promise<T> {
+      let entry = entries.get(key) as SaveQueueEntry<T> | undefined;
+      return new Promise<T>((resolve, reject) => {
+        if (!entry) {
+          entry = { queued: null };
+          entries.set(key, entry as SaveQueueEntry<unknown>);
+          start(key, entry, { operation, waiters: [{ resolve, reject }] });
+          return;
+        }
+
+        if (!entry.queued) {
+          entry.queued = { operation, waiters: [{ resolve, reject }] };
+          return;
+        }
+
+        entry.queued.operation = operation;
+        entry.queued.waiters.push({ resolve, reject });
+      });
     },
   };
 }
@@ -165,7 +205,7 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const [error, setError] = useState<string | null>(null);
   const lifecycleRef = useRef(0);
   const requestSequenceRef = useRef(createPackRequestSequence());
-  const saveLockRef = useRef(createPackSaveLock());
+  const saveQueueRef = useRef(createPackSaveQueue());
   const authKey = session?.user.id ?? "signed-out";
 
   const refresh = useCallback(async () => {
@@ -233,16 +273,17 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
     const candidate = pack.id || pack.clientId ? pack : { ...pack, clientId: uniqueLocalPackId() };
     const key = packKey(candidate);
     const lifecycle = lifecycleRef.current;
+    const sequence = requestSequenceRef.current.next(key);
     setError(null);
-    return saveLockRef.current.run(key, async () => {
-      const sequence = requestSequenceRef.current.next(key);
+    const pending = saveQueueRef.current.run<ContentPack>(key, async (previous) => {
+      const target = !candidate.id && previous?.id ? { ...candidate, id: previous.id } : candidate;
       try {
-        const saved = candidate.id
-          ? await updateContentPack(candidate.id, candidate.payload)
+        const saved = target.id
+          ? await updateContentPack(target.id, target.payload)
           : await createContentPack({
-              productId: candidate.productId,
-              reason: candidate.reason,
-              payload: candidate.payload,
+              productId: target.productId,
+              reason: target.reason,
+              payload: target.payload,
             });
         if (
           lifecycleRef.current === lifecycle &&
@@ -261,9 +302,10 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
           setSelectedPack((current) => (samePack(current, candidate) ? candidate : current));
           setError(normalizeContentPackError(cause, "save"));
         }
-        return null;
+        throw cause;
       }
     });
+    return pending.catch(() => null);
   }, []);
 
   const changeStatus = useCallback(async (pack: ContentPack | undefined, action: ContentPackAction) => {
