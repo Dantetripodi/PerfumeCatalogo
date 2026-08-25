@@ -23,6 +23,7 @@ import {
   regenerateContentPack,
   resetScopedPackState,
   selectRefreshedPack,
+  isValidScope,
 } from "./useContentPacks";
 
 const payload = {
@@ -170,6 +171,19 @@ describe("content pack state transitions", () => {
   it("limpia la selección persistida si refresh ya no la devuelve", () => {
     expect(selectRefreshedPack(existingPack, [])).toBeNull();
     expect(selectRefreshedPack(existingPack, [existingPack])).toBe(existingPack);
+  });
+
+  it("rechaza scopes vacíos en merge y selección de refresh", () => {
+    const scopedDraft = createLocalContentPack(perfume, "manual", "admin-a");
+    const emptyPackScope = { ...scopedDraft, clientScope: "   " };
+
+    expect(isValidScope("admin-a")).toBe(true);
+    expect(isValidScope("")).toBe(false);
+    expect(isValidScope("   ")).toBe(false);
+    expect(mergeRefreshedPacks([emptyPackScope], [existingPack], "admin-a")).toEqual([existingPack]);
+    expect(mergeRefreshedPacks([scopedDraft], [existingPack], " ")).toEqual([existingPack]);
+    expect(selectRefreshedPack(emptyPackScope, [], "admin-a")).toBeNull();
+    expect(selectRefreshedPack(scopedDraft, [], " ")).toBeNull();
   });
 
   it("descarta respuestas de refresh que ya no son la última secuencia", () => {

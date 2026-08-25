@@ -32,7 +32,7 @@ export function nextStatus(
 
 let localPackSequence = 0;
 
-export function hasValidPackScope(scope: string | null | undefined): scope is string {
+export function isValidScope(scope: string | null | undefined): scope is string {
   return typeof scope === "string" && scope.trim().length > 0;
 }
 
@@ -47,7 +47,7 @@ export function createLocalContentPack(
   reason: ContentPackReason,
   clientScope: string,
 ): ContentPack {
-  if (!hasValidPackScope(clientScope)) {
+  if (!isValidScope(clientScope)) {
     throw new Error("El content pack necesita un scope de administrador válido.");
   }
   const now = new Date().toISOString();
@@ -67,7 +67,7 @@ export function regenerateContentPack(
   product: Perfume,
   clientScope: string,
 ): ContentPack | null {
-  if (!hasValidPackScope(clientScope)) return null;
+  if (!isValidScope(clientScope)) return null;
   return createLocalContentPack(product, pack.reason, clientScope);
 }
 
@@ -100,7 +100,8 @@ export function mergeRefreshedPacks(
     (pack) =>
       pack.id === undefined &&
       pack.clientId !== undefined &&
-      clientScope !== null &&
+      isValidScope(clientScope) &&
+      isValidScope(pack.clientScope) &&
       pack.clientScope === clientScope,
   );
   return [...localDrafts, ...refreshedPacks];
@@ -113,7 +114,11 @@ export function selectRefreshedPack(
 ): ContentPack | null {
   if (!selectedPack) return null;
   if (selectedPack.id === undefined) {
-    return clientScope !== null && selectedPack.clientScope === clientScope ? selectedPack : null;
+    return isValidScope(clientScope) &&
+      isValidScope(selectedPack.clientScope) &&
+      selectedPack.clientScope === clientScope
+      ? selectedPack
+      : null;
   }
   return refreshedPacks.find((pack) => pack.id === selectedPack.id) ?? null;
 }
@@ -122,11 +127,11 @@ export function canCreateDraft(
   enabled: boolean,
   clientScope: string | null,
 ): clientScope is string {
-  return enabled && hasValidPackScope(clientScope);
+  return enabled && isValidScope(clientScope);
 }
 
 export function canSavePack(pack: ContentPack): boolean {
-  return pack.id !== undefined || hasValidPackScope(pack.clientScope);
+  return pack.id !== undefined || isValidScope(pack.clientScope);
 }
 
 export function resetScopedPackState() {
@@ -261,7 +266,7 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   } = options;
   const clientScope = adminIdentity !== undefined ? adminIdentity : session?.user.id ?? null;
   const admin = isAdmin ?? session?.user.app_metadata?.content_admin === true;
-  const enabled = hasValidPackScope(clientScope) && session !== null && admin;
+  const enabled = isValidScope(clientScope) && session !== null && admin;
   const [packs, setPacks] = useState<ContentPack[]>([]);
   const [selectedPack, setSelectedPack] = useState<ContentPack | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Perfume | null>(initialProduct);
@@ -422,7 +427,7 @@ export function useContentPacks(options: UseContentPacksOptions = {}): UseConten
   const regeneratePack = useCallback(
     (pack = selectedPack ?? undefined, product = selectedProduct ?? undefined) => {
       if (!pack || !product) return null;
-      if (!hasValidPackScope(clientScope)) return null;
+      if (!isValidScope(clientScope)) return null;
       const regenerated = regenerateContentPack(pack, product, clientScope);
       if (!regenerated) return null;
       setPacks((current) => [regenerated, ...current]);
