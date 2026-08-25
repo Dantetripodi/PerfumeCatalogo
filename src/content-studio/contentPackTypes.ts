@@ -31,7 +31,8 @@ export interface ContentPackPayload {
 }
 
 export interface ContentPack {
-  id: string;
+  /** Undefined while the pack is only being edited locally. */
+  id?: string;
   productId: number;
   reason: ContentPackReason;
   payload: ContentPackPayload;
