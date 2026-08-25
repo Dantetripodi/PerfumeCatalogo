@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { ContentPack } from "./contentPackTypes";
 import {
   contentPackItemKey,
+  contentPackListItemKey,
   filterContentPacks,
   getPackProduct,
   sortContentPacksByUpdatedAt,
@@ -62,11 +63,27 @@ describe("ContentPackInbox helpers", () => {
     expect(getPackProduct(makePack({ productId: 99 }), perfumes)).toBeNull();
   });
 
-  it("incluye el índice y sanea pipes para garantizar keys únicas", () => {
-    expect(contentPackItemKey("story", ["Título", "Texto|CTA"], 0)).toBe("story-0-titulo-texto-cta");
-    expect(contentPackItemKey("concept", ["", "", ""], 2)).toBe("concept-2-empty");
-    const duplicateKeys = [0, 1].map((index) => contentPackItemKey("story", ["Mismo", "contenido"], index));
+  it("mantiene estable la key del editor cuando cambia el texto", () => {
+    const originalText = ["Título", "Texto original|CTA"];
+    const editedText = ["Título editado", "Texto nuevo|CTA"];
+
+    expect(contentPackItemKey("story", 0, originalText)).toBe("story-0");
+    expect(contentPackItemKey("story", 0, editedText)).toBe(contentPackItemKey("story", 0, originalText));
+  });
+
+  it("usa el índice para evitar colisiones entre items idénticos", () => {
+    const duplicateKeys = [0, 1].map((index) => contentPackItemKey("story", index, ["Mismo", "contenido"]));
 
     expect(new Set(duplicateKeys).size).toBe(duplicateKeys.length);
+  });
+
+  it("mantiene únicas las keys de Inbox en fallback duplicado", () => {
+    const duplicatePacks = [
+      makePack({ productId: 7, updatedAt: "2026-08-23T10:00:00.000Z" }),
+      makePack({ productId: 7, updatedAt: "2026-08-23T10:00:00.000Z" }),
+    ];
+    const keys = duplicatePacks.map((pack, index) => contentPackListItemKey(pack, index));
+
+    expect(new Set(keys).size).toBe(duplicatePacks.length);
   });
 });

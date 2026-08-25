@@ -22,14 +22,12 @@ export function filterContentPacks<T extends ProductLookup>(packs: ContentPack[]
   });
 }
 
-export function contentPackItemKey(prefix: string, values: string[], index: number): string {
-  const content = values.join(" ").trim();
-  const stableSlug = content
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLocaleLowerCase("es-AR")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80) || "empty";
-  return `${prefix}-${index}-${stableSlug}`;
+export function contentPackItemKey(prefix: string, index: number, content?: readonly string[]): string {
+  void content;
+  return `${prefix}-${index}`;
+}
+
+export function contentPackListItemKey(pack: ContentPack, index: number): string {
+  const identity = pack.id ?? pack.clientId ?? `${pack.productId}-${pack.updatedAt}`;
+  return `pack-${identity}-${index}`;
 }
