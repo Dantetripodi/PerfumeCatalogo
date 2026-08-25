@@ -3,14 +3,22 @@ import { canOpenInternalTool } from "./useInternalTools";
 
 describe("internal tool access", () => {
   it("does not let PIN-only access open Content Studio", () => {
-    expect(canOpenInternalTool("content-studio", false, true)).toBe(false);
+    expect(canOpenInternalTool("content-studio", false, false, true)).toBe(false);
   });
 
-  it("allows an authenticated admin session to open Content Studio", () => {
-    expect(canOpenInternalTool("content-studio", true, false)).toBe(true);
+  it("does not let an authenticated user without content_admin open Content Studio", () => {
+    expect(canOpenInternalTool("content-studio", true, false, false)).toBe(false);
   });
 
-  it("keeps PIN access available for Carousel", () => {
-    expect(canOpenInternalTool("carousel", false, true)).toBe(true);
+  it("allows only content_admin to open Content Studio", () => {
+    expect(canOpenInternalTool("content-studio", true, true, false)).toBe(true);
+  });
+
+  it("keeps authenticated access to Carousel without content_admin", () => {
+    expect(canOpenInternalTool("carousel", true, false, false)).toBe(true);
+  });
+
+  it("keeps PIN access available for Carousel without a session", () => {
+    expect(canOpenInternalTool("carousel", false, false, true)).toBe(true);
   });
 });

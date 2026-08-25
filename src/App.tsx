@@ -73,7 +73,7 @@ function App() {
     closeAdmin,
     closePin,
     confirmPin,
-  } = useInternalTools(isContentAdminSession(session));
+  } = useInternalTools(session !== null, isContentAdminSession(session));
 
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
