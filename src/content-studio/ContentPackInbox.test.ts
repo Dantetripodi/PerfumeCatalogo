@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { ContentPack } from "./contentPackTypes";
-import { filterContentPacks, getPackProduct, sortContentPacksByUpdatedAt } from "./ContentPackInbox.utils";
-import { contentPackItemKey } from "./ContentPackInbox.utils";
+import {
+  contentPackItemKey,
+  filterContentPacks,
+  getPackProduct,
+  sortContentPacksByUpdatedAt,
+} from "./ContentPackInbox.utils";
 
 const makePack = (overrides: Partial<ContentPack> = {}): ContentPack => ({
   productId: 1,
@@ -58,8 +62,11 @@ describe("ContentPackInbox helpers", () => {
     expect(getPackProduct(makePack({ productId: 99 }), perfumes)).toBeNull();
   });
 
-  it("deriva keys de contenido estable y usa el índice sólo para contenido vacío", () => {
-    expect(contentPackItemKey("story", ["Título", "Texto", "CTA"], 0)).toBe("story-Título|Texto|CTA");
-    expect(contentPackItemKey("concept", ["", "", ""], 2)).toBe("concept-empty-2");
+  it("incluye el índice y sanea pipes para garantizar keys únicas", () => {
+    expect(contentPackItemKey("story", ["Título", "Texto|CTA"], 0)).toBe("story-0-titulo-texto-cta");
+    expect(contentPackItemKey("concept", ["", "", ""], 2)).toBe("concept-2-empty");
+    const duplicateKeys = [0, 1].map((index) => contentPackItemKey("story", ["Mismo", "contenido"], index));
+
+    expect(new Set(duplicateKeys).size).toBe(duplicateKeys.length);
   });
 });

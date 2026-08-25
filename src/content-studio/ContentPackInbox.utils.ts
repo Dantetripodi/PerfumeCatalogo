@@ -23,6 +23,13 @@ export function filterContentPacks<T extends ProductLookup>(packs: ContentPack[]
 }
 
 export function contentPackItemKey(prefix: string, values: string[], index: number): string {
-  const content = values.map((value) => value.trim()).join("|").replace(/\|+$/, "");
-  return content ? `${prefix}-${content}` : `${prefix}-empty-${index}`;
+  const content = values.join(" ").trim();
+  const stableSlug = content
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("es-AR")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80) || "empty";
+  return `${prefix}-${index}-${stableSlug}`;
 }
