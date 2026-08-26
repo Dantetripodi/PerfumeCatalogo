@@ -7,6 +7,7 @@ import { Perfume } from "../types";
 import Toast from "./Toast";
 import PerfumeList from "./admin/PerfumeList";
 import PerfumeForm from "./admin/PerfumeForm";
+import { isContentAdminSession } from "../content-studio/studioAccess";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -199,7 +200,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                 Carrusel
               </button>
             )}
-            {isAuthenticated && onOpenContentStudio && (
+            {isContentAdminSession(session) && onOpenContentStudio && (
               <button
                 onClick={() => { handleClose(); onOpenContentStudio(); }}
                 className="flex items-center gap-1.5 rounded-md border border-[#E8DDBF] px-3 py-2 text-sm font-medium text-[#1A2238] transition-colors hover:border-[#D4AF37] hover:text-[#D4AF37]"

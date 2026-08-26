@@ -1,41 +1,36 @@
-import { Perfume } from "../../types";
-import { formatPrice } from "../../utils/price";
-
+import type { Perfume } from "../../types";
+import { STORY_FRAME_MAX_LENGTH, truncateText } from "./text";
 // ─── Templates para Historias de Instagram ──────────────────────────────────
-// Texto corto y de impacto — 2 a 4 líneas máximo.
+// Frames breves, conversacionales y fáciles de acompañar con una foto.
 
 type TemplateFunc = (p: Perfume) => string;
 
-const priceShort = (p: Perfume) =>
-  typeof p.price === "number" ? formatPrice(p.price) : "Consultá precio";
-
 const templates: TemplateFunc[] = [
   (p) =>
-    `✨ NUEVO EN EL CATÁLOGO ✨\n` +
-    `${p.name.toUpperCase()}\n` +
-    `Fragancia ${p.category} · ${p.size}\n` +
-    `${priceShort(p)} → Escribinos ya 💬`,
+    `Hola ✨ ¿Qué aroma te acompaña hoy?\n` +
+    `${p.name}, una fragancia ${p.category}.\n` +
+    `¿La conocemos juntos? Escribinos 💬`,
 
   (p) =>
-    `¿Buscás un perfume que deje huella?\n` +
-    `${p.name} · ${p.brand}\n` +
-    `${priceShort(p)} · ${p.size}\n` +
-    `👆 Deslizá o escribinos al WhatsApp`,
+    `Hola 🌿 ¿Buscás algo fresco y fácil de llevar?\n` +
+    `${p.name} abre con ${p.notes.top[0] ?? p.category}.\n` +
+    `Escribinos por WhatsApp y te contamos más.`,
 
   (p) =>
-    `${p.gender === "femenino" ? "Para ella 🌸" : p.gender === "masculino" ? "Para él 🖤" : "Para vos 🌿"}\n` +
-    `${p.name.toUpperCase()} — ${p.brand}\n` +
-    `Fragancia ${p.category}\n` +
-    `Consultá precio → DM o WhatsApp 📩`,
+    `Hola ✨ ¿Querés descubrir un aroma con personalidad?\n` +
+    `${p.name} se siente ${p.notes.middle[0] ?? p.category}.\n` +
+    `¿Te lo reservamos? Mandanos un mensaje.`,
 
   (p) =>
-    `Hoy en el catálogo:\n` +
-    `${p.name} 🖤\n` +
-    `${p.size} · ${priceShort(p)}\n` +
-    `¿Te gusta? Escribinos ↓`,
+    `Hola 🤎 ¿Te gustan los aromas que dejan huella?\n` +
+    `${p.name}: ${p.notes.base[0] ?? p.category} en una base cálida.\n` +
+    `Escribinos y te ayudamos a elegir.`,
 ];
 
 export function generateInstagramStory(perfume: Perfume): string {
   const idx = (perfume.id + 1) % templates.length;
-  return templates[idx](perfume);
+  return templates[idx](perfume)
+    .split("\n")
+    .map((frame) => truncateText(frame, STORY_FRAME_MAX_LENGTH))
+    .join("\n");
 }

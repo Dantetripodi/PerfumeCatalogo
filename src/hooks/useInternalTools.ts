@@ -4,6 +4,17 @@ import { isStudioUnlocked } from "../content-studio/studioAccess";
 export type AppView = "catalog" | "content-studio" | "carousel";
 type PinTarget = "content-studio" | "carousel";
 
+export function canOpenInternalTool(
+  target: PinTarget,
+  hasAdminSession: boolean,
+  hasContentAdmin: boolean,
+  studioUnlocked: boolean,
+): boolean {
+  return target === "content-studio"
+    ? hasContentAdmin
+    : hasAdminSession || studioUnlocked;
+}
+
 /**
  * Owns the way into the owner-only tools: the Content Studio, the carousel
  * generator and the admin panel.
@@ -13,24 +24,31 @@ type PinTarget = "content-studio" | "carousel";
  * meant three effects, four pieces of state and two handlers sitting next to
  * the catalog markup, none of which the catalog cares about.
  */
-export function useInternalTools(hasAdminSession: boolean) {
+export function useInternalTools(hasAdminSession: boolean, hasContentAdmin: boolean) {
   const [appView, setAppView] = useState<AppView>("catalog");
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
   const [pinTarget, setPinTarget] = useState<PinTarget>("content-studio");
 
-  const canAccess = isStudioUnlocked() || hasAdminSession;
-
   const openTool = useCallback(
     (target: PinTarget) => {
+      const canAccess = canOpenInternalTool(
+        target,
+        hasAdminSession,
+        hasContentAdmin,
+        isStudioUnlocked(),
+      );
       if (canAccess) {
         setAppView(target);
         return;
       }
+      // Content Studio is admin-only. A PIN must never open it or show a
+      // misleading PIN modal when there is no authenticated session.
+      if (target === "content-studio") return;
       setPinTarget(target);
       setIsPinModalOpen(true);
     },
-    [canAccess]
+    [hasAdminSession, hasContentAdmin]
   );
 
   const openStudio = useCallback(() => openTool("content-studio"), [openTool]);
@@ -60,8 +78,9 @@ export function useInternalTools(hasAdminSession: boolean) {
 
   const confirmPin = useCallback(() => {
     setIsPinModalOpen(false);
+    if (pinTarget === "content-studio" && !hasContentAdmin) return;
     setAppView(pinTarget);
-  }, [pinTarget]);
+  }, [hasContentAdmin, pinTarget]);
 
   // Hash routes: #/admin, #/studio, #/carousel
   useEffect(() => {
