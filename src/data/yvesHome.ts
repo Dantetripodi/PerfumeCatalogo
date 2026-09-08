@@ -6,7 +6,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Aromaterapia — Difusor 150ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "150ml",
@@ -23,7 +23,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Aromaterapia — Esencia Hornito 10ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9500,
     gender: "unisex",
     category: "perfumería",
     size: "10ml",
@@ -40,7 +40,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Aromaterapia — Home Spray 150ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9500,
     gender: "unisex",
     category: "perfumería",
     size: "150ml",
@@ -72,7 +72,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Black — Body Splash 125ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -89,7 +89,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Black — Difusor 125ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -106,7 +106,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Black — Difusor 250ml",
     brand: "Yves Home",
-    price: 25000,
+    price: 16000,
     gender: "unisex",
     category: "perfumería",
     size: "250ml",
@@ -123,7 +123,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Black — Esencia Hornito 10ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9500,
     gender: "unisex",
     category: "perfumería",
     size: "10ml",
@@ -140,7 +140,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Black — Home Spray 125ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9500,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -157,7 +157,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Black — Home Spray 250ml",
     brand: "Yves Home",
-    price: 20000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "250ml",
@@ -174,7 +174,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Black — Home Spray 400ml",
     brand: "Yves Home",
-    price: 25000,
+    price: 16000,
     gender: "unisex",
     category: "perfumería",
     size: "400ml",
@@ -191,7 +191,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Black — Sahumerio X5 Unidades",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "x5 unidades",
@@ -225,7 +225,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Box Black Collection",
     brand: "Yves Home",
-    price: 45000,
+    price: 26000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -242,7 +242,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Box Deluxe",
     brand: "Yves Home",
-    price: 45000,
+    price: 26000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -259,7 +259,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Box Difusor 70cc + Home Spray 60cc",
     brand: "Yves Home",
-    price: 25000,
+    price: 15000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -276,7 +276,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Box Fortaleza",
     brand: "Yves Home",
-    price: 30000,
+    price: 23000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -293,7 +293,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Box Isabella",
     brand: "Yves Home",
-    price: 45000,
+    price: 27000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -310,7 +310,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Box Mundialista",
     brand: "Yves Home",
-    price: 30000,
+    price: 23000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -325,7 +325,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Box Porta Difusor Deco",
     brand: "Yves Home",
-    price: 30000,
+    price: 23000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -342,7 +342,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Box Primavera",
     brand: "Yves Home",
-    price: 35000,
+    price: 24000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -359,7 +359,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Cuba — Combo Difusor De Auto + Refill 30ml",
     brand: "Yves Home",
-    price: 25000,
+    price: 16000,
     gender: "unisex",
     category: "perfumería",
     size: "30ml",
@@ -376,7 +376,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Cuba — Difusor 125ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -393,7 +393,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Cuba — Difusor 250ml",
     brand: "Yves Home",
-    price: 25000,
+    price: 16000,
     gender: "unisex",
     category: "perfumería",
     size: "250ml",
@@ -410,7 +410,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Cuba — Home Spray 125ml",
     brand: "Yves Home",
-    price: 5000,
+    price: 8000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -444,7 +444,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Cuba — Home Spray 60ml",
     brand: "Yves Home",
-    price: 5000,
+    price: 7000,
     gender: "unisex",
     category: "perfumería",
     size: "60ml",
@@ -461,7 +461,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Cuba — Jabón Líquido 250ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 11000,
     gender: "unisex",
     category: "perfumería",
     size: "250ml",
@@ -478,7 +478,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Cuba — Vela De Soja En Lata",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -495,7 +495,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Cuba — Home Spray 400ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "400ml",
@@ -512,7 +512,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Deluxe — Body Splash 125ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -529,7 +529,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Deluxe — Difusor 125ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -546,7 +546,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Deluxe — Difusor 250ml",
     brand: "Yves Home",
-    price: 25000,
+    price: 16000,
     gender: "unisex",
     category: "perfumería",
     size: "250ml",
@@ -563,7 +563,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Deluxe — Esencia Hornito 10ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9500,
     gender: "unisex",
     category: "perfumería",
     size: "10ml",
@@ -580,7 +580,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Deluxe — Home Spray 125ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9500,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -597,7 +597,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Deluxe — Home Spray 250ml",
     brand: "Yves Home",
-    price: 20000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "250ml",
@@ -614,7 +614,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Deluxe — Home Spray 400ml",
     brand: "Yves Home",
-    price: 25000,
+    price: 16000,
     gender: "unisex",
     category: "perfumería",
     size: "400ml",
@@ -631,7 +631,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Deluxe — Sahumerio X5 Unidades",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "x5 unidades",
@@ -648,7 +648,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Deluxe — Vela De Soja",
     brand: "Yves Home",
-    price: 45000,
+    price: 28000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -665,7 +665,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Essential — Body Splash 125ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -682,7 +682,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Essential — Crema 125ml",
     brand: "Yves Home",
-    price: 20000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -699,7 +699,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Essential — Difusor 125ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 11000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -716,7 +716,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Essential — Difusor 250ml",
     brand: "Yves Home",
-    price: 30000,
+    price: 17000,
     gender: "unisex",
     category: "perfumería",
     size: "250ml",
@@ -733,7 +733,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Essential — Esencia Hornito 10ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9500,
     gender: "unisex",
     category: "perfumería",
     size: "10ml",
@@ -750,7 +750,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Essential — Home Spray 125ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -767,7 +767,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Essential — Home Spray 250ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "250ml",
@@ -784,7 +784,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Essential — Home Spray 500ml",
     brand: "Yves Home",
-    price: 30000,
+    price: 17000,
     gender: "unisex",
     category: "perfumería",
     size: "500ml",
@@ -801,7 +801,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Essential — Sahumerio X5 Unidades",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "x5 unidades",
@@ -818,7 +818,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Essential — Vela De Soja",
     brand: "Yves Home",
-    price: 45000,
+    price: 28000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -835,7 +835,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Fortaleza — Difusor 125ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 11000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -852,7 +852,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Fortaleza — Home Spray 125ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -869,7 +869,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Fortaleza — Home Spray 60ml",
     brand: "Yves Home",
-    price: 5000,
+    price: 7500,
     gender: "unisex",
     category: "perfumería",
     size: "60ml",
@@ -886,7 +886,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Isabella — Body Splash 100ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9500,
     gender: "unisex",
     category: "perfumería",
     size: "100ml",
@@ -903,7 +903,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Isabella — Difusor 125ml",
     brand: "Yves Home",
-    price: 20000,
+    price: 13000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -920,7 +920,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Isabella — Difusor 250ml",
     brand: "Yves Home",
-    price: 30000,
+    price: 17000,
     gender: "unisex",
     category: "perfumería",
     size: "250ml",
@@ -937,7 +937,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Isabella — Esencia Hornito 10ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9500,
     gender: "unisex",
     category: "perfumería",
     size: "10ml",
@@ -954,7 +954,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Isabella — Home Spray 125ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -971,7 +971,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Isabella — Home Spray 250ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "250ml",
@@ -988,7 +988,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Isabella — Home Spray 500ml",
     brand: "Yves Home",
-    price: 30000,
+    price: 17000,
     gender: "unisex",
     category: "perfumería",
     size: "500ml",
@@ -1005,7 +1005,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Isabella — Sahumerio X5 Unidades",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "x5 unidades",
@@ -1022,7 +1022,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Isabella — Vela De Soja",
     brand: "Yves Home",
-    price: 30000,
+    price: 17000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -1139,7 +1139,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Primavera — Body Splash 125ml",
     brand: "Yves Home",
-    price: 20000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "125ml",
@@ -1156,7 +1156,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Primavera — Difusor 150ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "150ml",
@@ -1173,7 +1173,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Primavera — Home Spray 150ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9500,
     gender: "unisex",
     category: "perfumería",
     size: "150ml",
@@ -1190,7 +1190,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Primavera — Vela De Soja",
     brand: "Yves Home",
-    price: 25000,
+    price: 15000,
     gender: "unisex",
     category: "perfumería",
     size: "Consultar",
@@ -1207,7 +1207,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Proteccion — Difusor 150ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "150ml",
@@ -1224,7 +1224,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Proteccion — Home Spray 150ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9500,
     gender: "unisex",
     category: "perfumería",
     size: "150ml",
@@ -1241,7 +1241,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Wood — Difusor De Vidrio 200ml",
     brand: "Yves Home",
-    price: 30000,
+    price: 19000,
     gender: "unisex",
     category: "perfumería",
     size: "200ml",
@@ -1258,7 +1258,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Wood — Home Spray 250ml",
     brand: "Yves Home",
-    price: 15000,
+    price: 12000,
     gender: "unisex",
     category: "perfumería",
     size: "250ml",
@@ -1275,7 +1275,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Zodiaco — Difusor 150ml",
     brand: "Yves Home",
-    price: 20000,
+    price: 13000,
     gender: "unisex",
     category: "perfumería",
     size: "150ml",
@@ -1292,7 +1292,7 @@ export const yvesHome: PerfumeInput[] = [
   {
     name: "Zodiaco — Home Spray 150ml",
     brand: "Yves Home",
-    price: 10000,
+    price: 9500,
     gender: "unisex",
     category: "perfumería",
     size: "150ml",
